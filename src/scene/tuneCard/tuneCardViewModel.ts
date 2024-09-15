@@ -1,24 +1,27 @@
 import axios from "axios";
 import {endPoint} from "../../consts/api";
+import {TuneCard} from "../../models/TuneCard/TuneCard";
 
 export class TuneCardViewModel {
     /**
-     * Seedを取得
+     * 取得
      * @param cardSerial
      */
-    async getUIdByCardSerial(cardSerial: string): Promise<{ uid: string, isActivated: boolean, message: string }> {
-        console.log("===fetchSeedList=====");
-
+    async getTuneCard(cardSerial: string): Promise<TuneCard> {
         const api = axios.create({
             headers: {
                 'Authorization': 'allow',
             }
         });
-        const response = await api.post(endPoint.CARD_SERIAL_TO_UID, {serial: cardSerial});
-        return {
-            uid: response.data.uid,
-            isActivated: response.data.isActivated,
-            message: response.data.message
-        };
+        const response = await api.get(`${endPoint.TUNE_CARD}/${cardSerial}`);
+        return TuneCard.creatTuneInstance({
+            uid: response.data.data.Uid,
+            isActivated: response.data.data.IsActivated,
+            serial: response.data.data.Serial,
+            qrLink: response.data.data.QRLink,
+            updateAt: response.data.data.UpdateAt,
+            createdAt: response.data.data.CreatedAt,
+            deletedAt: response.data.data.DeletedAt
+        });
     }
 }

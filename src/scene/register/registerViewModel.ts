@@ -5,7 +5,7 @@ import {endPoint} from "../../consts/api";
 
 export interface SignUpInputIF {
     code: string,
-    tuneCard: TuneCard
+    tuneCard: TuneCard,
 }
 
 export class RegisterViewModel {
@@ -30,30 +30,29 @@ export class RegisterViewModel {
         const params = {
             code: argument.code,
             clientId: clientId,
-            uid: argument.tuneCard.uid,
-            authType: "register"
         }
-
-        console.log(`params`);
-        console.log(params);
 
         const axiosInstance = axios.create({
             headers: {
                 'Authorization': 'sign-in-unite-web-app',
-                'x-api-key': '1yIDLcQTj28kU0fpfZFdCaZoi4dCoEgC8hLh1duf'
             }
         });
 
        const registerResponse = await axiosInstance.post(endPoint.REGISTER, params);
 
-        const registerSerialAndUidResponse = await this.registerSerialAndUid({
-            uid: argument.tuneCard.uid,
+        await this.registerSerialAndUid({
+            uid: registerResponse.data.data.Uid,
             serial: argument.tuneCard.serial
-        })
+        });
 
         return {
-            userRegister: registerResponse,
-            cardRegister: registerSerialAndUidResponse
+            userRegister: {
+                uid: registerResponse.data.data.Uid,
+                email: registerResponse.data.data.Email,
+                accessToken: registerResponse.data.data.AccessToken,
+                nickName: registerResponse.data.data.Email,
+                iconImagePath: "profile/default/iconImage.png",
+            }
         }
     }
 
@@ -62,16 +61,19 @@ export class RegisterViewModel {
             const cardTuneAPI = axios.create({
                 headers: {
                     'Authorization': 'registerTuneCard',
-                    'x-api-key': '1yIDLcQTj28kU0fpfZFdCaZoi4dCoEgC8hLh1duf'
                 }
             });
-            const cardTuneRegisterEndPoint = process.env.REACT_APP_CARD_TUNE_REGISTER as string;
-            await cardTuneAPI.post(cardTuneRegisterEndPoint, {
-                serial: input.serial,
-                uid: input.uid
-            }).then((cardTuneResponse: AxiosResponse<any>) => {
-                console.log(cardTuneResponse);
-            }).catch((err) => {
+
+            const params = {
+                uid: input.uid,
+                isActivated: true,
+            }
+
+            const cardTuneRegisterEndPoint = `${endPoint.TUNE_CARD}/${input.serial}`;
+            await cardTuneAPI.put(cardTuneRegisterEndPoint, params).then(
+                (cardTuneResponse: AxiosResponse<any>) => {
+                    console.log(cardTuneResponse);
+                }).catch((err) => {
                 console.log(err);
             });
         }
