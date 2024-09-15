@@ -21,41 +21,13 @@ const code = params.get("code") ?? '';
 const RegisterView: React.FunctionComponent = () => {
     const [viewModel] = useState<RegisterViewModel>(registerViewModel);
     const [navigation, setNavigation] = useRecoilState(navigationState);
-    const [tuneCardInfo] = useRecoilState<TuneCard>(tuneCardState);
+    const [tuneCard, setTuneCard] = useRecoilState<TuneCard>(tuneCardState);
     const [profile, setProfile] = useRecoilState(profileState);
     const [googleOneTimeCode, setGoogleOneTimeCode] = useState(code);
     const [authState, setAuthentication] = useRecoilState(authenticationState);
 
-    const redirectUriRegister = process.env.REACT_APP_GOOGLE_REDIRECT_URI_REGISTER as string;
     console.log("========================================");
     console.log(code);
-
-    // ログイン中はホームへ遷移する
-    console.log(authState);
-    const isLogin: boolean = authState.uid.length > 0;
-    if (isLogin) {
-        window.location.href = '/';
-    }
-
-    // const registerCard = async (input: { serial: string, uid: string }): Promise<void> => {
-    //     if (input.uid !== "") {
-    //         const cardTuneAPI = axios.create({
-    //             headers: {
-    //                 'Authorization': 'registerTuneCard',
-    //                 'x-api-key': '1yIDLcQTj28kU0fpfZFdCaZoi4dCoEgC8hLh1duf'
-    //             }
-    //         });
-    //         const cardTuneRegisterEndPoint = process.env.REACT_APP_CARD_TUNE_REGISTER as string;
-    //         await cardTuneAPI.post(cardTuneRegisterEndPoint, {
-    //             serial: input.serial,
-    //             uid: input.uid
-    //         }).then((cardTuneResponse: AxiosResponse<any>) => {
-    //             console.log(cardTuneResponse);
-    //         }).catch((err) => {
-    //             console.log(err);
-    //         });
-    //     }
-    // }
 
     /**
      * サインアップを実行する
@@ -68,26 +40,26 @@ const RegisterView: React.FunctionComponent = () => {
             return;
         }
 
-        const tuneCard = TuneCard.creatTuneInstance({serial: tuneCardInfo.serial, uid: tuneCardInfo.uid});
-
         void viewModel.signUp({code: googleOneTimeCode, tuneCard: tuneCard})
             .then(response => {
                 console.log('googleLogin')
                 console.log(response)
-                void swal("ようこそ.", response.userRegister.data.message ?? 'undefined', "success").then( res => {
+                void swal("ようこそ.", response.userRegister.uid ?? 'undefined', "success").then( res => {
                     console.log('成功', res);
+
+                    console.log(response.userRegister);
 
                     // ユーザーの認証情報のストアを更新
                     setAuthentication({
-                        uid: response.userRegister.data.uid,
-                        accessToken: response.userRegister.data.accessToken,
-                        email: response.userRegister.data.email
+                        uid: response.userRegister.uid,
+                        accessToken: response.userRegister.accessToken,
+                        email: response.userRegister.email
                     });
 
                     // ユーザー情報のストアを更新
                     setProfile({
-                        nickName: response.userRegister.data?.nickName ?? 'user',
-                        iconImage: response.userRegister.data?.iconImagePath ?? '',
+                        nickName: response.userRegister.nickName ?? 'user',
+                        iconImage: response.userRegister.iconImagePath ?? '',
                     });
 
                     // ナビゲーションバーを表示
@@ -110,6 +82,23 @@ const RegisterView: React.FunctionComponent = () => {
     // 開発環境においてStrictModeの2回目を無視するフラグ
     let strictModeIgnore = false;
     useEffect(() => {
+
+        // ログイン中はホームへ遷移する
+        console.log(authState);
+        const isLogin: boolean = authState.uid.length > 0;
+
+        if (isLogin) {
+            if (window.confirm('ログアウトして新規登録画面に遷移します.')) {
+                setAuthentication({uid:""}) // TODO: ログアウト処理を実装
+            } else {
+                window.location.href = '/';
+            }
+        }
+
+        if ((tuneCard.serial != '') && (tuneCard.uid != '') && (!tuneCard.isActivated)) {
+            window.location.href = '/';
+        }
+
         // ナビゲーションバーを非表示
         setNavigation({isHidden: true, isEnableRedirect: false});
 
@@ -131,10 +120,24 @@ const RegisterView: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid container spacing={2} className={"preference"} style={{paddingLeft: '5rem'}}>
+        <Grid container spacing={2} className={"preference"} style={{paddingLeft: 20}}>
             <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
+                <h1>このカードをペアリングしてあなただけのものにします。</h1>
                 <Box sx={{textAlign: "center", paddingTop: 5}}>
-                    {GoogleAuthenticationButton('SignUp with Google', redirectUriRegister)}
+                    {GoogleAuthenticationButton('SignUp with Google', process.env.REACT_APP_GOOGLE_REDIRECT_URI_REGISTER as string)}
+                </Box>
+                <Box sx={{textAlign: "start", paddingTop: 10}}>
+                    <h2>TUNE CARD</h2>
+                    <div>
+                        <p>
+                            IsActivated<br/>
+                            {tuneCard.isActivated?'true':'false'}
+                        </p>
+                        <p>
+                            UID<br/>
+                            {tuneCard.serial}
+                        </p>
+                    </div>
                 </Box>
             </Grid>
         </Grid>

@@ -54,9 +54,9 @@ const SignInView: () => JSX.Element = () => {
 
                     // ユーザーの認証情報のストアを更新
                     setAuthentication({
-                        uid: response.data.uid,
-                        accessToken: response.data.accessToken,
-                        email: response.data.email
+                        uid: response.data.data.Uid,
+                        accessToken: response.data.data.AccessToken,
+                        email: response.data.data.Email
                     });
 
                     // ユーザー情報のストアを更新

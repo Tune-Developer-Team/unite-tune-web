@@ -1,10 +1,12 @@
 export const baseUrl = process.env.REACT_APP_API_ORIGIN
 
 export const endPoint = {
-    SIGNIN: `${baseUrl}/oauth/google/signin`,
-    REGISTER: `${baseUrl}/oauth/google/register`,
-    CARD_SERIAL_TO_UID: `${baseUrl}/tune-card/serial-to-uid`,
-    CARD_TUNE_REGISTER: `${baseUrl}/tune-card/register-serial-and-uid`,
+    // USER
+    SIGNIN: `${baseUrl}/google/signin`,
+    REGISTER: `${baseUrl}/google/register`,
+    // TUNE CARD
+    TUNE_CARD: `${baseUrl}/tuneCards`,
+
     UPLOAD_IMAGE: `${baseUrl}/generateS3PreSignedUrl`,
     ADD_SEED: `${baseUrl}/seed/add`,
     FETCH_SEED: `${baseUrl}/seed/fetch`,
