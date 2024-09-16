@@ -40,9 +40,9 @@ export class HomeViewModel implements HomeViewModelIF {
         console.log("===fetchSeedList=====")
         console.log(authentication.accessToken)
         const api = new Api(authentication);
-        const result = await api.get(`${endPoint.FETCH_SEED}?chunk=10`);
+        const result = await api.get(endPoint.SEED);
 
-        this.seedList = result.data.seedList;
+        this.seedList = result.data.data;
 
         return {
             message: result.data.message,
