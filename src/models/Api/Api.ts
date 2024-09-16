@@ -16,7 +16,6 @@ export class Api {
         this.axiosInstance = axios.create({
             headers: {
                 'Authorization': authentication.accessToken,
-                'x-api-key': '1yIDLcQTj28kU0fpfZFdCaZoi4dCoEgC8hLh1duf'
             }
         });
     }

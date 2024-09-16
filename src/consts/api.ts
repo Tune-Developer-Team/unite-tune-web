@@ -6,10 +6,11 @@ export const endPoint = {
     REGISTER: `${baseUrl}/google/register`,
     // TUNE CARD
     TUNE_CARD: `${baseUrl}/tuneCards`,
+    // SEED
+    SEED: `${baseUrl}/seeds`,
 
-    UPLOAD_IMAGE: `${baseUrl}/generateS3PreSignedUrl`,
     ADD_SEED: `${baseUrl}/seed/add`,
-    FETCH_SEED: `${baseUrl}/seed/fetch`,
+    UPLOAD_IMAGE: `${baseUrl}/generateS3PreSignedUrl`,
     ADD_CUSTOM_URL: `${baseUrl}/customUrl/add`,
     FETCH_CUSTOM_URL: `${baseUrl}/customUrl/fetch`,
 }
