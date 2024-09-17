@@ -16,13 +16,13 @@ import ConfirmButton from "../../ui/confirmBottun/ConfirmButton";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {SeedInputIF} from "../../models/Seed/Seed";
 import ImagePath from "../../models/data/ImagePath";
 import {CloudUpload} from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/system";
 import {hashTagString, isHashTag} from "../../models/data/types";
 import {navigationState} from "../../atoms/NavigationState";
+import {AddSeedInputParamIF} from "./SeedEditViewModelIF";
 
 const seedEditViewModel = new SeedEditViewModel();
 
@@ -40,9 +40,9 @@ const SeedEditView: () => JSX.Element = () => {
     const [viewModel] = useState<SeedEditViewModel>(seedEditViewModel);
 
     //　フォーム
-    const [title, setTitle] = useState<string>('SeedName');
-    const [description, setDescription] = useState<string>("この度、副業として〇〇案件を受注しました。一緒に開発をしてくれる方を募集いたします。少しでも興味がある人はぜひ[grow]ボタンをどうぞ！");
-    const [benefit, setBenefit] = useState<string>("① ソースビュー有り！② 売上の何割かを報酬として還元します！");
+    const [title, setTitle] = useState<string>('MySeed');
+    const [description, setDescription] = useState<string>("");
+    const [benefit, setBenefit] = useState<string>("");
     const [termsFrom, setTermFrom] = useState<any | null>(null);
     const [termsTo, setTermTo] = useState<any | null>(null);
     const [hashTags, setHashTags] = useState<hashTagString[]>([]);
@@ -62,19 +62,28 @@ const SeedEditView: () => JSX.Element = () => {
         imageList.push(ImagePath.create({path:file3?.webkitRelativePath??'', alt: file3?.name??''}))
         imageList.push(ImagePath.create({path:file4?.webkitRelativePath??'', alt: file4?.name??''}))
 
-        const sSeedInput: SeedInputIF = {
+        const dateTermsFrom = new Date(termsFrom);
+        const unixTermsFrom = Math.floor(dateTermsFrom.getTime() / 1000);
+
+        const dateTermsTo = new Date(termsFrom);
+        const unixTermsTo = Math.floor(dateTermsTo.getTime() / 1000);
+
+
+        const addSeedParam: AddSeedInputParamIF = {
+            ownerUserUid: authState.uid as string,
+            isPublished: true,
             seedId: seedId,
             title: title,
             description: description,
             benefit: benefit,
-            termsFrom: termsFrom,
-            termsTo: termsTo,
+            termsFrom: unixTermsFrom,
+            termsTo: unixTermsTo,
             hashTagStringList: hashTags,
-            imagePathList: imageList,
-            relationSeedIdList: [], // TODO: 未実装_関連するSeedを指定する機能
-            mentionList: [] // TODO: 未実装_メンション_ユーザーにメンションできる機能
+            imagePathList: JSON.stringify(imageList),
+            relationSeedIdList:  JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
+            mentionList:  JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
-        await viewModel.addSeed(sSeedInput);
+        await viewModel.addSeed(addSeedParam);
     }
 
     const VisuallyHiddenInput = styled('input')({

@@ -1,7 +1,6 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {SeedEditViewModelIF} from "./SeedEditViewModelIF";
+import {AddSeedInputParamIF, SeedEditViewModelIF} from "./SeedEditViewModelIF";
 import {Api} from "../../models/Api/Api";
-import {SeedInputIF} from "../../models/Seed/Seed";
 import axios, {AxiosResponse} from "axios";
 import ImagePath from "../../models/data/ImagePath";
 import {endPoint} from "../../consts/api";
@@ -34,12 +33,11 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
     /**
      *
      */
-    async addSeed(seedInput: SeedInputIF): Promise<AxiosResponse> {
+    async addSeed(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
         console.log("===============addSeed============");
         const api = new Api(this.authState);
-        const endPoint = process.env.REACT_APP_ADD_SEED_API as string;
         const body = seedInput;
-        return await api.post({endPoint, body})
+        return await api.post({endPoint:endPoint.SEED, body})
     }
 
     /**

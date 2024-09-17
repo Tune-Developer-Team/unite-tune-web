@@ -8,24 +8,28 @@ export interface SeedIF {
 }
 
 export interface SeedInfoIF {
-    title: string
-    description: string
-    benefit: string
-    termsFrom: string
-    termsTo: string
-    relationSeedIdList: string[]
-    imagePathList: ImagePath[]
-    hashTagList: hashTagString[]
-    mentionList: Mention[]
+    imagePathList: ImagePath[];
+    termsFrom: string;
+    termsTo: string;
+    isPublished: boolean;
+    description: string;
+    relationSeedIdList: string[];
+    title: string;
+    mentionList: Mention[];
+    benefit: string;
+    hashTagList: hashTagString[];
 }
 
 export interface SeedMetaInfoIF {
     seedId: string
     ownerUserUid: string
+    isPublished: boolean
     updatedAt: string
 }
 
 export interface SeedInputIF {
+    ownerUserUid: string
+    isPublished: boolean
     seedId: string
     title: string
     description: string
@@ -87,6 +91,7 @@ export class Seed implements SeedIF {
             title: argument.title,
             description: argument.description,
             benefit: argument.benefit,
+            isPublished: argument.isPublished,
             termsFrom: argument.termsFrom,
             termsTo: argument.termsTo,
             relationSeedIdList: argument.relationSeedIdList,
@@ -97,7 +102,8 @@ export class Seed implements SeedIF {
 
         const seedMetaInfo: SeedMetaInfoIF = {
             seedId: argument.seedId,
-            ownerUserUid: '',
+            isPublished: argument.isPublished,
+            ownerUserUid: argument.ownerUserUid,
             updatedAt: ''
         }
 
