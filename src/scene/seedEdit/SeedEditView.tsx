@@ -24,6 +24,21 @@ import {styled} from "@mui/system";
 import {hashTagString, isHashTag} from "../../models/data/types";
 import {navigationState} from "../../atoms/NavigationState";
 
+export interface AddSeedInputParamIF {
+    imagePathList: string;
+    termsFrom: any;
+    termsTo: any;
+    hashTagStringList: hashTagString[];
+    isPublished: boolean;
+    seedId: string;
+    description: string;
+    relationSeedIdList: string;
+    title: string;
+    mentionList: string;
+    benefit: string;
+    ownerUserUid: string
+}
+
 const seedEditViewModel = new SeedEditViewModel();
 
 const SeedEditView: () => JSX.Element = () => {
@@ -40,9 +55,9 @@ const SeedEditView: () => JSX.Element = () => {
     const [viewModel] = useState<SeedEditViewModel>(seedEditViewModel);
 
     //　フォーム
-    const [title, setTitle] = useState<string>('SeedName');
-    const [description, setDescription] = useState<string>("この度、副業として〇〇案件を受注しました。一緒に開発をしてくれる方を募集いたします。少しでも興味がある人はぜひ[grow]ボタンをどうぞ！");
-    const [benefit, setBenefit] = useState<string>("① ソースビュー有り！② 売上の何割かを報酬として還元します！");
+    const [title, setTitle] = useState<string>('MySeed');
+    const [description, setDescription] = useState<string>("");
+    const [benefit, setBenefit] = useState<string>("");
     const [termsFrom, setTermFrom] = useState<any | null>(null);
     const [termsTo, setTermTo] = useState<any | null>(null);
     const [hashTags, setHashTags] = useState<hashTagString[]>([]);
@@ -62,7 +77,9 @@ const SeedEditView: () => JSX.Element = () => {
         imageList.push(ImagePath.create({path:file3?.webkitRelativePath??'', alt: file3?.name??''}))
         imageList.push(ImagePath.create({path:file4?.webkitRelativePath??'', alt: file4?.name??''}))
 
-        const sSeedInput: SeedInputIF = {
+        const addSeedParam: AddSeedInputParamIF = {
+            ownerUserUid: authState.uid as string,
+            isPublished: true,
             seedId: seedId,
             title: title,
             description: description,
@@ -70,11 +87,11 @@ const SeedEditView: () => JSX.Element = () => {
             termsFrom: termsFrom,
             termsTo: termsTo,
             hashTagStringList: hashTags,
-            imagePathList: imageList,
-            relationSeedIdList: [], // TODO: 未実装_関連するSeedを指定する機能
-            mentionList: [] // TODO: 未実装_メンション_ユーザーにメンションできる機能
+            imagePathList: JSON.stringify(imageList),
+            relationSeedIdList:  JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
+            mentionList:  JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
-        await viewModel.addSeed(sSeedInput);
+        await viewModel.addSeed(addSeedParam);
     }
 
     const VisuallyHiddenInput = styled('input')({
