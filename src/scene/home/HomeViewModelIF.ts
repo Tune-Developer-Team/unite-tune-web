@@ -15,6 +15,7 @@ export interface HomeViewModelIF {
 }
 
 export interface SeedListItem {
+    seedId: string
     title: string
     description: string
     ownerUserName: string

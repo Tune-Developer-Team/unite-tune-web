@@ -77,14 +77,15 @@ const HomeView = () => {
                 </Grid>
                 {seedList.map((item, index) => (
                   <Grid xs={12} sm={2} md={2} key={index}>
-                    <SeedViewCard
-                      title={item.title}
-                      description={item.description || "September 14, 2016"}
-                      ownerUserName={item.ownerUserName}
-                      imagePath={item.imagePath}
-                      userIconImagePath={item.userIconImagePath}
-                      favoriteCount={item.favoriteCount}
-                    />
+                      <SeedViewCard
+                          seedId={item.seedId}
+                          title={item.title}
+                          description={item.description || "September 14, 2016"}
+                          ownerUserName={item.ownerUserName}
+                          imagePath={item.imagePath}
+                          userIconImagePath={item.userIconImagePath}
+                          favoriteCount={item.favoriteCount}
+                      />
                   </Grid>
                 ))}
             </Grid>

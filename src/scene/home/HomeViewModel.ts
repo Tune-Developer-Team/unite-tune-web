@@ -54,6 +54,7 @@ export class HomeViewModel implements HomeViewModelIF {
 
 
             const seedListItem: SeedListItem = {
+                seedId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: '', // TODO: バックエンドが未実装

@@ -13,15 +13,16 @@ import sample1 from '../../assets/sample1.jpg';
 import sampleIcon1 from '../../assets/sampleIcon1.jpg';
 
 interface SeedViewCardProps {
-  title?: string;
-  description?: string;
+  seedId: string;
+  title: string;
+  description: string;
   ownerUserName?: string;
   imagePath?: any;
   userIconImagePath?: any;
   favoriteCount?: number;
 }
 
-const SeedViewCard = ({ title, description, ownerUserName, imagePath, userIconImagePath, favoriteCount }: SeedViewCardProps) => {
+const SeedViewCard = ({ seedId, title, description, ownerUserName, imagePath, userIconImagePath, favoriteCount }: SeedViewCardProps) => {
 
   return (
     <Card
@@ -36,7 +37,7 @@ const SeedViewCard = ({ title, description, ownerUserName, imagePath, userIconIm
         maxWidth: 345
       }}
       onClick={()=>{
-        window.location.href=`/seed/`+ownerUserName
+        window.location.href=`/seed/${seedId}`
     }}>
       <CardHeader/>
       <CardMedia
