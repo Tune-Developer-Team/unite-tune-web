@@ -245,11 +245,8 @@ const SeedEditView: () => JSX.Element = () => {
                                         console.log(event.target.files);
                                         if (event.target.files !== null) {
                                             const file = event.target.files[0] as File;
-                                            await viewModel.uploadS3({
-                                                file: file,
-                                                fileName: file.name,
-                                                seedId: seedId
-                                            });
+                                            await viewModel.uploadFile(file);
+
                                         }
                                     } else {
                                         console.log('none');

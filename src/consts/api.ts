@@ -8,6 +8,8 @@ export const endPoint = {
     TUNE_CARD: `${baseUrl}/tuneCards`,
     // SEED
     SEED: `${baseUrl}/seeds`,
+    // UPLOAD
+    UPLOAD: `${baseUrl}/upload`,
 
     UPLOAD_IMAGE: `${baseUrl}/generateS3PreSignedUrl`,
     ADD_CUSTOM_URL: `${baseUrl}/customUrl/add`,

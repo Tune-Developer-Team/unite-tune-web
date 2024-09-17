@@ -44,48 +44,24 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
      * アップロード
      * @param body
      */
-    async uploadS3(body: { file: File, fileName: string , seedId: string}): Promise<void> {
+    async uploadFile(file: File): Promise<void> {
         const api = new Api(this.authState);
-        const bucket = process.env.REACT_APP_SEED_BUCKET_NAME as string;
 
-        const s3Response = await api.post({
-            endPoint: endPoint.UPLOAD_IMAGE, body: {
-                fileName: `draft/${body.seedId}/${body.fileName}`,
-                bucket: bucket,
-                acl: 'public-read'
+        api.setConfig({contentsType: "multipart/form-data"});
+        await api.post({
+            endPoint: endPoint.UPLOAD, body: {
+                file: file,
             }
-        });
-
-        const url: string = s3Response.data.uploadUrl!;
-        console.log(url);
-
-        return await this.putFileToS3(url, body.file).then((res) => {
+        }).then((res) => {
             console.log("success");
             console.log(res);
 
-            const path = res.data.accessUrl;
-            const imagePath = ImagePath.create({alt:body.fileName, path:path});
-            this.imageFileList.push(imagePath);
+            const path = res.data.url;
+            this.imageFileList.push(path);
+            console.log(path);
         }).catch((err)=>{
             console.log("failure");
             console.log(err);
-        });
-    }
-
-    /**
-     * プットメソッドでリクエストを投げる
-     * @param endPoint
-     * @param file
-     */
-    private async putFileToS3(endPoint: string, file: File) {
-        console.log("===============put=============");
-        const fileData = new Blob([file], { type: 'image/png' });
-        const axiosInstance = axios.create();
-        return await axiosInstance.put(endPoint, fileData, {
-            headers: {
-                'Content-Type': file.type,
-                'Content-Length': file.size,
-            }
         });
     }
 }
