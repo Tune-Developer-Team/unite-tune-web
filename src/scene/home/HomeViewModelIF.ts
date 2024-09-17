@@ -14,7 +14,6 @@ export interface HomeViewModelIF {
     cleanUp(): void
 }
 
-// フロントエンドと揃えている
 export interface SeedListItem {
     title: string
     description: string
@@ -25,3 +24,37 @@ export interface SeedListItem {
     userIconImagePath: string
     favoriteCount: number
 }
+
+export interface SeedListApiResponseItemIF {
+    ID: number
+    SeedId: string
+    Title: string
+    OwnerUserUid: string
+    Description: string
+    IsPublished: boolean
+    Benefit: string
+    TermsFrom: number
+    TermsTo: number
+    HashTagList: string
+    ImagePathList: string
+    CreatedAt: string
+    UpdatedAt: string
+    DeletedAt: string
+}
+
+// export interface SeedListResponseItemIF {
+//     id
+//     seedId
+//     title
+//     ownerUserUid
+//     description
+//     isPublished
+//     benefit
+//     termsFrom
+//     termsTo
+//     hashTagList
+//     imagePathList
+//     createdAt
+//     updatedAt
+//     deletedAt
+// }
