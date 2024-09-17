@@ -1,5 +1,6 @@
 import {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {SeedDetail} from "../../models/Seed/SeedDetail/seedDetail";
+import {SeedDetailViewModel} from "./seedDetailViewModel";
 
 export interface SeedDetailViewModelIF {
     /**
