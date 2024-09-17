@@ -1,7 +1,9 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {HomeViewModelIF, SeedListItem} from "./HomeViewModelIF";
+import {HomeViewModelIF, SeedListApiResponseItemIF, SeedListItem} from "./HomeViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
+import {hashTagString} from "../../models/data/types";
+import ImagePath from "../../models/data/ImagePath";
 
 export class HomeViewModel implements HomeViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
@@ -38,11 +40,35 @@ export class HomeViewModel implements HomeViewModelIF {
      */
     async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: SeedListItem[] }> {
         console.log("===fetchSeedList=====")
-        console.log(authentication.accessToken)
+        // console.log(authentication.accessToken)
         const api = new Api(authentication);
         const result = await api.get(endPoint.SEED);
 
-        this.seedList = result.data.data;
+        const apiResponse = result.data.data;
+
+        this.seedList = apiResponse.map((item: SeedListApiResponseItemIF) => {
+
+            const imagePath = [ImagePath.create({alt:'',path:''})];
+            const hashTagStringList = ['#tag'];
+
+
+
+            const seedListItem: SeedListItem = {
+                seedId: item.SeedId,
+                title: item.Title,
+                description: item.Description,
+                ownerUserName: '', // TODO: バックエンドが未実装
+                hashTagStringList: ['#tag1','#tag2','#tag3'], // TODO: JSONを配列に変換
+                imagePath: imagePath[0], // TODO: JSONを配列に変換
+                updatedAt: item.UpdatedAt,
+                userIconImagePath: '', // TODO: バックエンドが未実装
+                favoriteCount: 0// TODO: バックエンドが未実装
+            }
+
+            return seedListItem
+        })
+
+        console.log(this.seedList[0].title)
 
         return {
             message: result.data.message,

@@ -1,12 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import {useParams} from "react-router-dom";
+import {SeedDetailViewModel} from "./seedDetailViewModel";
+import {useRecoilState} from "recoil";
+import {navigationState} from "../../atoms/NavigationState";
+import {authenticationState} from "../../atoms/AuthenticationState";
+import {profileState} from "../../atoms/ProfileState";
 
-const SeedDetail = () => {
+const seedDetailViewModel = new SeedDetailViewModel();
+
+const SeedDetailView = () => {
+    const [viewModel, setViewModel] = useState<SeedDetailViewModel>(seedDetailViewModel);
+    const [navigation, setNavigation] = useRecoilState(navigationState);
+    const [authState, setAuthentication] = useRecoilState(authenticationState);
+    const [profile, setProfile] = useRecoilState(profileState);
+
     const params = useParams();
-    console.log(params.seedId);
+    const seedId = params.seedId as string;
+
+    const setUp = async (): Promise<void> => {
+        await viewModel.setUp({
+            authentication: {
+                accessToken: authState.accessToken,
+                uid: authState.uid,
+                email: authState.email
+            }, seedId: seedId,
+        });
+    }
+
+    useEffect(() => {
+        setNavigation({isHidden: false, isEnableRedirect: true});
+        // セットアップ
+        void setUp();
+
+        return () => {
+            // クリーンアップ
+            viewModel.cleanUp()
+        };
+    }, []);
+
     return (
         <div className="Home" style={{paddingLeft: '5rem'}}>
             <Grid container spacing={2} className={"projectByLanguage"}>
@@ -47,4 +81,4 @@ const SeedDetail = () => {
     );
 };
 
-export default SeedDetail;
+export default SeedDetailView;
