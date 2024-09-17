@@ -16,28 +16,13 @@ import ConfirmButton from "../../ui/confirmBottun/ConfirmButton";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {SeedInputIF} from "../../models/Seed/Seed";
 import ImagePath from "../../models/data/ImagePath";
 import {CloudUpload} from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/system";
 import {hashTagString, isHashTag} from "../../models/data/types";
 import {navigationState} from "../../atoms/NavigationState";
-
-export interface AddSeedInputParamIF {
-    imagePathList: string;
-    termsFrom: any;
-    termsTo: any;
-    hashTagStringList: hashTagString[];
-    isPublished: boolean;
-    seedId: string;
-    description: string;
-    relationSeedIdList: string;
-    title: string;
-    mentionList: string;
-    benefit: string;
-    ownerUserUid: string
-}
+import {AddSeedInputParamIF} from "./SeedEditViewModelIF";
 
 const seedEditViewModel = new SeedEditViewModel();
 
@@ -77,6 +62,13 @@ const SeedEditView: () => JSX.Element = () => {
         imageList.push(ImagePath.create({path:file3?.webkitRelativePath??'', alt: file3?.name??''}))
         imageList.push(ImagePath.create({path:file4?.webkitRelativePath??'', alt: file4?.name??''}))
 
+        const dateTermsFrom = new Date(termsFrom);
+        const unixTermsFrom = Math.floor(dateTermsFrom.getTime() / 1000);
+
+        const dateTermsTo = new Date(termsFrom);
+        const unixTermsTo = Math.floor(dateTermsTo.getTime() / 1000);
+
+
         const addSeedParam: AddSeedInputParamIF = {
             ownerUserUid: authState.uid as string,
             isPublished: true,
@@ -84,8 +76,8 @@ const SeedEditView: () => JSX.Element = () => {
             title: title,
             description: description,
             benefit: benefit,
-            termsFrom: termsFrom,
-            termsTo: termsTo,
+            termsFrom: unixTermsFrom,
+            termsTo: unixTermsTo,
             hashTagStringList: hashTags,
             imagePathList: JSON.stringify(imageList),
             relationSeedIdList:  JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能

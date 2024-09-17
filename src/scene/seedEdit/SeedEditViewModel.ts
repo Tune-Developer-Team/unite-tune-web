@@ -1,10 +1,9 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {SeedEditViewModelIF} from "./SeedEditViewModelIF";
+import {AddSeedInputParamIF, SeedEditViewModelIF} from "./SeedEditViewModelIF";
 import {Api} from "../../models/Api/Api";
 import axios, {AxiosResponse} from "axios";
 import ImagePath from "../../models/data/ImagePath";
 import {endPoint} from "../../consts/api";
-import {AddSeedInputParamIF} from "./SeedEditView";
 
 export class SeedEditViewModel implements SeedEditViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
