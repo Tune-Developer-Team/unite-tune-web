@@ -27,7 +27,7 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
             const api = new Api(authState);
             api.setConfig({contentsType: "multipart/form-data"});
             await api.post({
-                endPoint: endPoint.UPLOAD, body: {
+                endPoint: endPoint.UPLOAD_IMAGE, body: {
                     file: file,
                 }
             }).then((res) => {
@@ -54,7 +54,7 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
                 variant="contained"
                 startIcon={<CloudUpload />}
             >
-                Upload file
+                upload image
                 <input
                     type="file"
                     accept="image/*"

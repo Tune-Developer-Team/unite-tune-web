@@ -71,18 +71,19 @@ export class Api {
      * プットメソッドでリクエストを投げる
      * @param props
      */
-    public async delete(props: { endPoint: string }): Promise<AxiosResponse> {
+    public async delete(props: { endPoint: string  ,body: any }): Promise<AxiosResponse> {
         console.log("===============post=============");
         console.log(props);
 
         const endPoint = props.endPoint;
+        const body = props.body;
 
         if ((endPoint === '') || (endPoint === undefined)) {
             console.log("========Error===========")
             throw new Error("error")
         }
 
-        return await this.axiosInstance.delete(endPoint);
+        return await this.axiosInstance.delete(endPoint, body);
     }
 
     /**

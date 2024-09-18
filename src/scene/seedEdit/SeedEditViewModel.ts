@@ -1,13 +1,11 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {AddSeedInputParamIF, SeedEditViewModelIF} from "./SeedEditViewModelIF";
 import {Api} from "../../models/Api/Api";
-import axios, {AxiosResponse} from "axios";
-import ImagePath from "../../models/data/ImagePath";
+import {AxiosResponse} from "axios";
 import {endPoint} from "../../consts/api";
 
 export class SeedEditViewModel implements SeedEditViewModelIF {
     public authState:Authentication = Authentication.initAuthentication();
-    public imageFileList: ImagePath[] = [];
     constructor(
     ) {
         console.log('====================SignInViewModel_called====================');
@@ -31,65 +29,20 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
     }
 
     /**
-     *
+     * シードを公開用として保存する
      */
     async addSeed(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
         console.log("===============addSeed============");
         const api = new Api(this.authState);
-        const body = seedInput;
-        return await api.post({endPoint:endPoint.SEED, body})
+        return await api.post({endPoint:endPoint.SEED, body:seedInput})
     }
 
     /**
-     * アップロード
-     * @param body
+     * 下書きを新規作成・更新する
      */
-    async uploadFile(index: number, file: File): Promise<ImagePath[]> {
+    async addSeedAsDraft(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
+        console.log("===============addSeed============");
         const api = new Api(this.authState);
-        api.setConfig({contentsType: "multipart/form-data"});
-        await api.post({
-            endPoint: endPoint.UPLOAD, body: {
-                file: file,
-            }
-        }).then((res) => {
-            console.log("success");
-            console.log(res);
-
-            const path = res.data.url;
-            console.log(path);
-            const imagePath = ImagePath.create({alt: 'file1', path: path});
-            this.imageFileList[index] = (imagePath);
-            console.log(this.imageFileList);
-        }).catch((err)=>{
-            console.log("failure");
-            console.log(err);
-        });
-        return this.imageFileList;
-    }
-
-    async removeFile(index: number): Promise<ImagePath[]> {
-        console.log("remove",index);
-        console.log(this.imageFileList[index]);
-        // if(!this.imageFileList[index]){
-        //     return this.imageFileList;
-        // }
-        // const api = new Api(this.authState);
-        // await api.post({
-        //     endPoint: endPoint.UPLOAD, body: {
-        //         path: this.imageFileList[index].path,
-        //     }
-        // }).then((res) => {
-        //     console.log("success");
-        //     console.log(res);
-        //
-        //     this.imageFileList[0] = ImagePath.create({alt:'',path:''});
-        //     console.log(this.imageFileList);
-        // }).catch((err)=>{
-        //     console.log("failure");
-        //     console.log(err);
-        // });
-        this.imageFileList[index] = ImagePath.create({alt:'',path:''});
-        console.log(this.imageFileList[index]);
-        return this.imageFileList;
+        return await api.post({endPoint: `${endPoint.SAVE_SEED_AS_DRAFT}/${seedInput.seedId}`, body:seedInput})
     }
 }
