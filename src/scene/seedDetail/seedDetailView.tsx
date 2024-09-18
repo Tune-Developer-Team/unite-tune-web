@@ -60,6 +60,9 @@ const SeedDetailView = () => {
 
                 <Grid xs={6} sm={6} md={6} lg={6} sx={{textAlign: "center"}}>
                     <Box sx={{textAlign:"start"}}>
+                        {viewModel.seedDetail.imagePathList.length > 0 ?
+                            <img src={viewModel.seedDetail.imagePathList[0].path} alt={viewModel.seedDetail.imagePathList[0].alt}/> : <p>画像なし</p>
+                        }
                         <Typography>
                             {viewModel.seedDetail.description}
                         </Typography>

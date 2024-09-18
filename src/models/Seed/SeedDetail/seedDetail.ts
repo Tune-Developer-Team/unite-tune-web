@@ -73,9 +73,15 @@ export class SeedDetail {
     createFromAPIResponse(apiResponse: SeedDetailApiResponseIF
     ): SeedDetail {
 
-        apiResponse.ImagePathList = [ImagePath.create({alt:'',path:''})];
+        const imagePathJson = JSON.parse(apiResponse.ImagePathList)
+        const imagePathList: ImagePath[] = imagePathJson.map((imagePath: { alt: string, path: string }) => {
+            return ImagePath.create({alt: imagePath.alt, path: imagePath.path});
+        });
+
         apiResponse.HashTagList = ['#tag1','#tag2','#tag3']; // TODO: JSONを配列に変換
         apiResponse.OwnerUserName = ''; // TODO: バックエンドが未実装
+
+
 
         const input: SeedDetailIF = {
             seedId: apiResponse.SeedId,
@@ -90,7 +96,7 @@ export class SeedDetail {
             termsTo: apiResponse.TermsTo,
             relationSeedIdList: apiResponse.RelationSeedIdList,
             hashTagStringList: apiResponse.HashTagList,
-            imagePathList: apiResponse.ImagePathList,
+            imagePathList: imagePathList,
             mentionList: apiResponse.MentionList
         }
 
