@@ -6,7 +6,7 @@ import ImagePath from "../../models/data/ImagePath";
 import {endPoint} from "../../consts/api";
 
 export class SeedEditViewModel implements SeedEditViewModelIF {
-    protected authState:Authentication = Authentication.initAuthentication();
+    public authState:Authentication = Authentication.initAuthentication();
     public imageFileList: ImagePath[] = [];
     constructor(
     ) {
@@ -44,9 +44,8 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
      * アップロード
      * @param body
      */
-    async uploadFile(file: File): Promise<void> {
+    async uploadFile(index: number, file: File): Promise<ImagePath[]> {
         const api = new Api(this.authState);
-
         api.setConfig({contentsType: "multipart/form-data"});
         await api.post({
             endPoint: endPoint.UPLOAD, body: {
@@ -57,11 +56,40 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
             console.log(res);
 
             const path = res.data.url;
-            this.imageFileList.push(path);
             console.log(path);
+            const imagePath = ImagePath.create({alt: 'file1', path: path});
+            this.imageFileList[index] = (imagePath);
+            console.log(this.imageFileList);
         }).catch((err)=>{
             console.log("failure");
             console.log(err);
         });
+        return this.imageFileList;
+    }
+
+    async removeFile(index: number): Promise<ImagePath[]> {
+        console.log("remove",index);
+        console.log(this.imageFileList[index]);
+        // if(!this.imageFileList[index]){
+        //     return this.imageFileList;
+        // }
+        // const api = new Api(this.authState);
+        // await api.post({
+        //     endPoint: endPoint.UPLOAD, body: {
+        //         path: this.imageFileList[index].path,
+        //     }
+        // }).then((res) => {
+        //     console.log("success");
+        //     console.log(res);
+        //
+        //     this.imageFileList[0] = ImagePath.create({alt:'',path:''});
+        //     console.log(this.imageFileList);
+        // }).catch((err)=>{
+        //     console.log("failure");
+        //     console.log(err);
+        // });
+        this.imageFileList[index] = ImagePath.create({alt:'',path:''});
+        console.log(this.imageFileList[index]);
+        return this.imageFileList;
     }
 }

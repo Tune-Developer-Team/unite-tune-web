@@ -49,6 +49,43 @@ export class Api {
     }
 
     /**
+     * プットメソッドでリクエストを投げる
+     * @param props
+     */
+    public async put(props: { endPoint: string, body: any }): Promise<AxiosResponse> {
+        console.log("===============post=============");
+        console.log(props);
+
+        const endPoint = props.endPoint;
+        const body = props.body;
+
+        if ((endPoint === '') || (endPoint === undefined)) {
+            console.log("========Error===========")
+            throw new Error("error")
+        }
+
+        return await this.axiosInstance.put(endPoint, body);
+    }
+
+    /**
+     * プットメソッドでリクエストを投げる
+     * @param props
+     */
+    public async delete(props: { endPoint: string }): Promise<AxiosResponse> {
+        console.log("===============post=============");
+        console.log(props);
+
+        const endPoint = props.endPoint;
+
+        if ((endPoint === '') || (endPoint === undefined)) {
+            console.log("========Error===========")
+            throw new Error("error")
+        }
+
+        return await this.axiosInstance.delete(endPoint);
+    }
+
+    /**
      * コンフィグを設定する
      * @param options
      */
