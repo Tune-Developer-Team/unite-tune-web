@@ -48,10 +48,11 @@ export class HomeViewModel implements HomeViewModelIF {
 
         this.seedList = apiResponse.map((item: SeedListApiResponseItemIF) => {
 
-            const imagePath = [ImagePath.create({alt:'',path:''})];
+            // SPEC: 1枚目の画像をメイン画像にする
+            const imagePathJson = JSON.parse(item.ImagePathList)
+            const imagePath: ImagePath = ImagePath.create({alt: imagePathJson[0].alt, path: imagePathJson[0].path});
+
             const hashTagStringList = ['#tag'];
-
-
 
             const seedListItem: SeedListItem = {
                 seedId: item.SeedId,
@@ -59,9 +60,9 @@ export class HomeViewModel implements HomeViewModelIF {
                 description: item.Description,
                 ownerUserName: '', // TODO: バックエンドが未実装
                 hashTagStringList: ['#tag1','#tag2','#tag3'], // TODO: JSONを配列に変換
-                imagePath: imagePath[0], // TODO: JSONを配列に変換
+                imagePath: imagePath,
                 updatedAt: item.UpdatedAt,
-                userIconImagePath: '', // TODO: バックエンドが未実装
+                userIconImagePath: ImagePath.create({alt: '', path: ''}), // TODO: バックエンドが未実装
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 

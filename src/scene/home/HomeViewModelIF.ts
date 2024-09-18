@@ -19,10 +19,10 @@ export interface SeedListItem {
     title: string
     description: string
     ownerUserName: string
-    hashTagStringList: hashTagString[];
-    imagePath: ImagePath;
+    hashTagStringList: hashTagString[]
+    imagePath: ImagePath
     updatedAt: string
-    userIconImagePath: string
+    userIconImagePath: ImagePath
     favoriteCount: number
 }
 

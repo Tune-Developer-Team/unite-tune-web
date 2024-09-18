@@ -5,8 +5,8 @@ export interface ImagePathIF {
 
 export default class ImagePath {
     private constructor(
-        protected readonly alt: string,
-        protected readonly path: string
+        public readonly alt: string,
+        public readonly path: string
     ) {
     }
 

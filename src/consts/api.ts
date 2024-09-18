@@ -10,6 +10,7 @@ export const endPoint = {
     SEED: `${baseUrl}/seeds`,
     // UPLOAD
     UPLOAD: `${baseUrl}/upload`,
+    DELETE: `${baseUrl}/delete`,
 
     UPLOAD_IMAGE: `${baseUrl}/generateS3PreSignedUrl`,
     ADD_CUSTOM_URL: `${baseUrl}/customUrl/add`,
