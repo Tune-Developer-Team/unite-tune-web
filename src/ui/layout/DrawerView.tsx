@@ -240,7 +240,7 @@ export default function DrawerView() {
                 <List>
                     {[
                         {label: 'Portfolio', icon: <AssignmentIcon/>, linkPath: "/portfolio"},
-                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: '/' + viewModel.generateSeedId() + '/edit'},
+                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'},
                         {label: 'Preference', icon: <SettingsIcon/>, linkPath: "/preference"},
                     ].map((item, index) => (
                         <ListItem key={index} disablePadding sx={{display: 'block'}}>
