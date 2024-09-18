@@ -21,7 +21,7 @@ export interface SeedDetailIF {
 
 export interface SeedDetailApiResponseIF {
     ID: number
-    ImagePathList: ImagePath[];
+    ImagePathList: string;
     TermsFrom: string;
     TermsTo: string;
     Description: string;

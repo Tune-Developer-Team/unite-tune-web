@@ -17,14 +17,19 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import ImagePath from "../../models/data/ImagePath";
-import {CloudUpload} from "@mui/icons-material";
-import Button from "@mui/material/Button";
-import {styled} from "@mui/system";
 import {hashTagString, isHashTag} from "../../models/data/types";
 import {navigationState} from "../../atoms/NavigationState";
 import {AddSeedInputParamIF} from "./SeedEditViewModelIF";
+import {ImageUploadForm} from "./imageUploadForm";
+import IconButton from "@mui/material/IconButton";
+import {endPoint} from "../../consts/api";
+import {Api} from "../../models/Api/Api";
 
 const seedEditViewModel = new SeedEditViewModel();
+
+function DeleteIcon() {
+    return null;
+}
 
 const SeedEditView: () => JSX.Element = () => {
     const urlParams = useParams<{ seedId: string }>()
@@ -35,9 +40,9 @@ const SeedEditView: () => JSX.Element = () => {
     }
 
     const [authState] = useRecoilState(authenticationState);
-    const [profile, setProfile] = useRecoilState(profileState);
     const [navigation, setNavigation] = useRecoilState(navigationState);
     const [viewModel] = useState<SeedEditViewModel>(seedEditViewModel);
+    const [isNeedUpdateDraft, setIsNeedUpdateDraft] = useState<boolean>(false);
 
     //　フォーム
     const [title, setTitle] = useState<string>('MySeed');
@@ -46,32 +51,52 @@ const SeedEditView: () => JSX.Element = () => {
     const [termsFrom, setTermFrom] = useState<any | null>(null);
     const [termsTo, setTermTo] = useState<any | null>(null);
     const [hashTags, setHashTags] = useState<hashTagString[]>([]);
+    const [imagePathList, setImagePathList] = useState<ImagePath[]>([]);
 
-    // 画像
-    const [file1, setFile1] = useState<File | null>(null);
-    const [file2, setFile2] = useState<File | null>(null);
-    const [file3, setFile3] = useState<File | null>(null);
-    const [file4, setFile4] = useState<File | null>(null);
+    // ファイル変更時に受け取るコールバック関数
+    const handleFileChange = async (imagePath: ImagePath) => {
+        // アップロード済みの画像パスをリストに追加
+        setImagePathList((prevList: ImagePath[]) => [...prevList, imagePath]);
+        // 下書きの更新
+        setIsNeedUpdateDraft(true);
+    };
+
+    // 画像削除処理
+    const handleImageDelete = async (index: number, imagePath: ImagePath) => {
+        const api = new Api(viewModel.authState);
+        try {
+            const objectName = imagePath.getGCSObjectName();
+
+            const params = {
+                ObjectName: objectName,
+                BucketName: "auth-tune"
+            };
+            await api.post({
+                endPoint: `${endPoint.DELETE_IMAGE}`,
+                body: params
+            });
+            console.log("Image deleted successfully");
+
+            // 画像をリストから削除
+            setImagePathList((prevList) => prevList.filter((_, i) => i !== index));
+            // 下書きの更新
+            setIsNeedUpdateDraft(true);
+        } catch (error) {
+            console.log("Failed to delete image", error);
+        }
+    };
 
     // シードを追加する
-    const addSeed = async (): Promise<void> => {
-
-        const imageList = [];
-        imageList.push(ImagePath.create({path:file1?.webkitRelativePath??'', alt: file1?.name??''}));
-        imageList.push(ImagePath.create({path:file2?.webkitRelativePath??'', alt: file2?.name??''}))
-        imageList.push(ImagePath.create({path:file3?.webkitRelativePath??'', alt: file3?.name??''}))
-        imageList.push(ImagePath.create({path:file4?.webkitRelativePath??'', alt: file4?.name??''}))
-
+    const saveSeed = async (param: { isPublished: boolean }): Promise<void> => {
         const dateTermsFrom = new Date(termsFrom);
         const unixTermsFrom = Math.floor(dateTermsFrom.getTime() / 1000);
 
-        const dateTermsTo = new Date(termsFrom);
+        const dateTermsTo = new Date(termsTo);
         const unixTermsTo = Math.floor(dateTermsTo.getTime() / 1000);
-
 
         const addSeedParam: AddSeedInputParamIF = {
             ownerUserUid: authState.uid as string,
-            isPublished: true,
+            isPublished: param.isPublished,
             seedId: seedId,
             title: title,
             description: description,
@@ -79,25 +104,33 @@ const SeedEditView: () => JSX.Element = () => {
             termsFrom: unixTermsFrom,
             termsTo: unixTermsTo,
             hashTagStringList: hashTags,
-            imagePathList: JSON.stringify(imageList),
+            imagePathList: JSON.stringify(imagePathList),
             relationSeedIdList:  JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
             mentionList:  JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
-        await viewModel.addSeed(addSeedParam);
+
+        if (param.isPublished) {
+            await viewModel.addSeed(addSeedParam);
+        } else {
+            await viewModel.addSeedAsDraft(addSeedParam);
+        }
+        setIsNeedUpdateDraft(false);
     }
 
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
+    /**
+     * 下書き更新フック
+     */
+    useEffect(() => {
+        console.log('際描画と下書きの更新');
+        console.log(imagePathList);
+        if(isNeedUpdateDraft){
+                void saveSeed({isPublished: false});
+        }
+    }, [isNeedUpdateDraft]);
 
+    /**
+     * セットアップ
+     */
     useEffect(() => {
         setNavigation({isHidden: false, isEnableRedirect: true});
 
@@ -224,130 +257,47 @@ const SeedEditView: () => JSX.Element = () => {
                         <Typography variant="h5" component="div" sx={{textAlign: "start", backgroundColor: "gray"}}>
                             <TipsAndUpdatesIcon/> Image
                         </Typography>
-                        <Box sx={{display: "flex", width: "100%"}}>
-                            {(file1 !== null)
-                                ?
-                                <Box style={{maxWidth: '30%', height: 'auto'}}>
-                                    <Box style={{textAlign: "center", position: "relative", zIndex:10, paddingTop: "-2rem"}}
-                                         onClick={() => {
-                                            setFile1(null);
-                                        }}>remove</Box>
-                                    <img src={window.URL.createObjectURL(file1)} alt={'Uploaded-1'} style={{maxWidth: '100%', height: 'auto'}}/>
+                        <ImageUploadForm onFileChange={handleFileChange} authState={viewModel.authState} />
+                        <div>
+                            {imagePathList.map((imagePath:ImagePath, index:number) => (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        position: "relative",
+                                        width: 100,
+                                        height: 100,
+                                    }}
+                                >
+                                    <img
+                                        src={imagePath.path}
+                                        alt={imagePath.alt}
+                                        width="100"
+                                        height="100"
+                                        style={{ objectFit: "cover" }}
+                                    />
+                                    {/* ホバーで表示される削除ボタン */}
+                                    <IconButton
+                                        onClick={() => handleImageDelete(index, imagePath)}
+                                        sx={{
+                                            position: "absolute",
+                                            top: 0,
+                                            right: 0,
+                                            color: "white",
+                                            bgcolor: "rgba(255,255,255,0.5)",
+                                            '&:hover': {
+                                                bgcolor: "rgba(255, 0, 0, 0.7)"
+                                            },
+                                        }}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </Box>
-                                : <Button
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudUpload/>}
-                                onChange={async (event) => {
-                                    if (event.target instanceof HTMLInputElement) {
-                                        console.log(event.target.files);
-                                        if (event.target.files !== null) {
-                                            const file = event.target.files[0] as File;
-                                            await viewModel.uploadS3({
-                                                file: file,
-                                                fileName: file.name,
-                                                seedId: seedId
-                                            });
-                                        }
-                                    } else {
-                                        console.log('none');
-                                    }
-                                }}
-                            >
-                                Upload file1
-                                <VisuallyHiddenInput type="file"/>
-                            </Button>}
-                            {(file2 !== null)
-                                ? <Box style={{maxWidth: '30%', height: 'auto'}}>
-                                    <Box style={{textAlign: "center", position: "relative", zIndex:10, paddingTop: "-2rem"}}
-                                         onClick={() => {
-                                             setFile2(null);
-                                         }}>remove</Box><img src={window.URL.createObjectURL(file2)} alt={'Uploaded-2'} style={{maxWidth: '100%', height: 'auto'}}/>
-                                </Box>
-                                : <Button
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudUpload/>}
-                                onChange={(event) => {
-                                    if (event.target instanceof HTMLInputElement) {
-                                        console.log(event.target.files);
-                                        if (event.target.files !== null) {
-                                            setFile2(event.target.files[0]);
-                                        }
-                                    } else {
-                                        console.log('none');
-                                    }
-                                }}
-                            >
-                                Upload file2
-                                <VisuallyHiddenInput type="file"/>
-                            </Button>}
-                            {(file3 !== null)
-                                ? <Box style={{maxWidth: '100%', height: 'auto'}}>
-                                    <Box style={{textAlign: "center", position: "relative", zIndex:10, paddingTop: "-2rem"}}
-                                         onClick={() => {
-                                             setFile3(null);
-                                         }}>remove</Box>
-                                    <img src={window.URL.createObjectURL(file3)} alt={'Uploaded-3'} style={{maxWidth: '100%', height: 'auto'}}/>
-                                </Box>
-                                : <Button
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudUpload/>}
-                                onChange={(event) => {
-                                    if (event.target instanceof HTMLInputElement) {
-                                        console.log(event.target.files);
-                                        if (event.target.files !== null) {
-                                            setFile3(event.target.files[0]);
-                                        }
-                                    } else {
-                                        console.log('none');
-                                    }
-                                }}
-                            >
-                                Upload file3
-                                <VisuallyHiddenInput type="file"/>
-                            </Button>}
-                            {(file4 !== null)
-                                ? <Box style={{maxWidth: '30%', height: 'auto'}}>
-                                    <Box style={{textAlign: "center", position: "relative", zIndex:10, paddingTop: "-2rem"}}
-                                         onClick={() => {
-                                             setFile4(null);
-                                         }}>remove</Box>
-                                    <img src={window.URL.createObjectURL(file4)} alt={'Uploaded-4'}
-                                                     style={{maxWidth: '100%', height: 'auto'}}/>
-                                </Box>
-                                : <Button
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudUpload/>}
-                                onChange={(event) => {
-                                    if (event.target instanceof HTMLInputElement) {
-                                        console.log(event.target.files);
-                                        if (event.target.files !== null) {
-                                            setFile4(event.target.files[0]);
-                                        }
-                                    } else {
-                                        console.log('none');
-                                    }
-                                }}
-                            >
-                                Upload file4
-                                <VisuallyHiddenInput type="file"/>
-                            </Button>}
-                        </Box>
+                            ))}
+                        </div>
                     </Box>
                     <Box sx={{marginTop: 10}}>
                         <ConfirmButton label={'完了'} onClick={() => {
-                            addSeed()
+                            saveSeed({isPublished: true})
                         }}/>
                     </Box>
                 </Grid>

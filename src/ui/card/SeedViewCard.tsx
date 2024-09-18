@@ -11,18 +11,27 @@ import ShareIcon from '@mui/icons-material/Share';
 
 import sample1 from '../../assets/sample1.jpg';
 import sampleIcon1 from '../../assets/sampleIcon1.jpg';
+import ImagePath from "../../models/data/ImagePath";
 
 interface SeedViewCardProps {
   seedId: string;
   title: string;
   description: string;
   ownerUserName?: string;
-  imagePath?: any;
-  userIconImagePath?: any;
+  imagePath?: ImagePath;
+  userIconImagePath?: ImagePath;
   favoriteCount?: number;
 }
 
-const SeedViewCard = ({ seedId, title, description, ownerUserName, imagePath, userIconImagePath, favoriteCount }: SeedViewCardProps) => {
+const SeedViewCard = ({
+                          seedId: seedId,
+                          title: title,
+                          description: description,
+                          ownerUserName: ownerUserName,
+                          imagePath: imagePath,
+                          userIconImagePath: userIconImagePath,
+                          favoriteCount: favoriteCount
+                      }: SeedViewCardProps) => {
 
   return (
     <Card
@@ -43,7 +52,7 @@ const SeedViewCard = ({ seedId, title, description, ownerUserName, imagePath, us
       <CardMedia
         component="img"
         height="194"
-        image={sample1}
+        image={imagePath?.path != '' ? imagePath?.path : sample1}
         alt="imagePath"
       />
         <Typography variant="h5" color="text.secondary"
