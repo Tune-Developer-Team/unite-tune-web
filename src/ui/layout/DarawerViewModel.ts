@@ -1,4 +1,4 @@
-import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
+import Authentication from "../../models/Authentication/Authentication";
 import dayjs from "dayjs";
 import Profile from "../../models/Profile/Profile";
 import {Api} from "../../models/Api/Api";

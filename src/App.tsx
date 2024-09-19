@@ -8,13 +8,15 @@ import DrawerView from "./ui/layout/DrawerView";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {RecoilRoot} from "recoil";
 import Profile from "./scene/profile/ProfileView";
-import TaskList from "./scene/taskList";
+import Portfolio from "./scene/portfolio";
 import SeedEditView from "./scene/seedEdit/SeedEditView";
 import HomeView from "./scene/home/HomeView";
 import TuneCardView from "./scene/tuneCard/tuneCardView";
 import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
 import SeedDetailView from "./scene/seedDetail/seedDetailView";
+import PostList from "./ui/feed/PostList";
+import AISecretary from "./scene/AISecretary";
 
 function App() {
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
@@ -23,7 +25,13 @@ function App() {
     const theme = createTheme({
         palette: {
             // mode: darkMode ? 'dark' : 'light',
-            mode: 'dark'
+            mode: 'dark',
+            primary: {
+                main: '#1857df', // プライマリー色
+            },
+            secondary: {
+                main: '#cecece', // セカンダリー色を設定
+            },
         },
         breakpoints: {
             values: {
@@ -40,20 +48,6 @@ function App() {
       <RecoilRoot>
           <ThemeProvider theme={theme}>
               <GoogleOAuthProvider clientId={clientId}>
-                  {/*<header className="App-header">*/}
-                  {/*  <img src={logo} className="App-logo" alt="logo" />*/}
-                  {/*  <p>*/}
-                  {/*    Edit <code>src/App.tsx</code> and save to reload.*/}
-                  {/*  </p>*/}
-                  {/*  <a*/}
-                  {/*      className="App-link"*/}
-                  {/*      href="https://reactjs.org"*/}
-                  {/*      target="_blank"*/}
-                  {/*      rel="noopener noreferrer"*/}
-                  {/*  >*/}
-                  {/*    Learn React*/}
-                  {/*  </a>*/}
-                  {/*</header>*/}
                   <BrowserRouter>
                       <DrawerView/>
                       <Routes>
@@ -78,16 +72,19 @@ function App() {
                           <Route path={'seed/:seedId'} element={<SeedDetailView/>}/>
                       </Routes>
                       <Routes>
-                          <Route path={'/profile'} element={<Profile/>}/>
-                      </Routes>
-                      <Routes>
                           <Route path={'/user/:uid'} element={<Profile/>}/>
                       </Routes>
                       <Routes>
-                          <Route path={'/portfolio'} element={<TaskList/>}/>
+                          <Route path={'/user/:uid/ais'} element={<AISecretary/>}/>
+                      </Routes>
+                      <Routes>
+                          <Route path={'/user/:uid/portfolio'} element={<Portfolio/>}/>
                       </Routes>
                       <Routes>
                           <Route path={'/card/:cardSerial'} element={<TuneCardView/>}/>
+                      </Routes>
+                      <Routes>
+                          <Route path="/post-list" element={<PostList />} />
                       </Routes>
                   </BrowserRouter>
               </GoogleOAuthProvider>

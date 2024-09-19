@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import HomePiChart from "../../ui/chart/pie/homnePieChart";
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";
@@ -10,9 +9,15 @@ import {HomeViewModel} from "./HomeViewModel";
 import {SeedListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
 import SeedViewCard from "../../ui/card/SeedViewCard";
+import RSSFeedBanner from "../../ui/feed/RSSFeedBanner";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import {useNavigate} from "react-router-dom";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
+    const navigate = useNavigate();
+
     const [navigation, setNavigation] = useRecoilState(navigationState);
     const [authState, setAuthentication] = useRecoilState(authenticationState);
     const [profile, setProfile] = useRecoilState(profileState);
@@ -54,19 +59,19 @@ const HomeView = () => {
 
     return (
         <div className="Home" style={{paddingLeft: '5rem'}}>
-            <Grid container spacing={2} className={"projectByLanguage"}>
+            <Grid container spacing={2} className={"new-arrival-banner"}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
-                        カテゴリ別Seed
+                        NEW ARRIVAL
                     </Typography>
+                    <Box textAlign={"end"} paddingRight={10}>
+                        <Button variant="text" style={{color:"#fff"}} onClick={() => {
+                            navigate(`/post-list`)
+                        }}>全て表示する</Button>
+                    </Box>
                 </Grid>
-                <Grid xs={0} sm={0} md={3} lg={3} >
-                </Grid>
-                <Grid sx={{display: "flex"}}
-                      xs={12} sm={12} md={6} lg={6}>
-                    <HomePiChart/>
-                </Grid>
-                <Grid xs={0} sm={0} md={3} lg={3} >
+                <Grid xs={12} sm={12} md={12} lg={12} >
+                    <RSSFeedBanner/>
                 </Grid>
             </Grid>
             <Grid container spacing={3}>
