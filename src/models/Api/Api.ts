@@ -16,6 +16,7 @@ export class Api {
         this.axiosInstance = axios.create({
             headers: {
                 'Authorization': authentication.accessToken,
+                'x-api-key': '1yIDLcQTj28kU0fpfZFdCaZoi4dCoEgC8hLh1duf'
             }
         });
     }
@@ -46,44 +47,6 @@ export class Api {
     public async get(endPoint: string) {
         console.log("===============get=============");
         return await this.axiosInstance.get(endPoint);
-    }
-
-    /**
-     * プットメソッドでリクエストを投げる
-     * @param props
-     */
-    public async put(props: { endPoint: string, body: any }): Promise<AxiosResponse> {
-        console.log("===============post=============");
-        console.log(props);
-
-        const endPoint = props.endPoint;
-        const body = props.body;
-
-        if ((endPoint === '') || (endPoint === undefined)) {
-            console.log("========Error===========")
-            throw new Error("error")
-        }
-
-        return await this.axiosInstance.put(endPoint, body);
-    }
-
-    /**
-     * プットメソッドでリクエストを投げる
-     * @param props
-     */
-    public async delete(props: { endPoint: string  ,body: any }): Promise<AxiosResponse> {
-        console.log("===============post=============");
-        console.log(props);
-
-        const endPoint = props.endPoint;
-        const body = props.body;
-
-        if ((endPoint === '') || (endPoint === undefined)) {
-            console.log("========Error===========")
-            throw new Error("error")
-        }
-
-        return await this.axiosInstance.delete(endPoint, body);
     }
 
     /**

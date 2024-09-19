@@ -2,14 +2,16 @@ import React, {useEffect, useState} from 'react';
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
+import {Card, CardContent, CardMedia} from "@mui/material";
 import HomePiChart from "../../ui/chart/pie/homnePieChart";
+import HomeGrid from "../../ui/grid/homeGrid";
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";
 import {HomeViewModel} from "./HomeViewModel";
 import {SeedListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
-import SeedViewCard from "../../ui/card/SeedViewCard";
+import RecipeReviewCard from "../../ui/card/RecipeReviewCard";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
@@ -25,7 +27,6 @@ const HomeView = () => {
     const loadSeedList = async (): Promise<void> => {
         console.log("===loadSeedList===");
         await viewModel.fetchSeedList(authState).then((response)=>{
-
             console.log(response);
             setSeedList(viewModel.seedList);
         }).catch((error)=>{
@@ -72,20 +73,19 @@ const HomeView = () => {
             <Grid container spacing={3}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
-                        人気のSeed
+                        おすすめSeed
                     </Typography>
                 </Grid>
                 {seedList.map((item, index) => (
                   <Grid xs={12} sm={2} md={2} key={index}>
-                      <SeedViewCard
-                          seedId={item.seedId}
-                          title={item.title}
-                          description={item.description || "September 14, 2016"}
-                          ownerUserName={item.ownerUserName}
-                          imagePath={item.imagePath}
-                          userIconImagePath={item.userIconImagePath}
-                          favoriteCount={item.favoriteCount}
-                      />
+                    <RecipeReviewCard
+                      title={item.title || "Shrimp and Chorizo Paella"}
+                      description={item.description || "September 14, 2016"}
+                      ownerUserName={item.ownerUserName}
+                      imagePath={item.imagePath}
+                      userIconImagePath={item.userIconImagePath}
+                      favoriteCount={item.favoriteCount}
+                    />
                   </Grid>
                 ))}
             </Grid>

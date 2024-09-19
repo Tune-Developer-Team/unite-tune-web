@@ -9,12 +9,12 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import {RecoilRoot} from "recoil";
 import Profile from "./scene/profile/ProfileView";
 import TaskList from "./scene/taskList";
+import SeedDetail from "./scene/seedDetail/seedDetail";
 import SeedEditView from "./scene/seedEdit/SeedEditView";
 import HomeView from "./scene/home/HomeView";
 import TuneCardView from "./scene/tuneCard/tuneCardView";
 import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
-import SeedDetailView from "./scene/seedDetail/seedDetailView";
 
 function App() {
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
@@ -72,10 +72,10 @@ function App() {
                           <Route path={'/home'} element={<HomeView/>}/>
                       </Routes>
                       <Routes>
-                          <Route path={'seed/:seedId/edit'} element={<SeedEditView/>}/>
+                          <Route path={'/:seedId/edit'} element={<SeedEditView/>}/>
                       </Routes>
                       <Routes>
-                          <Route path={'seed/:seedId'} element={<SeedDetailView/>}/>
+                          <Route path={'/:seedId/detail'} element={<SeedDetail/>}/>
                       </Routes>
                       <Routes>
                           <Route path={'/profile'} element={<Profile/>}/>
