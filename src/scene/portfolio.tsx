@@ -5,7 +5,7 @@ import {useRecoilState} from "recoil";
 import {navigationState} from "../atoms/NavigationState";
 import aiIcon from "../assets/ais.svg";
 
-const Portforio = () => {
+const Portfolio = () => {
     const [navigation, setNavigation] = useRecoilState(navigationState);
 
     useEffect(() => {
@@ -28,4 +28,4 @@ const Portforio = () => {
     );
 };
 
-export default Portforio;
+export default Portfolio;
