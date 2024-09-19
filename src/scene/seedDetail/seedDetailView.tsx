@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {SeedDetailViewModel} from "./seedDetailViewModel";
 import {useRecoilState} from "recoil";
 import {navigationState} from "../../atoms/NavigationState";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";
 import {SeedDetail} from "../../models/Seed/SeedDetail/seedDetail";
+import Button from "@mui/material/Button";
 
 const seedDetailViewModel = new SeedDetailViewModel();
 
@@ -17,7 +18,8 @@ const SeedDetailView = () => {
     const [SeedDetail, setSeedDetail] = useState<SeedDetail>(viewModel.seedDetail);
     const [navigation, setNavigation] = useRecoilState(navigationState);
     const [authState, setAuthentication] = useRecoilState(authenticationState);
-    const [profile, setProfile] = useRecoilState(profileState);
+
+    const navigate = useNavigate();
 
     const params = useParams();
     const seedId = params.seedId as string;
@@ -47,6 +49,10 @@ const SeedDetailView = () => {
     return (
         <div className="Home" style={{paddingLeft: '5rem'}}>
             <Grid container spacing={2} className={"projectByLanguage"}>
+                {/*TODO: 認可が実装できたら、シードのオーナーのみに表示される*/}
+                <Button variant="contained" onClick={()=>{
+                    navigate(`/seed/${seedId}/edit`);
+                }}>EditSeed🌱</Button>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h4" component="div" sx={{textAlign: "center"}}>
                         {viewModel.seedDetail.title}
