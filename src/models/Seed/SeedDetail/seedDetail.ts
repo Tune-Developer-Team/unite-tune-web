@@ -5,6 +5,7 @@ import {SeedDetailApiResponseIF, SeedDetailIF} from "./seedDetailIF";
 import ImagePath from "../../data/ImagePath";
 import Mention from "../../data/Mention";
 import {hashTagString} from "../../data/types";
+import dayjs from "dayjs";
 
 export class SeedDetail {
     public seedId: string
@@ -101,5 +102,43 @@ export class SeedDetail {
         }
 
         return new SeedDetail(input);
+    }
+
+    // TODO:データベースのunixタイムが間違えてる？
+    getTermsFromAsDysJS(): any {
+        const timestamp = parseInt(this.termsFrom);
+        if (isNaN(timestamp)) {
+            console.error("Invalid timestamp");
+            return null;
+        }
+
+        const int = timestamp * 1000;
+
+        if (isNaN(timestamp)) {
+            console.error("Invalid timestamp");
+            return null;
+        }
+
+        console.log(dayjs(int));
+        return dayjs(int);
+    }
+
+    // TODO:データベースのunixタイムが間違えてる？
+    getTermsToAsDysJS(): any {
+        const timestamp = parseInt(this.termsTo);
+        if (isNaN(timestamp)) {
+            console.error("Invalid timestamp");
+            return null;
+        }
+
+        const int = timestamp * 1000;
+
+        if (isNaN(timestamp)) {
+            console.error("Invalid timestamp");
+            return null;
+        }
+
+        console.log(dayjs(int));
+        return dayjs(int);
     }
 }
