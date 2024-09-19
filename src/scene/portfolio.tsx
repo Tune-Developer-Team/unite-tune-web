@@ -17,10 +17,27 @@ const Portfolio = () => {
             <Grid container spacing={2} className={"projectByLanguage"}>
                 <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h4" component="div" sx={{textAlign: "center"}}>
-                        <img src={aiIcon}/>️ AIS (AISecretary)
+                        This is My Value
                     </Typography>
+                    <br/>
                     <Typography>
-                        Under Construction !
+                        【開発中】<br/>自分が取り組んできたSeedの連動情報
+                    </Typography>
+                    <br/>
+                    <Typography>
+                        【開発中】<br/>自分が投稿したブログの連動情報
+                    </Typography>
+                    <br/>
+                    <Typography>
+                        【開発中】<br/>TSUBUYAKIアプリの連動情報
+                    </Typography>
+                    <br/>
+                    <Typography>
+                        【開発中】<br/>GitHubでの使用言語やコミット頻度、リポジトリの数などの連動情報
+                    </Typography>
+                    <br/>
+                    <Typography>
+                        【開発中】<br/>自分で作ったWebアプリのリンク
                     </Typography>
                 </Grid>
             </Grid>

@@ -1,0 +1,136 @@
+import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CircularProgress from "@mui/material/CircularProgress";
+import parse from "react-html-parser"; // HTML parser
+import { styled } from "@mui/system";
+import Button from "@mui/material/Button";
+
+interface FeedItem {
+    title: string;
+    link: string;
+    description: string;
+}
+
+//　フィードパス
+const RSS_URL = process.env.REACT_APP_TARGET_BLOG_RSS as string;
+// 取得件数
+const MAX_FEED_COUNT = 5;
+
+const ScrollContainer = styled(Box)({
+    display: "flex",
+    gap: "16px", // Add spacing between tiles
+    overflowX: "auto",
+    padding: "16px 0",
+    scrollBehavior: "smooth",
+    '&::-webkit-scrollbar': {
+        display: 'none', // Hide scrollbar for a cleaner look
+    },
+});
+
+const Tile = styled(Card)(({ theme }) => ({
+    width: "250px", // Fixed width for square tiles
+    height: "250px", // Fixed height for square tiles
+    flexShrink: 0,
+    color: "#232323",
+    backgroundColor: "#fff", // White-based modern design
+    boxShadow: "#fff",
+    borderRadius: theme.shape.borderRadius,
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+        transform: "scale(1.05)",
+    },
+    padding: "16px",
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    overflow: "hidden", // Hide overflowing content
+}));
+
+const Title = styled(Typography)({
+    fontWeight: "bold",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+});
+
+const Description = styled(Typography)({
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+});
+
+const RSSFeedBanner: React.FC = () => {
+    const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchRSSFeed = async () => {
+            try {
+                const response = await fetch(RSS_URL);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "application/xml");
+
+                const items = Array.from(xml.querySelectorAll("item")).slice(0, MAX_FEED_COUNT).map((item) => ({
+                    title: item.querySelector("title")?.textContent || "No Title",
+                    link: item.querySelector("link")?.textContent || "#",
+                    description: item.querySelector("description")?.textContent || "",
+                }));
+
+                setFeedItems(items);
+            } catch (error) {
+                console.error("Error fetching RSS feed:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRSSFeed();
+    }, []);
+
+    const handleMouseEnter = () => {
+        document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
+    };
+
+    const handleMouseLeave = () => {
+        document.body.style.overflowY = ''; // Re-enable vertical scrolling
+    };
+
+    const handleScroll = (e: React.WheelEvent) => {
+        if (window.innerWidth >= 1024) {
+            e.currentTarget.scrollLeft += e.deltaY;
+        }
+    };
+
+    if (loading) {
+        return <CircularProgress />;
+    }
+
+    return (
+        <ScrollContainer onWheel={handleScroll}>
+            {feedItems.map((item, index) => (
+                <Tile
+                    key={index}
+                    onClick={() => window.open(item.link, "_blank")}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <CardContent>
+                        <Title variant="h6" gutterBottom>
+                            {item.title}
+                        </Title>
+                        <Description variant="body2">
+                            {parse(item.description.substring(0, 150).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}...
+                        </Description>
+                    </CardContent>
+                </Tile>
+            ))}
+        </ScrollContainer>
+    );
+};
+
+export default RSSFeedBanner;

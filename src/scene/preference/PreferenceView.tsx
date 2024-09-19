@@ -7,11 +7,13 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import {v4 as uuidv4} from "uuid";
 import {navigationState} from "../../atoms/NavigationState";
+import {TuneCard} from "../../models/TuneCard/TuneCard";
+import {tuneCardState} from "../../atoms/TuneCardState";
 
 const PreferenceView: React.FunctionComponent = () => {
     const [authentication, setAuthentication] = useRecoilState(authenticationState);
     const [navigation, setNavigation] = useRecoilState(navigationState);
-    const [newSerial, setNewSerial] = useState<string>('');
+    const [tuneCard, setTuneCard] = useRecoilState<TuneCard>(tuneCardState);
 
     const signOut = (): void => {
         // googleLogout();
@@ -29,30 +31,28 @@ const PreferenceView: React.FunctionComponent = () => {
                     設定
                 </Typography>
             </Grid>
-            <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
+            <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                 <Typography variant="h6" component="div">
                     UID : {authentication.uid}
                 </Typography>
             </Grid>
-            <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
+            <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                 <Typography variant="h6" component="div">
-                    連携済みGoogleアカウント : {authentication.email}
+                    TuneCard : {tuneCard.serial}
                 </Typography>
             </Grid>
-            {/*<Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>*/}
-            {/*    <Typography variant="h6" component="div">*/}
-            {/*        <Button onClick={() => {*/}
-            {/*            setNewSerial(uuidv4())*/}
-            {/*        }}> カードシリアル発行（管理者向け） </Button>: {newSerial}*/}
-            {/*    </Typography>*/}
-            {/*</Grid>*/}
+            <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
+                <Typography variant="h6" component="div">
+                    GoogleAccount : {authentication.email}
+                </Typography>
+            </Grid>
 
             <Grid sx={{textAlign: "end"}} xs={6} sm={6} md={6} lg={6}>
                 <Button onClick={signOut}>サインアウト
                 </Button>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={6} sm={6} md={6} lg={6}>
-                <Button onClick={()=>{console.log('脱退')}}>脱退する</Button>
+                <Button onClick={()=>{console.log('←アカウントを破棄するらしいコイツ')}}>アカウントを破棄する</Button>
             </Grid>
         </Grid>
     );

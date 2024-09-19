@@ -33,8 +33,10 @@ import logo from "../../logo.png";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import aiIcon from"../../assets/ais.svg";
+import tsubuyakiIcon from"../../assets/tsubuyakiIcon.svg";
 
 const drawerWidth = 240;
+const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -106,7 +108,6 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 const drawerViewModel = new DrawerViewModel();
 export default function DrawerView() {
-    const theme = useTheme();
     const navigate = useNavigate();
 
     // ビューモデル
@@ -171,39 +172,28 @@ export default function DrawerView() {
         <Box sx={{display: navigation.isHidden ? 'none' : 'flex'}}>
             <CssBaseline/>
             <AppBar position="fixed" open={open} sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && {display: 'none'}),
-                        }}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
-                        <img src={logo} style={{width:"8rem"}}/>
-                    </Typography>
-                </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                    </IconButton>
+                    <Button style={{color:"#fff"}} onClick={open ? handleDrawerClose : handleDrawerOpen}>
+                        {open ? <span> <img src={logo} width={100} style={{marginRight: 40}}/> <ChevronLeftIcon/> </span> : <ChevronRightIcon/>}
+                    </Button>
                 </DrawerHeader>
                 <Divider/>
                 <List>
                     {[
                         {label: 'home', icon: <HomeIcon/>, linkPath: "/"},
                         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
-                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'}
+                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'},
+                        {label: 'Tsubuyaki', icon: <img src={tsubuyakiIcon}/>, linkPath: TSUBUYAKI_ORIGIN},
                     ].map((item, index) => (
                         <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={()=>{
-                            navigate(item.linkPath)
+
+                            if(item.linkPath == TSUBUYAKI_ORIGIN){
+                                window.open(item.linkPath, '_blank') // TODO: 仮
+                            }
+
+                            navigate(item.linkPath);
                         }}>
                                 <ListItemButton
                                     sx={{
@@ -229,7 +219,7 @@ export default function DrawerView() {
                 <Divider/>
                 <List>
                     {[
-                        {label: 'AIS', icon: <img src={aiIcon}/>, linkPath:  `/user/${authentication.uid}/portfolio`},
+                        {label: 'AIS', icon: <img src={aiIcon}/>, linkPath:  `/user/${authentication.uid}/ais`},
                         {label: 'Preference', icon: <SettingsIcon/>, linkPath: "/preference"},
                     ].map((item, index) => (
                         <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={() => {
