@@ -8,7 +8,7 @@ import DrawerView from "./ui/layout/DrawerView";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {RecoilRoot} from "recoil";
 import Profile from "./scene/profile/ProfileView";
-import TaskList from "./scene/taskList";
+import Portforio from "./scene/portforio";
 import SeedEditView from "./scene/seedEdit/SeedEditView";
 import HomeView from "./scene/home/HomeView";
 import TuneCardView from "./scene/tuneCard/tuneCardView";
@@ -78,13 +78,10 @@ function App() {
                           <Route path={'seed/:seedId'} element={<SeedDetailView/>}/>
                       </Routes>
                       <Routes>
-                          <Route path={'/profile'} element={<Profile/>}/>
-                      </Routes>
-                      <Routes>
                           <Route path={'/user/:uid'} element={<Profile/>}/>
                       </Routes>
                       <Routes>
-                          <Route path={'/portfolio'} element={<TaskList/>}/>
+                          <Route path={'/user/:uid/portfolio'} element={<Portforio/>}/>
                       </Routes>
                       <Routes>
                           <Route path={'/card/:cardSerial'} element={<TuneCardView/>}/>

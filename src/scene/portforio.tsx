@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import TaskListTable from "../ui/table/taskListTable";
 import {useRecoilState} from "recoil";
 import {navigationState} from "../atoms/NavigationState";
+import aiIcon from "../assets/ais.svg";
 
-const TaskList = () => {
+const Portforio = () => {
     const [navigation, setNavigation] = useRecoilState(navigationState);
 
     useEffect(() => {
@@ -17,13 +17,15 @@ const TaskList = () => {
             <Grid container spacing={2} className={"projectByLanguage"}>
                 <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h4" component="div" sx={{textAlign: "center"}}>
-                        ⚡️ My Task
+                        <img src={aiIcon}/>️ AIS (AISecretary)
+                    </Typography>
+                    <Typography>
+                        Under Construction !
                     </Typography>
                 </Grid>
-                <TaskListTable/>
             </Grid>
         </div>
     );
 };
 
-export default TaskList;
+export default Portforio;

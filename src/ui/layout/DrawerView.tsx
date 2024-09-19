@@ -13,8 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {Container, Grid, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, TextField} from "@mui/material";
-import PersonIcon from '@mui/icons-material/Person';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CreateIcon from '@mui/icons-material/Create';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
@@ -22,7 +21,7 @@ import {authenticationState} from "../../atoms/AuthenticationState";
 import AddIcon from '@mui/icons-material/Add';
 
 import {useRecoilState} from "recoil";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {DrawerViewModel} from "./DarawerViewModel";
 import {useEffect, useState} from "react";
 import {profileState} from "../../atoms/ProfileState";
@@ -33,6 +32,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import logo from "../../logo.png";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
+import aiIcon from"../../assets/ais.svg";
 
 const drawerWidth = 240;
 
@@ -87,19 +87,6 @@ const AppBar = styled(MuiAppBar, {
         }),
     }),
 }));
-
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
-
 const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
     ({theme, open}) => ({
         width: drawerWidth,
@@ -120,6 +107,8 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const drawerViewModel = new DrawerViewModel();
 export default function DrawerView() {
     const theme = useTheme();
+    const navigate = useNavigate();
+
     // ビューモデル
     const [viewModel] = useState<DrawerViewModel>(drawerViewModel);
 
@@ -210,10 +199,12 @@ export default function DrawerView() {
                 <List>
                     {[
                         {label: 'home', icon: <HomeIcon/>, linkPath: "/"},
-                        {label: 'Profile', icon: <PersonIcon/>, linkPath: "/profile"}
+                        {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
+                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'}
                     ].map((item, index) => (
-                        <ListItem key={item.label} disablePadding sx={{display: 'block'}}>
-                            <a href={item.linkPath} style={{textDecoration: "none", color: "white"}}>
+                        <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={()=>{
+                            navigate(item.linkPath)
+                        }}>
                                 <ListItemButton
                                     sx={{
                                         minHeight: 48,
@@ -232,49 +223,47 @@ export default function DrawerView() {
                                     </ListItemIcon>
                                     <ListItemText primary={item.label} sx={{opacity: open ? 1 : 0}}/>
                                 </ListItemButton>
-                            </a>
                         </ListItem>
                     ))}
                 </List>
                 <Divider/>
                 <List>
                     {[
-                        {label: 'Portfolio', icon: <AssignmentIcon/>, linkPath: "/portfolio"},
-                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'},
+                        {label: 'AIS', icon: <img src={aiIcon}/>, linkPath:  `/user/${authentication.uid}/portfolio`},
                         {label: 'Preference', icon: <SettingsIcon/>, linkPath: "/preference"},
                     ].map((item, index) => (
-                        <ListItem key={index} disablePadding sx={{display: 'block'}}>
-                            <a href={item.linkPath} style={{textDecoration: "none", color: "white"}}>
-                                <ListItemButton
+                        <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={() => {
+                            navigate(item.linkPath)
+                        }}>
+                            <ListItemButton
+                                sx={{
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
+                                }}
+                            >
+                                <ListItemIcon
                                     sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
                                     }}
                                 >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText primary={item.label} sx={{opacity: open ? 1 : 0}}/>
-                                </ListItemButton>
-                            </a>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.label} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
                         </ListItem>
                     ))}
                 </List>
                 <Divider/>
                 <List>
                     {customUrlList.map((item, index) => (
-                            <ListItem key={item.customUrlId} disablePadding sx={{display: 'block'}}>
-                                <a href={item.urlString} style={{textDecoration: "none", color: "white"}}>
-                                    <ListItemButton
-                                        sx={{
-                                            minHeight: 48,
+                        <ListItem key={item.customUrlId} disablePadding sx={{display: 'block'}}>
+                            <a href={item.urlString} style={{textDecoration: "none", color: "white"}}>
+                                <ListItemButton
+                                    sx={{
+                                        minHeight: 48,
                                             justifyContent: open ? 'initial' : 'center',
                                             px: 2.5,
                                         }}

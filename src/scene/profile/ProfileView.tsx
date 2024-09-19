@@ -2,16 +2,16 @@ import React, {useEffect} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import axios from "axios";
 import {useRecoilState} from "recoil";
 import {profileState} from "../../atoms/ProfileState";
 import {authenticationState} from "../../atoms/AuthenticationState";
-import Avatar from "@mui/material/Avatar";
 import ProfileBarChart from "../../ui/chart/ProfileBarChart";
-import TaskListTable from "../../ui/table/taskListTable";
 import {navigationState} from "../../atoms/NavigationState";
+import Button from "@mui/material/Button";
+import {useNavigate} from "react-router-dom";
 
 const ProfileView = () => {
+    const navigate = useNavigate();
     const [authentication] = useRecoilState(authenticationState);
     const [profile, setProfile] = useRecoilState(profileState);
     const [navigation, setNavigation] = useRecoilState(navigationState);
@@ -51,8 +51,13 @@ const ProfileView = () => {
                     <Typography variant="h4" component="div" sx={{textAlign: "center"}}>
                         ⚡️ My Portfolio
                     </Typography>
+                    <Box>
+                        <Button onClick={() => {
+                            navigate(`/user/${authentication.uid}/portfolio`)
+                        }}
+                        >Please See Portfolio</Button>
+                    </Box>
                 </Grid>
-                <TaskListTable/>
                 <Grid xs={3} sm={3} md={3} lg={3} >
                 </Grid>
 
