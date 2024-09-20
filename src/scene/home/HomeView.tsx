@@ -8,11 +8,11 @@ import {profileState} from "../../atoms/ProfileState";
 import {HomeViewModel} from "./HomeViewModel";
 import {SeedListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
-import SeedViewCard from "../../ui/card/SeedViewCard";
 import BlogPostTileBanner from "../../ui/blogPost/BlogPostTileBanner";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
+import SeedTileBanner from "../../ui/seed/SeedTileBanner";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
@@ -59,7 +59,8 @@ const HomeView = () => {
 
     return (
         <div className="Home" style={{paddingLeft: '5rem'}}>
-            <Grid container spacing={2} className={"new-arrival-banner"}>
+
+            <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
                         NEW ARRIVAL
@@ -74,26 +75,24 @@ const HomeView = () => {
                     <BlogPostTileBanner/>
                 </Grid>
             </Grid>
-            <Grid container spacing={3}>
+
+            <Grid container spacing={3} className={"seed-banner"} paddingBottom={5}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
-                        人気のSeed
+                        {/*このシードがアツい！*/}
+                        Hot SEEDS !
                     </Typography>
+                    <Box textAlign={"end"} paddingRight={1}>
+                        <Button variant="text" style={{color:"#fff"}} onClick={() => {
+                            navigate(`/seeds`)
+                        }}>全て表示する</Button>
+                    </Box>
+                    <Grid xs={12} sm={12} md={12} lg={12} >
+                        <SeedTileBanner seedList={viewModel.seedList}/>
+                    </Grid>
                 </Grid>
-                {seedList.map((item, index) => (
-                  <Grid xs={12} sm={2} md={2} key={index}>
-                      <SeedViewCard
-                          seedId={item.seedId}
-                          title={item.title}
-                          description={item.description || "September 14, 2016"}
-                          ownerUserName={item.ownerUserName}
-                          imagePath={item.imagePath}
-                          userIconImagePath={item.userIconImagePath}
-                          favoriteCount={item.favoriteCount}
-                      />
-                  </Grid>
-                ))}
             </Grid>
+
         </div>
     );
 };

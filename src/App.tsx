@@ -17,6 +17,7 @@ import RegisterView from "./scene/register/registerView";
 import SeedDetailView from "./scene/seedDetail/seedDetailView";
 import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
 import AISecretary from "./scene/AISecretary";
+import SeedListView from "./scene/seedList/SeedListView";
 
 function App() {
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
@@ -82,6 +83,9 @@ function App() {
                       </Routes>
                       <Routes>
                           <Route path={'/card/:cardSerial'} element={<TuneCardView/>}/>
+                      </Routes>
+                      <Routes>
+                          <Route path="/seeds" element={<SeedListView />} />
                       </Routes>
                       <Routes>
                           <Route path="/blogposts" element={<BlogPostTileList />} />
