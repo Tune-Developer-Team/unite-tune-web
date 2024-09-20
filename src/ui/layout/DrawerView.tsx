@@ -29,7 +29,7 @@ import Button from "@mui/material/Button";
 import {navigationState} from "../../atoms/NavigationState";
 import LinkIcon from '@mui/icons-material/Link';
 
-import logo from "../../logo.png";
+import logo from "../../uniteLogo.svg";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import aiIcon from"../../assets/ais.svg";
@@ -176,7 +176,7 @@ export default function DrawerView() {
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
                     <Button style={{color:"#fff"}} onClick={open ? handleDrawerClose : handleDrawerOpen}>
-                        {open ? <span> <img src={logo} width={100} style={{marginRight: 40}}/> <ChevronLeftIcon/> </span> : <ChevronRightIcon/>}
+                        {open ? <span> <ChevronLeftIcon/> <img src={logo} width={20}/> </span> : <img src={logo} width={20} style={{marginLeft: 10}}/>}
                     </Button>
                 </DrawerHeader>
                 <Divider/>
