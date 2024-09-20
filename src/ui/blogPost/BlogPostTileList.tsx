@@ -54,7 +54,7 @@ const Description = styled(Typography)({
     whiteSpace: "nowrap",
 });
 
-const PostList: React.FC = () => {
+const BlogPostTileList: React.FC = () => {
     const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -74,7 +74,7 @@ const PostList: React.FC = () => {
 
                 setFeedItems(items);
             } catch (error) {
-                console.error("Error fetching RSS post:", error);
+                console.error("Error fetching RSS blogPost:", error);
             } finally {
                 setLoading(false);
             }
@@ -114,4 +114,4 @@ const PostList: React.FC = () => {
     );
 };
 
-export default PostList;
+export default BlogPostTileList;

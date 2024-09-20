@@ -9,7 +9,7 @@ import {HomeViewModel} from "./HomeViewModel";
 import {SeedListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
 import SeedViewCard from "../../ui/card/SeedViewCard";
-import RSSFeedBanner from "../../ui/post/RSSFeedBanner";
+import BlogPostTileBanner from "../../ui/blogPost/BlogPostTileBanner";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
@@ -66,12 +66,12 @@ const HomeView = () => {
                     </Typography>
                     <Box textAlign={"end"} paddingRight={1}>
                         <Button variant="text" style={{color:"#fff"}} onClick={() => {
-                            navigate(`/post-list`)
+                            navigate(`/blogposts`)
                         }}>全て表示する</Button>
                     </Box>
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12} >
-                    <RSSFeedBanner/>
+                    <BlogPostTileBanner/>
                 </Grid>
             </Grid>
             <Grid container spacing={3}>

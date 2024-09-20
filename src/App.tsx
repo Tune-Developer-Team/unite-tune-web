@@ -15,7 +15,7 @@ import TuneCardView from "./scene/tuneCard/tuneCardView";
 import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
 import SeedDetailView from "./scene/seedDetail/seedDetailView";
-import PostList from "./ui/post/PostList";
+import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
 import AISecretary from "./scene/AISecretary";
 
 function App() {
@@ -84,7 +84,7 @@ function App() {
                           <Route path={'/card/:cardSerial'} element={<TuneCardView/>}/>
                       </Routes>
                       <Routes>
-                          <Route path="/post-list" element={<PostList />} />
+                          <Route path="/blogposts" element={<BlogPostTileList />} />
                       </Routes>
                   </BrowserRouter>
               </GoogleOAuthProvider>

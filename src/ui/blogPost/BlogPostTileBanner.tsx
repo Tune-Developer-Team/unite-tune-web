@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import parse from "react-html-parser"; // HTML parser
 import { styled } from "@mui/system";
-import postCardBackground from "./postCardBackground.svg";
+import postCardBackground from "./BlogPostTileBackground.svg";
 
 interface FeedItem {
     title: string;
@@ -66,7 +66,7 @@ const Description = styled(Typography)({
     whiteSpace: "nowrap",
 });
 
-const RSSFeedBanner: React.FC = () => {
+const BlogPostTileBanner: React.FC = () => {
     const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -86,7 +86,7 @@ const RSSFeedBanner: React.FC = () => {
 
                 setFeedItems(items);
             } catch (error) {
-                console.error("Error fetching RSS post:", error);
+                console.error("Error fetching RSS blogPost:", error);
             } finally {
                 setLoading(false);
             }
@@ -137,4 +137,4 @@ const RSSFeedBanner: React.FC = () => {
     );
 };
 
-export default RSSFeedBanner;
+export default BlogPostTileBanner;
