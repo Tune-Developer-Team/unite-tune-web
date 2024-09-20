@@ -74,7 +74,7 @@ const PostList: React.FC = () => {
 
                 setFeedItems(items);
             } catch (error) {
-                console.error("Error fetching RSS feed:", error);
+                console.error("Error fetching RSS post:", error);
             } finally {
                 setLoading(false);
             }

@@ -9,7 +9,7 @@ import {HomeViewModel} from "./HomeViewModel";
 import {SeedListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
 import SeedViewCard from "../../ui/card/SeedViewCard";
-import RSSFeedBanner from "../../ui/feed/RSSFeedBanner";
+import RSSFeedBanner from "../../ui/post/RSSFeedBanner";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";

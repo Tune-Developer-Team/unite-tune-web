@@ -15,7 +15,7 @@ import TuneCardView from "./scene/tuneCard/tuneCardView";
 import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
 import SeedDetailView from "./scene/seedDetail/seedDetailView";
-import PostList from "./ui/feed/PostList";
+import PostList from "./ui/post/PostList";
 import AISecretary from "./scene/AISecretary";
 
 function App() {
