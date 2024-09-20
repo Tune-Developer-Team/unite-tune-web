@@ -1,19 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import CardContent from "@mui/material/CardContent";
-import parse from "react-html-parser"; // HTML parser
 import { styled } from "@mui/system";
-import Tile from "./SeedTile";
-import postCardBackground from "./seedTileBackground.svg";
 import {SeedListItem} from "../../scene/home/HomeViewModelIF";
 import {useNavigate} from "react-router-dom";
-
-interface FeedItem {
-    title: string;
-    link: string;
-    description: string;
-}
+import SeedTile from "./SeedTile";
 
 interface SeedTileListProps {
     seedList: SeedListItem[];
@@ -27,19 +18,6 @@ const GridContainer = styled(Box)({
     overflow: "auto",
 });
 
-const Title = styled(Typography)({
-    fontWeight: "bold",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-});
-
-const Description = styled(Typography)({
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-});
-
 const SeedTileList: React.FC<SeedTileListProps> = ({ seedList }) => {
     const navigate = useNavigate();
     return (
@@ -50,22 +28,7 @@ const SeedTileList: React.FC<SeedTileListProps> = ({ seedList }) => {
             </Typography>
             <GridContainer>
                 {seedList.map((item, index) => (
-                    <Tile
-                        key={index}
-                        onClick={()=>{
-                            navigate(`/seed/${item.seedId}`);
-                        }}
-                        image={postCardBackground}
-                    >
-                        <CardContent>
-                            <Title variant="h6" gutterBottom>
-                                {item.title}
-                            </Title>
-                            <Description variant="body2">
-                                {parse(item.description.substring(0, 150).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}...
-                            </Description>
-                        </CardContent>
-                    </Tile>
+                    <SeedTile item={item}/>
                 ))}
             </GridContainer>
         </div>

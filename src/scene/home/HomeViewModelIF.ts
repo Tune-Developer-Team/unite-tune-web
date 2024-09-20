@@ -19,6 +19,7 @@ export interface SeedListItem {
     title: string
     description: string
     ownerUserName: string
+    ownerUserUid: string
     hashTagStringList: hashTagString[]
     imagePath: ImagePath
     updatedAt: string
@@ -42,20 +43,3 @@ export interface SeedListApiResponseItemIF {
     UpdatedAt: string
     DeletedAt: string
 }
-
-// export interface SeedListResponseItemIF {
-//     id
-//     seedId
-//     title
-//     ownerUserUid
-//     description
-//     isPublished
-//     benefit
-//     termsFrom
-//     termsTo
-//     hashTagList
-//     imagePathList
-//     createdAt
-//     updatedAt
-//     deletedAt
-// }

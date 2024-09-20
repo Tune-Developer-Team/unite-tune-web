@@ -1,8 +1,9 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {SeedListViewModelIF, SeedListApiResponseItemIF, SeedListItem} from "./SeedListViewModelIF";
+import {SeedListViewModelIF} from "./SeedListViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
+import {SeedListApiResponseItemIF, SeedListItem} from "../home/HomeViewModelIF";
 
 export class SeedListViewModel implements SeedListViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
@@ -58,6 +59,7 @@ export class SeedListViewModel implements SeedListViewModelIF {
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: '', // TODO: バックエンドが未実装
+                ownerUserUid: item.OwnerUserUid,
                 hashTagStringList: ['#tag1','#tag2','#tag3'], // TODO: JSONを配列に変換
                 imagePath: imagePath,
                 updatedAt: item.UpdatedAt,

@@ -59,6 +59,7 @@ export class HomeViewModel implements HomeViewModelIF {
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: '', // TODO: バックエンドが未実装
+                ownerUserUid: item.OwnerUserUid,
                 hashTagStringList: ['#tag1','#tag2','#tag3'], // TODO: JSONを配列に変換
                 imagePath: imagePath,
                 updatedAt: item.UpdatedAt,
