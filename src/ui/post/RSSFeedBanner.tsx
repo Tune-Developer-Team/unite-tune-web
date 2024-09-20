@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import parse from "react-html-parser"; // HTML parser
 import { styled } from "@mui/system";
-import Button from "@mui/material/Button";
+import postCardBackground from "./postCardBackground.svg";
 
 interface FeedItem {
     title: string;
@@ -21,28 +21,31 @@ const MAX_FEED_COUNT = 5;
 
 const ScrollContainer = styled(Box)({
     display: "flex",
-    gap: "16px", // Add spacing between tiles
+    gap: 20, // Add spacing between tiles
     overflowX: "auto",
-    padding: "16px 0",
+    padding: 0,
     scrollBehavior: "smooth",
     '&::-webkit-scrollbar': {
         display: 'none', // Hide scrollbar for a cleaner look
     },
 });
 
-const Tile = styled(Card)(({ theme }) => ({
-    width: "250px", // Fixed width for square tiles
-    height: "250px", // Fixed height for square tiles
+const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
+    backgroundImage: `url(${image})`, // 背景画像を動的に設定
+    backgroundSize: 'cover',           // 画像をコンテナのサイズにフィット
+    backgroundPosition: 'center',      // 画像を中央に表示
+    width: 180, // Fixed width for square tiles
+    height: 180, // Fixed height for square tiles
     flexShrink: 0,
     color: "#232323",
-    backgroundColor: "#fff", // White-based modern design
+    // backgroundColor: "#9b9b9b", // White-based modern design
     boxShadow: "#fff",
     borderRadius: theme.shape.borderRadius,
     transition: "transform 0.2s ease-in-out",
     "&:hover": {
         transform: "scale(1.05)",
     },
-    padding: "16px",
+    padding:  5,
     position: "relative",
     display: "flex",
     flexDirection: "column",
@@ -52,9 +55,9 @@ const Tile = styled(Card)(({ theme }) => ({
 
 const Title = styled(Typography)({
     fontWeight: "bold",
-    overflow: "hidden",
+    overflow:"hidden",
     textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    whiteSpace: "break-word",
 });
 
 const Description = styled(Typography)({
@@ -118,15 +121,16 @@ const RSSFeedBanner: React.FC = () => {
                     onClick={() => window.open(item.link, "_blank")}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
+                    image={postCardBackground}
                 >
-                    <CardContent>
+                    <Box>
                         <Title variant="h6" gutterBottom>
                             {item.title}
                         </Title>
                         <Description variant="body2">
                             {parse(item.description.substring(0, 150).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}...
                         </Description>
-                    </CardContent>
+                    </Box>
                 </Tile>
             ))}
         </ScrollContainer>

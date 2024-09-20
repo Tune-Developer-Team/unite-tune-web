@@ -64,7 +64,7 @@ const HomeView = () => {
                     <Typography variant="h5" component="div">
                         NEW ARRIVAL
                     </Typography>
-                    <Box textAlign={"end"} paddingRight={10}>
+                    <Box textAlign={"end"} paddingRight={1}>
                         <Button variant="text" style={{color:"#fff"}} onClick={() => {
                             navigate(`/post-list`)
                         }}>全て表示する</Button>
