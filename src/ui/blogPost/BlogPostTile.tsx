@@ -111,7 +111,7 @@ const BlogPostTile: React.FC<SeedTileProps> = ({ item }) => {
             </Tile>
 
             <Box display={"flex"} paddingTop={1}>
-                <span style={{fontSize:12}}>{item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, '')}
+                <span style={{fontSize:12}}>{parse(item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
                     <span style={{color:"#fff"}} onClick={() => {
                         window.open(item.link, "_blank");
                     }}>...続きをみる</span>
