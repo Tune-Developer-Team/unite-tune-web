@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
-import parse from "react-html-parser"; // HTML parser
 import { styled } from "@mui/system";
+import BlogPostTile from "./BlogPostTile";
 
 interface FeedItem {
     title: string;
@@ -21,37 +20,6 @@ const GridContainer = styled(Box)({
     gap: "16px", // Add spacing between tiles
     padding: "16px",
     overflow: "auto",
-});
-
-const Tile = styled(Card)(({ theme }) => ({
-    width: "100%", // Full width of grid item
-    height: "250px", // Fixed height for square tiles
-    color: "#232323",
-    backgroundColor: "#fff", // White-based modern design
-    boxShadow: "#fff", // Use theme shadows
-    borderRadius: theme.shape.borderRadius,
-    transition: "transform 0.2s ease-in-out",
-    "&:hover": {
-        transform: "scale(1.05)",
-    },
-    padding: "16px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    overflow: "hidden", // Hide overflowing content
-}));
-
-const Title = styled(Typography)({
-    fontWeight: "bold",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-});
-
-const Description = styled(Typography)({
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
 });
 
 const BlogPostTileList: React.FC = () => {
@@ -95,19 +63,7 @@ const BlogPostTileList: React.FC = () => {
             </Typography>
             <GridContainer>
                 {feedItems.map((item, index) => (
-                    <Tile
-                        key={index}
-                        onClick={() => window.open(item.link, "_blank")}
-                    >
-                        <CardContent>
-                            <Title variant="h6" gutterBottom>
-                                {item.title}
-                            </Title>
-                            <Description variant="body2">
-                                {parse(item.description.substring(0, 150).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}...
-                            </Description>
-                        </CardContent>
-                    </Tile>
+                   <BlogPostTile item={item}/>
                 ))}
             </GridContainer>
         </div>
