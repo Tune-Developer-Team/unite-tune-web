@@ -1,11 +1,11 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {HomeViewModelIF, SeedListApiResponseItemIF, SeedListItem} from "./HomeViewModelIF";
+import {SeedListViewModelIF} from "./SeedListViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
-import {hashTagString} from "../../models/data/types";
 import ImagePath from "../../models/data/ImagePath";
+import {SeedListApiResponseItemIF, SeedListItem} from "../home/HomeViewModelIF";
 
-export class HomeViewModel implements HomeViewModelIF {
+export class SeedListViewModel implements SeedListViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
     public seedList: SeedListItem[] = [];
     constructor(
@@ -74,7 +74,7 @@ export class HomeViewModel implements HomeViewModelIF {
 
         return {
             message: result.data.message,
-            seedList: result.data.seedList
+            seedList: this.seedList
         };
     }
 }
