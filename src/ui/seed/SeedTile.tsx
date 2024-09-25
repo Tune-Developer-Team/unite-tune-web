@@ -4,7 +4,7 @@ import seedCardBackground from "./seedTileBackground.svg";
 import parse from "react-html-parser";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {SeedListItem} from "../../scene/home/HomeViewModelIF";
 
@@ -32,18 +32,17 @@ const Title = styled(Typography)({
     color: "#181818"
 });
 
-const AvatarIcon = styled(Avatar)({
+const AvatarIcon = styled(Avatar)<{ isAvatarHovered: boolean }>(({ isAvatarHovered }) => ({
     position: "absolute",
     bottom: 0,
     right: 0,
-    margin: 8, // タイルの右下から少し内側に配置
-    zIndex: 1, // 背景画像の前に表示されるように調整
-    transition: "transform 0.2s ease-in-out",
-    pointerEvents: "auto", // クリックイベントを受け取る
+    margin: 8,
+    zIndex: isAvatarHovered ? 100 : 2,  // Dynamically set zIndex based on hover state
+    transition: "transform 0.2s ease-in-out, z-index 0.2s ease-in-out",
     "&:hover": {
         transform: "scale(1.5)",
     },
-});
+}));
 
 const OverlayImage = styled("img")({
     position: "absolute",
@@ -71,13 +70,26 @@ interface SeedTileProps {
 }
 
 const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
+    const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
+
+    const handleAvatarMouseEnter = () => {
+        console.log("hovering");
+        setIsAvatarHovered(true); // Set hover state to true
+    };
+
+    const handleAvatarMouseLeave = () => {
+        setIsAvatarHovered(false); // Reset hover state
+    };
+
     const navigate = useNavigate();
     return (
         <Box>
             <Tile
                 image={item.imagePath.path}
                 onClick={()=>{
-                    navigate(`/seed/${item.seedId}`);
+                    if(!isAvatarHovered){
+                        navigate(`/seed/${item.seedId}`);
+                    }
                 }}
             >
                 {/* 重ねる画像を表示 */}
@@ -89,9 +101,19 @@ const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
                     {parse(item.title.substring(0, 38).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
                 </Title>
                 <Box height={"100%"}>
-                    <AvatarIcon alt="userIcon" sizes={"ss"} src={item.userIconImagePath.path} onClick={()=>{
-                        navigate(`/user/${item.ownerUserUid}`)
-                    }}/>
+                    <AvatarIcon
+                        alt="userIcon"
+                        sizes={"ss"}
+                        src={item.userIconImagePath.path}
+                        isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                        onMouseEnter={handleAvatarMouseEnter}
+                        onMouseLeave={handleAvatarMouseLeave}
+                        onClick={() => {
+                            console.log("ユーザー");
+                            setIsAvatarHovered(true);
+                            navigate(`/user/${item.ownerUserUid}`);
+                        }}
+                    />
                 </Box>
             </Tile>
 
