@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/system";
 import {SeedListItem} from "../../scene/home/HomeViewModelIF";
 import SeedTile from "./SeedTile";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 interface SeedTileBannerProps {
     seedList:  SeedListItem[]; // 親コンポーネントから渡されるシードリスト
@@ -21,6 +23,21 @@ const ScrollContainer = styled(Box)({
 
 const SeedTileBanner: React.FC<SeedTileBannerProps> = ({ seedList }) => {
 
+    useEffect(() => {
+        document.body.style.overflowY = '';
+        return () => {
+        };
+    }, [input]);
+
+
+    const handleMouseEnter = () => {
+        document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
+    };
+
+    const handleMouseLeave = () => {
+        document.body.style.overflowY = ''; // Re-enable vertical scrolling
+    };
+
     const handleScroll = (e: React.WheelEvent) => {
         if (window.innerWidth >= 1024) {
             e.currentTarget.scrollLeft += e.deltaY;
@@ -28,7 +45,11 @@ const SeedTileBanner: React.FC<SeedTileBannerProps> = ({ seedList }) => {
     };
 
     return (
-        <ScrollContainer onWheel={handleScroll}>
+        <ScrollContainer
+            onWheel={handleScroll}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
             {seedList.map((item, index) => (
                 <SeedTile item={item}/>
             ))}

@@ -1,13 +1,9 @@
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
-import seedCardBackground from "./seedTileBackground.svg";
 import parse from "react-html-parser";
 import Avatar from "@mui/material/Avatar";
-import defaultUserIcon from "../../assets/defaultUserIcon.png";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import {useNavigate} from "react-router-dom";
-import {SeedListItem} from "../../scene/home/HomeViewModelIF";
 import postCardBackground from "./BlogPostTileBackground.svg";
 import {FeedItem} from "./BlogPostTileBanner";
 import blogIcon from "../../assets/dBlog111Icon.png";
@@ -75,21 +71,9 @@ interface SeedTileProps {
 }
 
 const BlogPostTile: React.FC<SeedTileProps> = ({ item }) => {
-    const navigate = useNavigate();
-
-    const handleMouseEnter = () => {
-        document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
-    };
-
-    const handleMouseLeave = () => {
-        document.body.style.overflowY = ''; // Re-enable vertical scrolling
-    };
-
     return (
         <Box>
             <Tile
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
                 image={blogIcon}
                 onClick={()=>{
                     window.open(item.link, "_blank");

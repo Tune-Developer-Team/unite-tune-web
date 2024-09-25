@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import seedCardBackground from "./seedTileBackground.svg";
 import parse from "react-html-parser";
 import Avatar from "@mui/material/Avatar";
-import defaultUserIcon from "../../assets/defaultUserIcon.png";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {useNavigate} from "react-router-dom";
@@ -73,20 +72,9 @@ interface SeedTileProps {
 
 const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
     const navigate = useNavigate();
-
-    const handleMouseEnter = () => {
-        document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
-    };
-
-    const handleMouseLeave = () => {
-        document.body.style.overflowY = ''; // Re-enable vertical scrolling
-    };
-
     return (
         <Box>
             <Tile
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
                 image={item.imagePath.path}
                 onClick={()=>{
                     navigate(`/seed/${item.seedId}`);

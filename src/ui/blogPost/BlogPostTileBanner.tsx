@@ -36,6 +36,7 @@ const BlogPostTileBanner: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        document.body.style.overflowY = '';
         const fetchRSSFeed = async () => {
             try {
                 const response = await fetch(service.feed);
@@ -79,7 +80,11 @@ const BlogPostTileBanner: React.FC = () => {
     }
 
     return (
-        <ScrollContainer onWheel={handleScroll}>
+        <ScrollContainer
+            onWheel={handleScroll}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
             {feedItems.map((item, index) => (
                 <BlogPostTile item={item}/>
             ))}
