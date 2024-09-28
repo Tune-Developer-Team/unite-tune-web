@@ -52,12 +52,7 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
      * 取得
      */
     async fetchSeed(seedId: string): Promise<void> {
-        console.log("実行");
-        const api = axios.create({
-            headers: {
-                'Authorization': 'allow',
-            }
-        });
+        const api = new Api(this.authState);
         await api.get(`${endPoint.SEED}/${seedId}`).then((response)=>{
             this.seedDetail = this.seedDetail.createFromAPIResponse(response.data.data);
         }).catch((error)=>{
