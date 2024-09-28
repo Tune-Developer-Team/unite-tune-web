@@ -1,4 +1,3 @@
-import axios from "axios";
 import {endPoint} from "../../consts/api";
 import {SeedDetail} from "../../models/Seed/SeedDetail/seedDetail";
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
@@ -38,7 +37,6 @@ export class SeedDetailViewModel implements SeedDetailViewModelIF{
      */
     async fetchSeedDetail(seedId: string): Promise<void> {
         const api = new Api(this.authState);
-        console.log("詳細取得PAI実行");
         const response = await api.get(`${endPoint.SEED}/${seedId}`);
         this.seedDetail = this.seedDetail.createFromAPIResponse(response.data.data);
     }

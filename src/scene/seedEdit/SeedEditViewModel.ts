@@ -3,7 +3,6 @@ import {AddSeedInputParamIF, SeedEditViewModelIF} from "./SeedEditViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {AxiosResponse} from "axios";
 import {endPoint} from "../../consts/api";
-import axios from "axios";
 import {SeedDetail} from "../../models/Seed/SeedDetail/seedDetail";
 
 export class SeedEditViewModel implements SeedEditViewModelIF {
