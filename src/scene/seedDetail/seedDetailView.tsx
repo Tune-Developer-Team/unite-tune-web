@@ -65,14 +65,16 @@ const SeedDetailView = () => {
 
     return (
         <Box className="SeedDetail" paddingLeft={8}>
-            <Box>
-                <Box width={"100%"} display={"flex"} paddingBottom={2}>
+            <Box className={"SeedCover"}>
+                <Box paddingBottom={2}>
                     <img src={seedDetail.imagePathList[0]?.path ?? ""}
                          alt={seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
-                         style={{width: "100%"}}
+                         style={{objectFit:"cover"}}
+                         width={"310px"}
+                         height={"310px"}
                     />
                 </Box>
-                <Box textAlign={"end"} width={"100%"} marginTop={-38}
+                <Box textAlign={"end"} width={"100%"} marginTop={-37}
                      display={seedDetail.ownerUserUid === authState.uid ? "block" : "none"}>
                     <MoreHorizIcon onClick={() => {
                         navigate(`/seed/${seedId}/edit`);
@@ -80,8 +82,8 @@ const SeedDetailView = () => {
                 </Box>
             </Box>
 
-            <Grid container spacing={2} paddingTop={33} className={"SeedDetailMainContent"}>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={2} paddingTop={25} className={"SeedDetailMainContent"}>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} sx={{backgroundColor:"rgba(12,12,12,0.79)"}}>
                     <Typography variant="h6" component="div" sx={{ textAlign: "start" }}>
                         {seedDetail.title}
                     </Typography>
@@ -110,7 +112,6 @@ const SeedDetailView = () => {
                     <RoundedButton onClick={()=>{
                     }}>Follow</RoundedButton>
                 </Grid>
-
 
                 <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
                     <Box width={"100%"} fontSize={"0.7rem"} paddingBottom={2} display={isShowAllMember? "none" : "block"}>
@@ -223,7 +224,6 @@ const SeedDetailView = () => {
                         </ScrollContainer>
                     </Box>
                 </Grid>
-
 
                 <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
                     <Box sx={{textAlign: "start"}}>
