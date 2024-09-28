@@ -2,7 +2,6 @@ import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import seedCardBackground from "./seedTileBackground.svg";
 import parse from "react-html-parser";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -91,10 +90,15 @@ const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
                 </Title>
                 <Box height={"100%"}>
                     <AvatarIcon
+                        sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0
+                        }}
                         alt="userIcon"
                         sizes={"ss"}
                         src={item.userIconImagePath.path}
-                        isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                        isAvatarHovered={isAvatarHovered}
                         onMouseEnter={handleAvatarMouseEnter}
                         onMouseLeave={handleAvatarMouseLeave}
                         onClick={() => {
