@@ -1,15 +1,16 @@
 export const baseUrl = process.env.REACT_APP_API_ORIGIN
 
 export const endPoint = {
-    // USER
+    // AUTH
     SIGNIN: `${baseUrl}/google/signin`,
     REGISTER: `${baseUrl}/google/register`,
     // TUNE CARD
     TUNE_CARD: `${baseUrl}/tuneCards`,
+    // PROFILE
+    PROFILE: `${baseUrl}/profiles`,
     // SEED
     SEED: `${baseUrl}/seeds`,
     SAVE_SEED_AS_DRAFT: `${baseUrl}/save-as-draft`,
-
     // UPLOAD
     UPLOAD_IMAGE: `${baseUrl}/upload`,
     DELETE_IMAGE: `${baseUrl}/delete`,
