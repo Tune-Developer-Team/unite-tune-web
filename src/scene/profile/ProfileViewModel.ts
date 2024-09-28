@@ -1,21 +1,42 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {ProfileViewModelIF} from "./ProfileViewModelIF";
+import Profile from "../../models/Profile/Profile";
+import axios from "axios";
+import {endPoint} from "../../consts/api";
 
 export class ProfileViewModel implements ProfileViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
-    constructor(
-    ) {
-        console.log('====================SignInViewModel_called====================');
-    }
+    public profile: Profile = Profile.initProfile();
 
     /**
      * セットアップ処理
      * @param argument
      */
-    setUp(argument: { authentication: AuthenticationArgumentIF }): void {
-        console.log('====================TimeLineViewModel_setup====================');
+    async setUp(argument: { authentication: AuthenticationArgumentIF, uId: string }): Promise<ProfileViewModel> {
         this.authState.setAuthentication(argument.authentication);
-        console.log('====================TimeLineViewModel_setup_end====================');
+
+        console.log(argument.uId)
+        //  詳細取得
+        await this.fetchUserProfile(argument.uId);
+        return this
+    }
+
+    /**
+     * 取得
+     */
+    async fetchUserProfile(uId: string): Promise<void> {
+        const api = axios.create({
+            headers: {
+                'Authorization': this.authState.accessToken,
+            }
+        });
+        const response = await api.get(`${endPoint.PROFILE}/${uId}`);
+        console.log(response.data.data);
+        this.profile = this.profile.createFromAPIResponse(response.data.data);
+    }
+
+    getProfile():Profile {
+        return this.profile
     }
 
     /**

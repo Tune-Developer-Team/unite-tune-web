@@ -44,8 +44,6 @@ export class HomeViewModel implements HomeViewModelIF {
             const imagePathJson = JSON.parse(item.ImagePathList)
             const imagePath: ImagePath = ImagePath.create({alt: imagePathJson[0].alt, path: imagePathJson[0].path});
 
-            const hashTagStringList = ['#tag'];
-
             const seedListItem: SeedListItem = {
                 seedId: item.SeedId,
                 title: item.Title,

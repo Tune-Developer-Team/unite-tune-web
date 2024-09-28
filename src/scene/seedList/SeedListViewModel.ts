@@ -34,7 +34,6 @@ export class SeedListViewModel implements SeedListViewModelIF {
      * @param authentication
      */
     async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: SeedListItem[] }> {
-        console.log("===fetchSeedList=====")
         // console.log(authentication.accessToken)
         const api = new Api(authentication);
         const result = await api.get(endPoint.SEED);
@@ -46,8 +45,6 @@ export class SeedListViewModel implements SeedListViewModelIF {
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
             const imagePath: ImagePath = ImagePath.create({alt: imagePathJson[0].alt, path: imagePathJson[0].path});
-
-            const hashTagStringList = ['#tag'];
 
             const seedListItem: SeedListItem = {
                 seedId: item.SeedId,
