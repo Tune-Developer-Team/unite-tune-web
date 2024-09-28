@@ -20,11 +20,6 @@ export class SeedListViewModel implements SeedListViewModelIF {
     setUp(argument: { authentication: AuthenticationArgumentIF }): void {
         console.log('====================TimeLineViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
-        // this.fetchSeedList(this.authState).then((respones)=>{
-        //     console.log(respones);
-        // }).catch((error)=>{
-        //     console.log(error);
-        // });
     }
 
     /**

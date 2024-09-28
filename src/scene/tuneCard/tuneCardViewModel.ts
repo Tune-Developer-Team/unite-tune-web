@@ -9,9 +9,7 @@ export class TuneCardViewModel {
      */
     async getTuneCard(cardSerial: string): Promise<TuneCard> {
         const api = axios.create({
-            headers: {
-                'Authorization': 'allow',
-            }
+            headers: {}
         });
         const response = await api.get(`${endPoint.TUNE_CARD}/${cardSerial}`);
         return TuneCard.creatTuneInstance({

@@ -2,7 +2,6 @@ import Authentication, {AuthenticationArgumentIF} from "../../models/Authenticat
 import {HomeViewModelIF, SeedListApiResponseItemIF, SeedListItem} from "./HomeViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
-import {hashTagString} from "../../models/data/types";
 import ImagePath from "../../models/data/ImagePath";
 
 export class HomeViewModel implements HomeViewModelIF {
@@ -20,11 +19,6 @@ export class HomeViewModel implements HomeViewModelIF {
     setUp(argument: { authentication: AuthenticationArgumentIF }): void {
         console.log('====================TimeLineViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
-        // this.fetchSeedList(this.authState).then((respones)=>{
-        //     console.log(respones);
-        // }).catch((error)=>{
-        //     console.log(error);
-        // });
     }
 
     /**
@@ -39,8 +33,6 @@ export class HomeViewModel implements HomeViewModelIF {
      * @param authentication
      */
     async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: SeedListItem[] }> {
-        console.log("===fetchSeedList=====")
-        // console.log(authentication.accessToken)
         const api = new Api(authentication);
         const result = await api.get(endPoint.SEED);
 

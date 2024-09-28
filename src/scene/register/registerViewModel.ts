@@ -59,9 +59,7 @@ export class RegisterViewModel {
     private async registerSerialAndUid(input: { serial: string, uid: string }): Promise<void> {
         if (input.uid !== "") {
             const cardTuneAPI = axios.create({
-                headers: {
-                    'Authorization': 'registerTuneCard',
-                }
+                headers: {}
             });
 
             const params = {

@@ -3,6 +3,7 @@ import {endPoint} from "../../consts/api";
 import {SeedDetail} from "../../models/Seed/SeedDetail/seedDetail";
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {SeedDetailViewModelIF} from "./seedDetailViewModelIF";
+import {Api} from "../../models/Api/Api";
 
 export class SeedDetailViewModel implements SeedDetailViewModelIF{
     protected authState: Authentication;
@@ -36,11 +37,7 @@ export class SeedDetailViewModel implements SeedDetailViewModelIF{
      * 取得
      */
     async fetchSeedDetail(seedId: string): Promise<void> {
-        const api = axios.create({
-            headers: {
-                'Authorization': 'allow',
-            }
-        });
+        const api = new Api(this.authState);
         console.log("詳細取得PAI実行");
         const response = await api.get(`${endPoint.SEED}/${seedId}`);
         this.seedDetail = this.seedDetail.createFromAPIResponse(response.data.data);

@@ -43,9 +43,7 @@ export class SignInViewModel implements SignInViewModelIF {
         console.log(params);
 
         const axiosInstance = axios.create({
-            headers: {
-                'Authorization': 'sign-in-unite-web-app'
-            }
+            headers: {}
         });
 
         return await axiosInstance.post(endPoint.SIGNIN, params);
