@@ -16,9 +16,10 @@ export class HomeViewModel implements HomeViewModelIF {
      * セットアップ処理
      * @param argument
      */
-    setUp(argument: { authentication: AuthenticationArgumentIF }): void {
+    async setUp(argument: { authentication: AuthenticationArgumentIF }): Promise<void> {
         console.log('====================TimeLineViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
+        await this.fetchSeedList(this.authState)
     }
 
     /**
@@ -42,7 +43,10 @@ export class HomeViewModel implements HomeViewModelIF {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
-            const imagePath: ImagePath = ImagePath.create({alt: imagePathJson[0].alt, path: imagePathJson[0].path});
+            const imagePath: ImagePath = imagePathJson.length > 0 ? ImagePath.create({
+                alt: imagePathJson[0].alt,
+                path: imagePathJson[0].path
+            }) : ImagePath.create({alt: "タイトル", path: ""});
 
             const seedListItem: SeedListItem = {
                 seedId: item.SeedId,
@@ -60,11 +64,9 @@ export class HomeViewModel implements HomeViewModelIF {
             return seedListItem
         })
 
-        console.log(this.seedList[0].title)
-
         return {
             message: result.data.message,
-            seedList: result.data.seedList
+            seedList: this.seedList
         };
     }
 }
