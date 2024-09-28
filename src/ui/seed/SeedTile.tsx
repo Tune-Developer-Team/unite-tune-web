@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {SeedListItem} from "../../scene/home/HomeViewModelIF";
+import {AvatarIcon} from "../avatarIcon/AvatarIcon";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
     width: 180, // Fixed width for square tiles
@@ -31,18 +32,6 @@ const Title = styled(Typography)({
     whiteSpace: "break-word",
     color: "#181818"
 });
-
-const AvatarIcon = styled(Avatar)<{ isAvatarHovered: boolean }>(({ isAvatarHovered }) => ({
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    margin: 8,
-    zIndex: isAvatarHovered ? 100 : 2,  // Dynamically set zIndex based on hover state
-    transition: "transform 0.2s ease-in-out, z-index 0.2s ease-in-out",
-    "&:hover": {
-        transform: "scale(1.5)",
-    },
-}));
 
 const OverlayImage = styled("img")({
     position: "absolute",
