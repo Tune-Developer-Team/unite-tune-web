@@ -30,16 +30,18 @@ const HomeView = () => {
     const loadSeedList = async (): Promise<void> => {
         console.log("===loadSeedList===");
         await viewModel.fetchSeedList(authState).then((response)=>{
-
-            console.log(response);
-            setSeedList(viewModel.seedList);
+            console.log("---------------------成功------------------------")
+            console.log(response)
+            setSeedList(response.seedList);
         }).catch((error)=>{
+            console.log("---------------------失敗------------------------")
             console.log(error);
         });
     }
 
     useEffect(() => {
         setNavigation({isHidden: false, isEnableRedirect: true});
+        console.log("================セットアップ================")
         // セットアップ
         viewModel.setUp({
             authentication: {
@@ -50,6 +52,7 @@ const HomeView = () => {
         });
 
         void loadSeedList();
+
 
         return () => {
             // クリーンアップ
@@ -88,7 +91,7 @@ const HomeView = () => {
                         }}>全て表示する</Button>
                     </Box>
                     <Grid xs={12} sm={12} md={12} lg={12} >
-                        <SeedTileBanner seedList={viewModel.seedList}/>
+                        <SeedTileBanner seedList={seedList}/>
                     </Grid>
                 </Grid>
             </Grid>

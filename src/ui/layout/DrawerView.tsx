@@ -1,17 +1,12 @@
 import * as React from 'react';
-import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
+import {styled, Theme, CSSObject} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {Container, Grid, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, TextField} from "@mui/material";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CreateIcon from '@mui/icons-material/Create';
@@ -63,32 +58,11 @@ const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0, 0),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
 const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
     ({theme, open}) => ({
         width: drawerWidth,
@@ -171,8 +145,6 @@ export default function DrawerView() {
     return (
         <Box sx={{display: navigation.isHidden ? 'none' : 'flex'}}>
             <CssBaseline/>
-            <AppBar position="fixed" open={open} sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
-            </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
                     <Button style={{color:"#fff"}} onClick={open ? handleDrawerClose : handleDrawerOpen}>
@@ -297,26 +269,6 @@ export default function DrawerView() {
             >
                 <Container sx={{display: "block", backgroundColor: "black", marginTop: 30, width: "60%"}}>
                     <Grid sx={{display: "flex", padding: 2}} gap={2}>
-                        {/*<Grid sx={{paddingTop: 3, paddingRight: 3}}>*/}
-                        {/*    <Button*/}
-                        {/*        component="label"*/}
-                        {/*        role={undefined}*/}
-                        {/*        variant="outlined"*/}
-                        {/*        tabIndex={-1}*/}
-                        {/*        startIcon={<FileUpload/>}*/}
-                        {/*        onChange={(event) => {*/}
-                        {/*            if (event.target instanceof HTMLInputElement) {*/}
-                        {/*                console.log(event.target.files);*/}
-                        {/*                if (event.target.files !== null) {*/}
-                        {/*                    setUrlIcon(event.target.files[0]);*/}
-                        {/*                }*/}
-                        {/*            } else {*/}
-                        {/*                console.log('none');*/}
-                        {/*            }*/}
-                        {/*        }}>*/}
-                        {/*        <VisuallyHiddenInput type="file"/>*/}
-                        {/*    </Button>*/}
-                        {/*</Grid>*/}
                         <Grid sx={{width: 1000}}>
                             <TextField
                                 fullWidth
@@ -370,9 +322,7 @@ export default function DrawerView() {
                     </Grid>
                 </Container>
             </Modal>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
-                <DrawerHeader/>
-            </Box>
+            <Box paddingTop={2}/>
         </Box>
     );
 }
