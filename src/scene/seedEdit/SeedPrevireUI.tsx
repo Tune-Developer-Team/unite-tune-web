@@ -1,0 +1,277 @@
+import React, {useState} from "react";
+import Grid from "@mui/material/Unstable_Grid2";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import {SeedEditViewModel} from "./SeedEditViewModel";
+import RoundedButton from "../../ui/button/RoundedButton";
+import ScrollContainer from "../../ui/container/ScrollContainer";
+import {AvatarIcon} from "../../ui/avatarIcon/AvatarIcon";
+
+interface SeedPreviewUIProps {
+    viewModel: SeedEditViewModel
+}
+
+export default function SeedPreviewUI({viewModel}: SeedPreviewUIProps) {
+    const [isShowAllDescription, setIsShowAllDescription] = useState<boolean>(false);
+    const [isShowAllMember, setIsShowAllMember] = useState<boolean>(false);
+    const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
+
+    const handleAvatarMouseEnter = () => {
+        console.log("hovering");
+        setIsAvatarHovered(true); // Set hover state to true
+    };
+
+    const handleAvatarMouseLeave = () => {
+        setIsAvatarHovered(false); // Reset hover state
+    };
+
+    return (
+    <Box className="SeedPreview">
+        <Box className={"SeedCover"}>
+            <Box paddingBottom={2}>
+                <img src={viewModel.seedDetail.imagePathList[0]?.path ?? ""}
+                     alt={viewModel.seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
+                     style={{objectFit:"cover"}}
+                     width={"310px"}
+                     height={"310px"}
+                />
+            </Box>
+        </Box>
+
+        <Grid container spacing={2} marginTop={-8} className={"SeedDetailMainContent"}>
+            <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} sx={{backgroundColor:"rgba(12,12,12,0.79)"}}>
+                <Typography variant="h6" component="div" sx={{ textAlign: "start" }}>
+                    {viewModel.seedDetail.title}
+                </Typography>
+            </Grid>
+
+            <Grid xs={4} sm={4} md={4} lg={4} textAlign={"center"}>
+                <Box width={"100%"} >
+                    star
+                </Box>
+                <Box width={"100%"} >
+                    ⭐️⭐️⭐️⭐️
+                </Box>
+            </Grid>
+            <Grid xs={4} sm={4} md={4} lg={4} textAlign={"center"}>
+                <Box width={"100%"}>
+                    member
+                </Box>
+                <Box width={"100%"} onClick={() => {
+                    setIsShowAllMember(!isShowAllMember)
+                }}>
+                    {"6"}
+                </Box>
+            </Grid>
+
+            <Grid xs={4} sm={4} md={4} lg={4}>
+                <RoundedButton onClick={()=>{
+                }}>Follow</RoundedButton>
+            </Grid>
+
+            <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                <Box width={"100%"} fontSize={"0.7rem"} paddingBottom={2} display={isShowAllMember? "none" : "block"}>
+                    {viewModel.seedDetail.seedId}
+                </Box>
+                <Box width={"100%"} paddingBottom={2} display={isShowAllMember? "block" : "none"}>
+                    <ScrollContainer>
+                        <Box textAlign={"start"} position={"relative"}>
+                            <AvatarIcon
+                                alt="userIcon"
+                                sizes={"ss"}
+                                src={"pathName"}
+                                isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                                onMouseEnter={handleAvatarMouseEnter}
+                                onMouseLeave={handleAvatarMouseLeave}
+                            />
+                            <span style={{fontSize: "0.7rem"}}>
+                                    {viewModel.seedDetail.ownerUserName}
+                                </span>
+                        </Box>
+                        <Box textAlign={"start"} position={"relative"}>
+                            <AvatarIcon
+                                alt="userIcon"
+                                sizes={"ss"}
+                                src={"pathName"}
+                                isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                                onMouseEnter={handleAvatarMouseEnter}
+                                onMouseLeave={handleAvatarMouseLeave}
+                            />
+                            <span style={{fontSize: "0.7rem"}}>
+                                    {viewModel.seedDetail.ownerUserName}
+                                </span>
+                        </Box>
+                        <Box textAlign={"start"} position={"relative"}>
+                            <AvatarIcon
+                                alt="userIcon"
+                                sizes={"ss"}
+                                src={"pathName"}
+                                isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                                onMouseEnter={handleAvatarMouseEnter}
+                                onMouseLeave={handleAvatarMouseLeave}
+                            />
+                            <span style={{fontSize: "0.7rem"}}>
+                                    {viewModel.seedDetail.ownerUserName}
+                                </span>
+                        </Box>
+                        <Box textAlign={"start"} position={"relative"}>
+                            <AvatarIcon
+                                alt="userIcon"
+                                sizes={"ss"}
+                                src={"pathName"}
+                                isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                                onMouseEnter={handleAvatarMouseEnter}
+                                onMouseLeave={handleAvatarMouseLeave}
+                            />
+                            <span style={{fontSize: "0.7rem"}}>
+                                    {viewModel.seedDetail.ownerUserName}
+                                </span>
+                        </Box>
+                        <Box textAlign={"start"} position={"relative"}>
+                            <AvatarIcon
+                                alt="userIcon"
+                                sizes={"ss"}
+                                src={"pathName"}
+                                isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                                onMouseEnter={handleAvatarMouseEnter}
+                                onMouseLeave={handleAvatarMouseLeave}
+                            />
+                            <span style={{fontSize: "0.7rem"}}>
+                                    {viewModel.seedDetail.ownerUserName}
+                                </span>
+                        </Box>
+                        <Box textAlign={"start"} position={"relative"}>
+                            <AvatarIcon
+                                alt="userIcon"
+                                sizes={"ss"}
+                                src={"pathName"}
+                                isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                                onMouseEnter={handleAvatarMouseEnter}
+                                onMouseLeave={handleAvatarMouseLeave}
+                            />
+                            <span style={{fontSize: "0.7rem"}}>
+                                    {viewModel.seedDetail.ownerUserName}
+                                </span>
+                        </Box>
+                    </ScrollContainer>
+                </Box>
+            </Grid>
+
+            <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                <Box sx={{textAlign: "start"}}>
+                    <Typography fontSize={"1.3rem"}>
+                        概要
+                    </Typography>
+                    <Typography style={{
+                        display: isShowAllDescription ? "none" : "block"
+                    }}>{viewModel.seedDetail.description.substring(0, 38).replace(/<a[^>]*>(.*?)<\/a>/gi, '')}
+                        <span style={{color: "#fff"}} onClick={() => {
+                            setIsShowAllDescription(!isShowAllDescription)
+                        }}>...<br/>続きをみる</span>
+                    </Typography>
+                    <Typography style={{
+                        display: isShowAllDescription ? "block" : "none"
+                    }}>{viewModel.seedDetail.description}
+                        <span style={{color: "#fff"}} onClick={() => {
+                            setIsShowAllDescription(!isShowAllDescription)
+                        }}><br/>折りたたむ</span>
+                    </Typography>
+                </Box>
+            </Grid>
+
+            <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                <ScrollContainer>
+                    <Box width={"150px"} height={"150px"}>
+                        <img src={viewModel.seedDetail.imagePathList[0]?.path ?? ""}
+                             alt={viewModel.seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
+                             style={{width: "150px", flexShrink: 0,}}
+                        />
+                    </Box>
+                    <Box width={"150px"} height={"150px"}>
+                        <img src={viewModel.seedDetail.imagePathList[0]?.path ?? ""}
+                             alt={viewModel.seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
+                             style={{width: "150px", flexShrink: 0,}}
+                        />
+                    </Box>
+                    <Box width={"150px"} height={"150px"}>
+                        <img src={viewModel.seedDetail.imagePathList[0]?.path ?? ""}
+                             alt={viewModel.seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
+                             style={{width: "150px", flexShrink: 0,}}
+                        />
+                    </Box>
+                    <Box width={"150px"} height={"150px"}>
+                        <img src={viewModel.seedDetail.imagePathList[0]?.path ?? ""}
+                             alt={viewModel.seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
+                             style={{width: "150px", flexShrink: 0,}}
+                        />
+                    </Box>
+                </ScrollContainer>
+            </Grid>
+
+            <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                <Typography fontSize={"1.3rem"}>
+                    約束する価値
+                </Typography>
+                <Typography textAlign={"center"}>
+                    {viewModel.seedDetail.benefit}
+                </Typography>
+            </Grid>
+
+            <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                <Typography fontSize={"1.0rem"}>
+                    期間:&nbsp;&nbsp;{viewModel.seedDetail.termsFrom}から{viewModel.seedDetail.termsTo}
+                </Typography>
+            </Grid>
+            <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12} >
+                <Typography>{viewModel.seedDetail.hashTagStringList}</Typography>
+            </Grid>
+            <Grid textAlign={"center"} xs={12} sm={12} md={12} lg={12} >
+                <RoundedButton onClick={()=>{
+                }}>Join</RoundedButton>
+            </Grid>
+        </Grid>
+
+        <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12} paddingTop={4}>
+            <Typography fontSize={"1.3rem"}>
+                関連シード
+            </Typography>
+            <ScrollContainer>
+                <Box textAlign={"start"} position={"relative"}>
+                    <AvatarIcon
+                        alt="userIcon"
+                        sizes={"ss"}
+                        src={"pathName"}
+                        isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                        onMouseEnter={handleAvatarMouseEnter}
+                        onMouseLeave={handleAvatarMouseLeave}
+                    />
+                    <span style={{fontSize: "0.7rem"}}>
+                            {viewModel.seedDetail.ownerUserName}
+                        </span>
+                </Box>
+            </ScrollContainer>
+        </Grid>
+
+        <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12} paddingTop={4}>
+            <Typography fontSize={"1.3rem"}>
+                関連ユーザー
+            </Typography>
+            <ScrollContainer>
+                <Box textAlign={"start"} position={"relative"}>
+                    <AvatarIcon
+                        alt="userIcon"
+                        sizes={"ss"}
+                        src={"pathName"}
+                        isAvatarHovered={isAvatarHovered}  // Pass hover state to styled component
+                        onMouseEnter={handleAvatarMouseEnter}
+                        onMouseLeave={handleAvatarMouseLeave}
+                    />
+                    <span style={{fontSize: "0.7rem"}}>
+                            {viewModel.seedDetail.ownerUserName}
+                        </span>
+                </Box>
+            </ScrollContainer>
+        </Grid>
+    </Box>
+);
+};
