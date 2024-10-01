@@ -1,6 +1,6 @@
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
-import parse from "react-html-parser";
+import parse from "html-react-parser";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React from "react";
