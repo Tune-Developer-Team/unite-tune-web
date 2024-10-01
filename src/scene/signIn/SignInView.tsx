@@ -121,6 +121,9 @@ const SignInView: () => JSX.Element = () => {
                         <p>
                             {languageLocale === 'ja' ? explainJa : explainEn}
                         </p>
+                        <p>
+                            Ver.{process.env.REACT_APP_VERSION as string}
+                        </p>
                     </div>
                 </Box>
                 <Box sx={{textAlign: "center", paddingTop: 5}}>
