@@ -8,6 +8,11 @@ export class TuneCardViewModel {
      * @param cardSerial
      */
     async getTuneCard(cardSerial: string): Promise<TuneCard> {
+        // SPEC:あえて長めに時間をかける
+        const delaySec = 3;
+        const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+        await delay(delaySec * 1000);
+
         const api = axios.create({
             headers: {}
         });
