@@ -27,16 +27,13 @@ const TuneCardView: React.FunctionComponent = () => {
     console.log('====================');
     // serialIdが空の場合ホームへ遷移する
     if (cardSerial === '') {
-        // window.location.href = '/';
+        window.location.href = '/';
     }
 
     const getUIdBySerial = async (): Promise<void> => {
         setLoading({isLoading: true});
         console.log("===getUIdBySerial===");
         await viewModel.getTuneCard(cardSerial).then((tuneCard) => {
-            console.log(tuneCard.serial);
-            console.log(tuneCard.uid);
-
             setLoading({isLoading: false});
 
             if (!tuneCard.isActivated) {
@@ -68,8 +65,8 @@ const TuneCardView: React.FunctionComponent = () => {
     }
 
     useEffect(() => {
-        setNavigation({isHidden: true});
         void getUIdBySerial();
+        setNavigation({isHidden: true});
     }, []);
 
     return (

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {useRecoilState} from "recoil";
 import Grid from "@mui/material/Unstable_Grid2";
-import {RegisterViewModel} from "./registerViewModel";
+import {RegisterResponseIF, RegisterViewModel} from "./registerViewModel";
 import {navigationState} from "../../atoms/NavigationState";
 import Box from "@mui/material/Box";
 import GoogleAuthenticationButton from "../signIn/authorization/google/GoogleAuthenticationButton";
@@ -41,10 +41,10 @@ const RegisterView: React.FunctionComponent = () => {
         }
 
         void viewModel.signUp({code: googleOneTimeCode, tuneCard: tuneCard})
-            .then(response => {
+            .then((response: RegisterResponseIF) => {
                 console.log('googleLogin')
                 console.log(response)
-                void swal("ようこそ.", response.userRegister.uid ?? 'undefined', "success").then( res => {
+                void swal("ようこそ.", response.userRegister.uid ?? 'undefined', "success").then(res => {
                     console.log('成功', res);
 
                     console.log(response.userRegister);
@@ -134,8 +134,12 @@ const RegisterView: React.FunctionComponent = () => {
                             {tuneCard.isActivated?'true':'false'}
                         </p>
                         <p>
-                            UID<br/>
+                            SERIAL<br/>
                             {tuneCard.serial}
+                        </p>
+                        <p>
+                            UID<br/>
+                            {tuneCard.uid}
                         </p>
                     </div>
                 </Box>
