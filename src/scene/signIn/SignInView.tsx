@@ -49,19 +49,19 @@ const SignInView: () => JSX.Element = () => {
             .then(response => {
                 console.log('googleLogin')
                 console.log(response)
-                void swal("おかえりなさい", response.data.message ?? 'undefined', "success").then(res => {
+                void swal("おかえりなさい", response.data.data.uid ?? 'undefined', "success").then(res => {
                     console.log('成功', res);
 
                     // ユーザーの認証情報のストアを更新
                     setAuthentication({
-                        uid: response.data.data.Uid,
-                        accessToken: response.data.data.AccessToken,
-                        email: response.data.data.Email
+                        uid: response.data.data.uid,
+                        accessToken: response.data.data.access_token,
+                        email: response.data.data.email
                     });
 
                     // ユーザー情報のストアを更新
                     setProfile({
-                        nickName: response.data?.nickName ?? 'user',
+                        nickName: response.data?.nick_name ?? 'user',
                         iconImage: response.data?.iconImagePath ?? '',
                     });
 
