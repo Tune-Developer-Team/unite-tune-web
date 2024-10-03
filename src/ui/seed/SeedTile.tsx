@@ -1,7 +1,7 @@
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import seedCardBackground from "./seedTileBackground.svg";
-import parse from "react-html-parser";
+import parse from "html-react-parser";
 import Typography from "@mui/material/Typography";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
