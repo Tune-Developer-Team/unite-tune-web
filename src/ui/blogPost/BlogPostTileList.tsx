@@ -56,7 +56,7 @@ const BlogPostTileList: React.FC = () => {
     }
 
     return (
-        <div className="PostList" style={{paddingLeft: '5rem'}}>
+        <div className="PostList" >
             <Typography variant="h5" component="div">
                 {/*他人の考えに触れる。アイデアに出会う。*/}
                 Meet other's INTERESTS. Tune my IDEA.

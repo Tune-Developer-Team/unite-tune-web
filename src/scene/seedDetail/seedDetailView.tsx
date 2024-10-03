@@ -64,14 +64,14 @@ const SeedDetailView = () => {
     console.log(seedDetail.imagePathList)
 
     return (
-        <Box className="SeedDetail" paddingLeft={8}>
+        <Box className="SeedDetail">
             <Box className={"SeedCover"}>
                 <Box paddingBottom={2}>
                     <img src={seedDetail.imagePathList[0]?.path ?? ""}
                          alt={seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
                          style={{objectFit:"cover"}}
-                         width={"310px"}
-                         height={"310px"}
+                         width={370}
+                         height={370}
                     />
                 </Box>
                 <Box textAlign={"end"} width={"100%"} marginTop={-37}

@@ -20,7 +20,7 @@ function CustomTabPanel(props: TabPanelProps) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && <Box sx={{paddingLeft: 3}}>{children}</Box>}
+            {value === index && <Box>{children}</Box>}
         </div>
     );
 }
@@ -50,7 +50,7 @@ export default function SeedEditTabPanel({ tabItems }: SeedEditTabPanelProps) {
     };
 
     return (
-        <Box sx={{width: '100%'}} paddingLeft={5}>
+        <Box sx={{width: '100%'}}>
             <Box className={"seedEditTabMenu"} sx={{
                 backgroundColor: "#000000",
                 position: 'sticky', // ここでstickyを指定

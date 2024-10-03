@@ -61,7 +61,7 @@ const HomeView = () => {
     }, []);
 
     return (
-        <div className="Home" style={{paddingLeft: '5rem'}}>
+        <div className="Home">
 
             <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>

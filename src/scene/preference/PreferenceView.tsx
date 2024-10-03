@@ -25,7 +25,7 @@ const PreferenceView: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid container spacing={2} className={"preference"} style={{paddingLeft: '5rem'}}>
+        <Grid container spacing={2} className={"preference"}>
             <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
                 <Typography variant="h5" component="div">
                     設定

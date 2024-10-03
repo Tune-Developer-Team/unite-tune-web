@@ -21,7 +21,7 @@ const GridContainer = styled(Box)({
 const SeedTileList: React.FC<SeedTileListProps> = ({ seedList }) => {
     const navigate = useNavigate();
     return (
-        <div className="PostList" style={{paddingLeft: '5rem'}}>
+        <div className="PostList" >
             <Typography variant="h5" component="div">
                 {/*自分のアイデア、みんなのシード。*/}
                 My IDEA, Our SEED.

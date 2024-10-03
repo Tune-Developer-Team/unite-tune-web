@@ -70,7 +70,7 @@ const TuneCardView: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid container spacing={2} className={"preference"} style={{paddingLeft: '5rem'}}>
+        <Grid container spacing={2} className={"preference"} >
             <Loader/>
             <Box sx={{textAlign: "start", paddingTop: 30}}>
                 <h2>TUNE CARD</h2>

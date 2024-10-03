@@ -13,7 +13,7 @@ const Portfolio = () => {
     }, []);
 
     return (
-        <div className="Home" style={{paddingLeft: '5rem'}}>
+        <div className="Home" >
             <Grid container spacing={2} className={"projectByLanguage"}>
                 <Grid sx={{textAlign: "center"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h4" component="div" sx={{textAlign: "center"}}>

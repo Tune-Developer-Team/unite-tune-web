@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
 
 import SignIn from "./scene/signIn/SignInView";
-import DrawerView from "./ui/layout/DrawerView";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { RecoilRoot } from "recoil";
 import Profile from "./scene/profile/ProfileView";
@@ -18,6 +17,7 @@ import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
 import AISecretary from "./scene/AISecretary";
 import SeedListView from "./scene/seedList/SeedListView";
 import NotFound from "./scene/notFound/NotFound";
+import Layout from "./ui/layout/Layout";
 
 function App() {
     const [darkMode] = useState(true);
@@ -48,21 +48,22 @@ function App() {
         <RecoilRoot>
             <ThemeProvider theme={theme}>
                 <BrowserRouter basename={"/"}>
-                    <DrawerView />
+                    {/*<DrawerView />*/}
                     <Routes>
-                        <Route path='/' element={<HomeView />} />
-                        <Route path='/register' element={<RegisterView />} />
-                        <Route path='/signin' element={<SignIn />} />
-                        <Route path='/preference' element={<PreferenceView />} />
-                        <Route path='/home' element={<HomeView />} />
-                        <Route path='/seed/:seedId/edit' element={<SeedEditView />} />
-                        <Route path='/seed/:seedId' element={<SeedDetailView />} />
-                        <Route path='/user/:uid' element={<Profile />} />
-                        <Route path='/user/:uid/ais' element={<AISecretary />} />
-                        <Route path='/user/:uid/portfolio' element={<Portfolio />} />
                         <Route path='/card/:cardSerial' element={<TuneCardView />} />
-                        <Route path='/seeds' element={<SeedListView />} />
-                        <Route path='/blogposts' element={<BlogPostTileList />} />
+                        <Route path='/' element={<Layout />} >
+                            <Route path='/register' element={<RegisterView />} />
+                            <Route path='/signin' element={<SignIn />} />
+                            <Route path='/preference' element={<PreferenceView />} />
+                            <Route path='/home' element={<HomeView />} />
+                            <Route path='/seed/:seedId/edit' element={<SeedEditView />} />
+                            <Route path='/seed/:seedId' element={<SeedDetailView />} />
+                            <Route path='/user/:uid' element={<Profile />} />
+                            <Route path='/user/:uid/ais' element={<AISecretary />} />
+                            <Route path='/user/:uid/portfolio' element={<Portfolio />} />
+                            <Route path='/seeds' element={<SeedListView />} />
+                            <Route path='/blogposts' element={<BlogPostTileList />} />
+                        </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>

@@ -108,7 +108,6 @@ const SignInView: () => JSX.Element = () => {
     return (
         <Box className="container" sx={{
             color: "#d7d7d7",
-            paddingLeft: 30,
             backgroundColor: "black",
             display: 'flex',
             height: "100vh",

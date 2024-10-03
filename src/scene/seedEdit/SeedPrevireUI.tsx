@@ -32,8 +32,8 @@ export default function SeedPreviewUI({viewModel}: SeedPreviewUIProps) {
                 <img src={viewModel.seedDetail.imagePathList[0]?.path ?? ""}
                      alt={viewModel.seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
                      style={{objectFit:"cover"}}
-                     width={"310px"}
-                     height={"310px"}
+                     width={320}
+                     height={320}
                 />
             </Box>
         </Box>
