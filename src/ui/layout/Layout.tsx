@@ -338,13 +338,20 @@ export default function Layout() {
                 <Box paddingLeft={10}>
                     <Outlet/>
                 </Box>
+                <Box textAlign={"center"} paddingTop={6} paddingBottom={12}>
+                    <Typography fontSize={"small"}>
+                        Ver.{process.env.REACT_APP_VERSION as string}&nbsp;&nbsp;
+                        powered by Tune&nbsp;©︎</Typography>
+                </Box>
             </Box>
             <Box sx={{display: {xs: "block", sm: "block", md: "none", lg: "none"}}}>
                 <HeaderMenu/>
                 <Box paddingLeft={2} paddingRight={2} paddingTop={10}>
                     <Outlet/>
-                    <Box paddingTop={6} paddingBottom={12}>
-                        <Typography fontSize={"small"}>powered by Tune&nbsp;©︎</Typography>
+                    <Box textAlign={"center"}  paddingTop={6} paddingBottom={12}>
+                        <Typography fontSize={"small"}>
+                            Ver.{process.env.REACT_APP_VERSION as string}&nbsp;&nbsp;
+                            powered by Tune&nbsp;©︎</Typography>
                     </Box>
                 </Box>
                 <FooterMenu/>
