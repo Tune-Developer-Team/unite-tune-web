@@ -77,9 +77,9 @@ const AttendanceManage: React.FC = () => {
             // const now = new Date("2024-09-19 11:56");
             // const now = new Date("2024-09-19 12:55");
             // const now = new Date("2024-09-19 13:15");
-            const now = new Date("2024-09-19 18:15");
+            // const now = new Date("2024-09-19 18:15");
 
-            // const now = new Date();
+            const now = new Date();
             setCurrentDate(now);
             setButtonState(getButtonState(now));
             setProgressData(calculateProgress(now));
