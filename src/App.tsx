@@ -51,16 +51,16 @@ function App() {
                     {/*<DrawerView />*/}
                     <Routes>
                         <Route path='/card/:cardSerial' element={<TuneCardView />} />
+                        <Route path='/register' element={<RegisterView />} />
+                        <Route path='/signin' element={<SignIn />} />
                         <Route path='/' element={<Layout />} >
-                            <Route path='/register' element={<RegisterView />} />
-                            <Route path='/signin' element={<SignIn />} />
                             <Route path='/preference' element={<PreferenceView />} />
                             <Route path='/home' element={<HomeView />} />
                             <Route path='/seed/:seedId/edit' element={<SeedEditView />} />
                             <Route path='/seed/:seedId' element={<SeedDetailView />} />
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
-                            <Route path='/user/:uid/portfolio' element={<Portfolio />} />
+                            <Route path='/user/:uid/portfolio' element={<Portfolio />} />ほんほ
                             <Route path='/seeds' element={<SeedListView />} />
                             <Route path='/blogposts' element={<BlogPostTileList />} />
                         </Route>
