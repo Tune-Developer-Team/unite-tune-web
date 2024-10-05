@@ -66,12 +66,22 @@ const SeedDetailView = () => {
     return (
         <Box className="SeedDetail">
             <Box className={"SeedCover"}>
-                <Box paddingBottom={2}>
+                {/*pc*/}
+                <Box paddingBottom={2} sx={{display: {xs:"none",s:"none",md:"block", lg: "block", xl: "block"}}}>
                     <img src={seedDetail.imagePathList[0]?.path ?? ""}
                          alt={seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
                          style={{objectFit:"cover"}}
                          width={370}
                          height={370}
+                    />
+                </Box>
+                {/*phone*/}
+                <Box paddingBottom={2} sx={{display: {xs:"block",s:"block",md:"none", lg: "none", xl: "none"}}}>
+                    <img src={seedDetail.imagePathList[0]?.path ?? ""}
+                         alt={seedDetail.imagePathList[0]?.alt ?? "seedIcon"}
+                         style={{objectFit:"cover"}}
+                         width={350}
+                         height={350}
                     />
                 </Box>
                 <Box textAlign={"end"} width={"100%"} marginTop={-37}

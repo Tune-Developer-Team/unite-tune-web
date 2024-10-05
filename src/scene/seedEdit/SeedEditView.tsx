@@ -18,6 +18,7 @@ const SeedEditView: () => JSX.Element = () => {
     return (
         <Box>
             <SeedEditTabPanel tabItems={tabItems}/>
+        {/*  TODO: 下書保存きが成功・失敗、新規登録保存が成功・失敗をスナックバーで通知する*/}
         </Box>
     );
 }

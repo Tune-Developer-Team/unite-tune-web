@@ -23,7 +23,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import {ImageUploadForm} from "./imageUploadForm";
+import {ImageUploadForm} from "./ImageUploadForm";
 import IconButton from "@mui/material/IconButton";
 import ConfirmButton from "../../ui/confirmBottun/ConfirmButton";
 
@@ -203,7 +203,9 @@ export default function SeedEditUI({viewModel}: SeedEditUIProps) {
             <Grid container spacing={2} className={"MainBody"}>
                 {/*画像*/}
                 <Grid xs={12} sm={12} md={12} lg={12}>
-                    <ImageUploadForm onFileChange={handleFileChange} authState={viewModel.authState}/>
+                    <ImageUploadForm onFileChange={handleFileChange}
+                                     folderName={seedId}
+                                     uploadEndPoint={endPoint.UPLOAD_SEED_IMAGE}/>
                     <Box>
                         {imagePathList.map((imagePath: ImagePath, index: number) => (
                             <Box

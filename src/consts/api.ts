@@ -11,6 +11,8 @@ export const endPoint = {
     // SEED
     SEED: `${baseUrl}/seeds`,
     SAVE_SEED_AS_DRAFT: `${baseUrl}/save-as-draft`,
+    UPLOAD_SEED_IMAGE: `${baseUrl}/upload/seeds`,
+
     // UPLOAD
     UPLOAD_IMAGE: `${baseUrl}/upload`,
     DELETE_IMAGE: `${baseUrl}/delete`,

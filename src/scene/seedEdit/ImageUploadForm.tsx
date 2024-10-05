@@ -4,37 +4,47 @@ import Button from "@mui/material/Button";
 import { CloudUpload } from "@mui/icons-material";
 import ImagePath from "../../models/data/ImagePath";
 import {Api} from "../../models/Api/Api";
-import {endPoint} from "../../consts/api";
-import Authentication from "../../models/Authentication/Authentication";
+import {useRecoilState} from "recoil";
+import {authenticationState} from "../../atoms/AuthenticationState";
 
 interface ImageUploadFormPropsIF {
-    authState: Authentication; // 認証情報
     onFileChange: (imagePath: ImagePath) => void; // 親コンポーネントに結果を返すコールバック関数
+    folderName: string;
+    uploadEndPoint: string;
 }
 
 export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
-                                                                      authState: authState,
-                                                                      onFileChange: onFileChange
+                                                                      onFileChange: onFileChange,
+                                                                      folderName: folderName,
+                                                                      uploadEndPoint: uploadEndPoint
                                                                   }) => {
+    const [authState] = useRecoilState(authenticationState);
     const [uploadFile, setUploadFile] = useState<File | null>(null);
 
     // ファイル変更ハンドラ
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            setUploadFile(file);
+
+            // 新しいファイル名を定義する
+            const now = new Date();
+            const dateTimeString = now.toISOString().replace(/[:.]/g, '-');
+            const newFileName = `seed-image-${dateTimeString}_${file.name.substring(file.name.lastIndexOf('.'))}`;
+            // 新しいFileオブジェクトを作成
+            const newFile = new File([file], newFileName, { type: file.type });
+            setUploadFile(newFile);
 
             const api = new Api(authState);
             api.setConfig({contentsType: "multipart/form-data"});
             await api.post({
-                endPoint: endPoint.UPLOAD_IMAGE, body: {
-                    file: file,
+                endPoint: `${uploadEndPoint}/${folderName}`, body: {
+                    file: newFile,
                 }
             }).then((res) => {
                 console.log("success");
                 console.log(res);
 
-                const uploadedImagePath = ImagePath.create({alt: file.name.toString(), path: res.data.url});
+                const uploadedImagePath = ImagePath.create({alt: newFile.name.toString(), path: res.data.url});
                 // 親コンポーネントにアップロード結果を渡す
                 onFileChange(uploadedImagePath);
             }).catch((err)=>{
