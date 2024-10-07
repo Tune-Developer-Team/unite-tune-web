@@ -192,6 +192,22 @@ const ProfileEditUI = (props: ProfileEditUIIF) => {
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12}>
                     <Box>
+                        ポートフォリオ
+                        <Switch
+                            checked={isShowPortFolio}
+                            onChange={() => {
+                                setIsShowPortFolio(!isShowPortFolio);
+                                console.log("isShowMbti");
+                            }
+                            }
+                            name="isShowMbti"
+                            color="primary"
+                        />
+                        {isShowPortFolio?"公開する":"公開しない"}
+                    </Box>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Box>
                         性格タイプ
                         <Switch
                             checked={isShowMbti}
@@ -223,23 +239,6 @@ const ProfileEditUI = (props: ProfileEditUIIF) => {
                         <MenuItem value={"論理学者(INTP-T)"}>論理学者(INTP-T)</MenuItem>
                     </Select>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Box>
-                        ポートフォリオ
-                        <Switch
-                            checked={isShowPortFolio}
-                            onChange={() => {
-                                setIsShowPortFolio(!isShowPortFolio);
-                                console.log("isShowMbti");
-                            }
-                            }
-                            name="isShowMbti"
-                            color="primary"
-                        />
-                        {isShowPortFolio?"公開する":"公開しない"}
-                    </Box>
-                </Grid>
-
             </Grid>
         </div>
     );

@@ -89,7 +89,7 @@ const ProfileView = () => {
                     </Box>
                     <Typography variant="h6" component="div" sx={{ textAlign: "start" }}>
                         {profile.nickName}&nbsp;&nbsp;
-                        <Chip label={profile.curiosDirection} size="small" />
+                        {/*<Chip label={profile.curiosDirection} size="small" />*/}
                     </Typography>
                 </Grid>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
