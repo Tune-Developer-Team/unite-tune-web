@@ -28,7 +28,7 @@ import logo from "../../uniteLogo.svg";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import aiIcon from"../../assets/ais.svg";
-import tsubuyakiIcon from"../../assets/tsubuyakiIcon.svg";
+import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import Profile from "../../models/Profile/Profile";
 
 
@@ -155,15 +155,10 @@ export default function DrawerView() {
                     {[
                         {label: 'home', icon: <HomeIcon/>, linkPath: "/"},
                         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
-                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'},
-                        {label: 'Tsubuyaki', icon: <img src={tsubuyakiIcon}/>, linkPath: TSUBUYAKI_ORIGIN},
+                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: '/seed/' + viewModel.generateSeedId() + '/edit'},
+                        {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: '/timeline'},
                     ].map((item, index) => (
                         <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={()=>{
-
-                            if(item.linkPath == TSUBUYAKI_ORIGIN){
-                                window.open(item.linkPath, '_blank') // TODO: 仮
-                            }
-
                             navigate(item.linkPath);
                         }}>
                                 <ListItemButton

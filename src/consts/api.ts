@@ -13,6 +13,10 @@ export const endPoint = {
     SEED: `${baseUrl}/seeds`,
     SAVE_SEED_AS_DRAFT: `${baseUrl}/save-as-draft`,
     UPLOAD_SEED_IMAGE: `${baseUrl}/upload/seeds`,
+    // THINK
+    THINK: `${baseUrl}/think`,
+    SAVE_THINK_AS_DRAFT: `${baseUrl}/save-think/as/draft`,
+    UPLOAD_THINK_IMAGE: `${baseUrl}/upload/think`,
 
     // UPLOAD
     UPLOAD_IMAGE: `${baseUrl}/upload`,

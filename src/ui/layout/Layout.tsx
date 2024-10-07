@@ -27,7 +27,7 @@ import logo from "../../uniteLogo.svg";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import aiIcon from "../../assets/ais.svg";
-import tsubuyakiIcon from "../../assets/tsubuyakiIcon.svg";
+import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import HeaderMenu from "./HeaderMenu";
 import FooterMenu from "./FooterMenu";
 import Profile from "../../models/Profile/Profile";
@@ -163,14 +163,9 @@ export default function Layout() {
                                 icon: <CreateIcon/>,
                                 linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'
                             },
-                            {label: 'Tsubuyaki', icon: <img src={tsubuyakiIcon}/>, linkPath: TSUBUYAKI_ORIGIN},
+                            {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: `/timeline`},
                         ].map((item, index) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={() => {
-
-                                if (item.linkPath == TSUBUYAKI_ORIGIN) {
-                                    window.open(item.linkPath, '_blank') // TODO: 仮
-                                }
-
                                 navigate(item.linkPath);
                             }}>
                                 <ListItemButton

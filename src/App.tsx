@@ -18,6 +18,7 @@ import AISecretary from "./scene/AISecretary";
 import SeedListView from "./scene/seedList/SeedListView";
 import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
+import TimeLineView from "./scene/thinkTank/TimeLineView";
 
 function App() {
     const [darkMode] = useState(true);
@@ -58,6 +59,8 @@ function App() {
                             <Route path='/home' element={<HomeView />} />
                             <Route path='/seed/:seedId/edit' element={<SeedEditView />} />
                             <Route path='/seed/:seedId' element={<SeedDetailView />} />
+                            <Route path='/timeline' element={<TimeLineView />} />
+                            <Route path='/timeline/:thinkId' element={<TimeLineView />} />
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
                             <Route path='/user/:uid/portfolio' element={<Portfolio />} />ほんほ

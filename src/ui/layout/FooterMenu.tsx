@@ -10,7 +10,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import {useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import aiIcon from "../../assets/ais.svg";
-import tsubuyakiIcon from "../../assets/tsubuyakiIcon.svg";
+import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import Typography from "@mui/material/Typography";
 
@@ -42,16 +42,12 @@ const FooterMenu = () => {
                 width: "100%"
             }}>
                 {[
-                    {label: 'home', icon: <HomeIcon/>, linkPath: "/home"},
-                    {label: 'Tsubuyaki', icon: <img src={tsubuyakiIcon}/>, linkPath: TSUBUYAKI_ORIGIN},
+                    {label: 'Home', icon: <HomeIcon/>, linkPath: "/home"},
+                    {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: `/timeLine/`},
                     {label: 'AIS', icon: <img src={aiIcon}/>, linkPath: `/user/${authentication.uid}/ais`}
                 ].map((item, index) => (
                     <ListItem key={item.label} disablePadding sx={{justifyContent: "center"}} onClick={() => {
-                        if (item.linkPath === TSUBUYAKI_ORIGIN) {
-                            window.open(item.linkPath, '_blank'); // 仮
-                        } else {
-                            navigate(item.linkPath);
-                        }
+                        navigate(item.linkPath);
                     }}>
                         <Box display={"block"} textAlign={"center"}>
                             {item.icon}
