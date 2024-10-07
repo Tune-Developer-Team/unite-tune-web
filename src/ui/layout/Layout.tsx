@@ -33,7 +33,6 @@ import FooterMenu from "./FooterMenu";
 import Profile from "../../models/Profile/Profile";
 
 const drawerWidth = 240;
-const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -127,8 +126,6 @@ export default function Layout() {
             console.log(error);
         });
 
-        navigate("/home");
-
         return () => {
             // クリーンアップ
             viewModel.cleanUp();
@@ -139,7 +136,7 @@ export default function Layout() {
     const isLogin: boolean = authentication.uid.length > 0;
     const pathname = useLocation().pathname;
     if (!isLogin && (pathname !== '/signin')) {
-        window.location.href = '/signin';
+        navigate("/signin");
     }
 
     return (

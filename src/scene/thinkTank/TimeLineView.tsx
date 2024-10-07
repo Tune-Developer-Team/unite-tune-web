@@ -3,7 +3,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import {Button, Card, CardContent, CardMedia, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
-import SyncIcon from '@mui/icons-material/Sync';
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";

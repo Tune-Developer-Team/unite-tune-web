@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, {useState} from 'react';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
 
 import SignIn from "./scene/signIn/SignInView";
-import { createTheme, ThemeProvider } from "@mui/material";
-import { RecoilRoot } from "recoil";
+import {createTheme, ThemeProvider} from "@mui/material";
+import {RecoilRoot} from "recoil";
 import Profile from "./scene/profile/ProfileView";
 import Portfolio from "./scene/portfolio";
 import SeedEditView from "./scene/seedEdit/SeedEditView";
@@ -49,7 +49,6 @@ function App() {
         <RecoilRoot>
             <ThemeProvider theme={theme}>
                 <BrowserRouter basename={"/"}>
-                    {/*<DrawerView />*/}
                     <Routes>
                         <Route path='/card/:cardSerial' element={<TuneCardView />} />
                         <Route path='/register' element={<RegisterView />} />
@@ -67,7 +66,7 @@ function App() {
                             <Route path='/seeds' element={<SeedListView />} />
                             <Route path='/blogposts' element={<BlogPostTileList />} />
                         </Route>
-                        <Route path="*" element={<NotFound />} />
+                        <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </BrowserRouter>
             </ThemeProvider>
