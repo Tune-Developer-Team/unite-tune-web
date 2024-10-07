@@ -11,6 +11,12 @@ import { ProfileViewModel } from "./ProfileViewModel";
 import Profile from "../../models/Profile/Profile";
 import RoundedButton from "../../ui/button/RoundedButton";
 import Avatar from "@mui/material/Avatar";
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import ProfileEditUI from "./ProfileEditUI";
+import { Gauge } from "@mui/x-charts";
+import {Chip} from "@mui/material";
 
 const profileViewModel = new ProfileViewModel();
 
@@ -23,7 +29,11 @@ const ProfileView = () => {
     const navigate = useNavigate();
     const [authState] = useRecoilState(authenticationState);
     const [profile, setProfile] = useState<Profile>(viewModel.profile);
-    const [navigation, setNavigation] = useRecoilState(navigationState);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const toggleDrawer = (open: boolean) => {
+        setIsDrawerOpen(open);
+    };
 
     const setUp = async (): Promise<void> => {
         const newViewModel = await viewModel.setUp({
@@ -33,59 +43,75 @@ const ProfileView = () => {
                 email: authState.email
             }, uId: targetUid,
         });
-        // setViewModel(newViewModel);
         setProfile(newViewModel.getProfile());
     }
 
     useEffect(() => {
-        setNavigation({ isHidden: false, isEnableRedirect: true });
-        // セットアップ
         void setUp();
 
         return () => {
-            // クリーンアップ
-            viewModel.cleanUp()
+            viewModel.cleanUp();
         };
-    },[]);
+    }, []);
 
     return (
-        <div className="Home" style={{ paddingLeft: '5rem' }}>
+        <Box className="Profile" paddingLeft={1}>
             <Grid container spacing={2} className={"projectByLanguage"}>
-                <Grid paddingBottom={12} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
-                    <Box width={"100%"} display={"flex"} paddingBottom={2}>
-                        <Avatar
-                            alt="userIcon"
-                            src={profile.iconImage.path}
-                            sx={{ width: 100, height: 100 }} // サイズを大きくする
-                            onClick={() => {
-                                console.log("ユーザー");
-                            }}
-                        />
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                    <Box width={"100%"} display={"flex"} paddingBottom={2} position="relative">
+                        {/* 親要素を相対位置に設定 */}
+                        <Box position="relative" width={100} height={100}>
+                            {/* Gaugeを絶対位置に設定し、Avatarに沿わせる */}
+                            <Gauge
+                                width={140}
+                                height={140}
+                                value={profile.curiosValue}
+                                sx={{
+                                    position: 'absolute',
+                                    top: -19,
+                                    left: -19
+                                }}
+                            />
+                            <Avatar
+                                alt="userIcon"
+                                src={profile.iconImage.path}
+                                sx={{ width: 100, height: 100, position: 'relative', zIndex: 1 }} // Avatarを上に表示
+                                onClick={() => {
+                                    console.log("ユーザー");
+                                }}
+                            />
+                        </Box>
                         <Box textAlign={"end"} width={"100%"} display={uId === authState.uid ? "block" : "none"}>
-                            <RoundedButton onClick={() => {
-                                console.log("編集")
-                            }}>
+                            <RoundedButton onClick={() => toggleDrawer(true)}>
                                 Edit
                             </RoundedButton>
                         </Box>
                     </Box>
                     <Typography variant="h6" component="div" sx={{ textAlign: "start" }}>
-                        {profile.nickName}
+                        {profile.nickName}&nbsp;&nbsp;
+                        <Chip label={profile.curiosDirection} size="small" />
                     </Typography>
                 </Grid>
-
-                <Grid xs={6} sm={6} md={6} lg={6}>
-                    <Box sx={{ textAlign: "start" }}>
-                        <Typography>
-                            自分でも気づかない自分の自己紹介データが見られる。<br />現在開発中
-                        </Typography>
-                        {/*<ProfileBarChart/>*/}
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                    {profile.description}
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                    MyCurios
+                    <Box>
+                        {profile.curios}
                     </Box>
                 </Grid>
-                <Grid xs={6} sm={6} md={6} lg={6} sx={{ textAlign: "center" }}>
-                    <Typography variant="h6" component="div" sx={{ textAlign: "center" }}>
-                        ⚡️ My Values
-                    </Typography>
+                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: profile.isPublicAis ? "block" : "none"}}>
+                    <Box>
+                        AIS：&nbsp;&nbsp;{"🚧開発中🚧"}
+                    </Box>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: profile.isShowMbti ? "block" : "none"}}>
+                    <Box>
+                        性格タイプ：&nbsp;&nbsp;{profile.mbti}
+                    </Box>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: profile.isShowPortfolio ? "block" : "none"}}>
                     <Box>
                         <Button onClick={() => {
                             navigate(`/user/${uId}/portfolio`)
@@ -93,16 +119,25 @@ const ProfileView = () => {
                         >Please See Portfolio</Button>
                     </Box>
                 </Grid>
-                <Grid xs={3} sm={3} md={3} lg={3}>
-                </Grid>
-                <Grid sx={{ textAlign: "center" }} xs={6} sm={6} md={6} lg={6}>
-
-                </Grid>
-                <Grid xs={3} sm={3} md={3} lg={3}>
-                </Grid>
-
             </Grid>
-        </div>
+            <Drawer
+                anchor="bottom"
+                open={isDrawerOpen}
+                onClose={() => toggleDrawer(false)}
+                sx={{ '& .MuiDrawer-paper': { padding: 2, borderTopLeftRadius: 20, borderTopRightRadius: 20 } }} // 丸みをつける
+            >
+                <Box sx={{ width: 'auto', padding: 2 }}>
+                    <Typography color={"#325eff"} onClick={() => {
+                        toggleDrawer(false)}
+                        // TODO: データのリフレッシュ
+                    }
+                                sx={{ float: 'right', font: 'bold'}}>
+                        完了
+                    </Typography>
+                    <ProfileEditUI profile={profile}/>
+                </Box>
+            </Drawer>
+        </Box>
     );
 };
 

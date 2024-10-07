@@ -8,6 +8,7 @@ export const endPoint = {
     TUNE_CARD: `${baseUrl}/tuneCards`,
     // PROFILE
     PROFILE: `${baseUrl}/profiles`,
+    UPLOAD_PROFILE_IMAGE: `${baseUrl}/upload/profiles`,
     // SEED
     SEED: `${baseUrl}/seeds`,
     SAVE_SEED_AS_DRAFT: `${baseUrl}/save-as-draft`,

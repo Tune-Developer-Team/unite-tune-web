@@ -1,6 +1,6 @@
 import Authentication from "../../models/Authentication/Authentication";
 import dayjs from "dayjs";
-import Profile from "../../models/Profile/Profile";
+import Profile, {ProfileIF} from "../../models/Profile/Profile";
 import {Api} from "../../models/Api/Api";
 import {AxiosResponse} from "axios";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
@@ -18,7 +18,7 @@ export class DrawerViewModel {
      * セットアップ処理
      * @param argument
      */
-    setUp(argument: { profile: { iconImage: any; nickName: any }; authentication: { uid: any; accessToken: any; email: any } }): void {
+    setUp(argument: { profile: ProfileIF; authentication: { uid: any; accessToken: any; email: any } }): void {
         console.log('====================DrawerViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
         this.profile.setProfile(argument.profile);

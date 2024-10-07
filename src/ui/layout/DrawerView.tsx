@@ -29,6 +29,8 @@ import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import aiIcon from"../../assets/ais.svg";
 import tsubuyakiIcon from"../../assets/tsubuyakiIcon.svg";
+import Profile from "../../models/Profile/Profile";
+
 
 const drawerWidth = 240;
 const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
@@ -89,7 +91,7 @@ export default function DrawerView() {
 
     const [navigation] = useRecoilState(navigationState);
     const [authentication] = useRecoilState(authenticationState);
-    const [profile] = useRecoilState(profileState);
+    const [profile] = useRecoilState<Profile>(profileState);
 
     // カスタムURL
     const [urlString, setUrlString] = useState<string>('');
@@ -116,10 +118,7 @@ export default function DrawerView() {
                 uid: authentication.uid,
                 email: authentication.email
             },
-            profile: {
-                nickName: profile.nickName,
-                iconImage: profile.iconImage
-            }
+            profile: profile
         });
 
         void viewModel.fetchCustomUrl().then((response) => {
