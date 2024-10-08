@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import {Button, Card, CardContent, CardMedia, TextField} from "@mui/material";
+import {Button, Card, CardContent, CardMedia, Drawer, Fab, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
@@ -17,8 +17,8 @@ import {TimeLineViewModel} from "./TimeLineViewModel";
 import {ThinkDraft, ThinkDraftIF} from "../../models/ThinkTank/ThinkiDraft";
 import ImagePath from "../../models/data/ImagePath";
 import Mention from "../../models/data/Mention";
-import AddThinkModal from "../../ui/addThinkModal/AddThinkModal";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import AddIcon from '@mui/icons-material/Add';
 
 const timeLineViewModel = new TimeLineViewModel();
 
@@ -43,21 +43,20 @@ const TimeLineView = () => {
      * タイムラインの読み込み
      */
     const loadTimeLine = async (): Promise<void> => {
-        await viewModel.loadTimeLine({accessToken: authState.accessToken}).then((response)=>{
-            console.log(response);
-        }).catch((error)=>{
+        await viewModel.loadTimeLine().then((newThinkTable) => {
+            setThinkList(newThinkTable.thinkList.reverse());
+        }).catch((error) => {
             console.log(error);
         });
-        setThinkList(viewModel.thinkTable.thinkList);
     }
 
     /**
      * Thinkの下書きの状態の監視および更新
      * @param event
      */
-    const thinkDraftHandler = (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    const thinkDraftHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const sentence = event.target.value;
-        if(sentence === ''){
+        if (sentence === '') {
             setThinkDraft(null);
             return
         }
@@ -66,14 +65,14 @@ const TimeLineView = () => {
 
         // TODO: 仮
         const imagePathList = [
-            ImagePath.create({alt:'sample1',path:'http://hogehoge-sample1.hoge.com'}),
-            ImagePath.create({alt:'sample2',path:'http://hogehoge-sample2.hoge.com'})
+            ImagePath.create({alt: 'sample1', path: 'http://hogehoge-sample1.hoge.com'}),
+            ImagePath.create({alt: 'sample2', path: 'http://hogehoge-sample2.hoge.com'})
         ];
 
         // TODO:仮
         const mentionList = [
-            Mention.create({idCategory: 'user', idValue:'2'}),
-            Mention.create({idCategory: 'user', idValue:'3'})
+            Mention.create({idCategory: 'user', idValue: '2'}),
+            Mention.create({idCategory: 'user', idValue: '3'})
         ];
 
         const argument: ThinkDraftIF = {
@@ -112,7 +111,7 @@ const TimeLineView = () => {
             console.log('成功', response);
 
             // フォームを空にする
-            setThinkDraft(null);
+            setThinkDraft(ThinkDraft.initThinkDraft());
 
             // ThinkId初期化
             void initThinkId();
@@ -132,13 +131,13 @@ const TimeLineView = () => {
      * スマホだけ表示
      */
     const styleOfOnlyDisplaySmartPhone = {
-        display:{xs: "block", sm: "block", md: "none", lg: "none", xl: "none"}
+        display: {xs: "block", sm: "block", md: "none", lg: "none", xl: "none"}
     }
     /**
      * PCだけ表示
      */
     const styleOfOnlyDisplayPc = {
-        display:{xs: "none", sm: "none", md: "block", lg: "block", xl: "block"}
+        display: {xs: "none", sm: "none", md: "block", lg: "block", xl: "block"}
     }
 
     /**
@@ -151,7 +150,40 @@ const TimeLineView = () => {
         textAlign: "start"
     }
 
-    useEffect( () => {
+    const [isOpenThinkModal, setIsOpenThinkModal] = useState<boolean>(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const openAddThinkModalHandler = () => {
+        console.log('push addThink button');
+        // setIsOpenThinkModal(true);
+        setIsDrawerOpen(true);
+    }
+
+    const closeAddThinkModalHandler = () => {
+        console.log('push addThink button');
+        // setIsOpenThinkModal(false);
+        setIsDrawerOpen(true);
+    }
+
+    const style = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+
+    const toggleDrawer = (open: boolean) => {
+        setIsDrawerOpen(open);
+    };
+
+    // 開発環境においてStrictModeの2回目を無視するフラグ
+    let strictModeIgnore = false;
+    useEffect(() => {
         viewModel.setUp({
             authentication: {
                 accessToken: authState.accessToken,
@@ -162,135 +194,197 @@ const TimeLineView = () => {
 
         void initThinkId();
 
-        // タイムラインの初期化
-        void loadTimeLine();
+        if (!strictModeIgnore) {
+            // タイムラインの初期化
+            void loadTimeLine();
+        }
 
+        return () => {
+            strictModeIgnore = true;
+        };
     }, []);
 
     return (
-        <div className="TimeLine">
-            <Grid container spacing={2} className={"projectByLanguage"}>
-                <Grid xs={12} sm={2} md={2} lg={2} >
-                    <Box sx={{textAlign: "center"}}>
+        <Grid container spacing={2}>
+            <Grid padding={0} xs={12} sm={12} md={7} lg={7} sx={{height: "85vh", overflow: "auto"}}>
+                <Box sx={styleOfOnlyDisplayPc} width={"100%"}>
+                    <Box sx={{textAlign: "center", paddingBottom: 0.5}}>
+                        <Card
+                            sx={{
+                                '&:hover': {
+                                    boxShadow: 6,
+                                    cursor: 'pointer',
+                                    // transform: 'scale(1.05)',
+                                },
+                                transition: 'transform 0.3s, box-shadow 0.3s',
+                            }}
+                        >
+                            <CardContent>
+                                <CardMedia sx={{textAlign: "start"}}>
+                                    <Box sx={{display: "flex"}}>
+                                        <Avatar src={profile.iconImage} alt={profile.nickName}/>
+                                        <Typography sx={{alignContent: "center", paddingLeft: 1}}>
+                                            {profile.nickName}
+                                        </Typography>
+                                    </Box>
+                                </CardMedia>
+                                <Box sx={styleAddThinkTextFillArea}>
+                                    <Typography variant="body1" component="div">
+                                        <TextField
+                                            onChange={(e) => thinkDraftHandler(e)}
+                                            id="add-think-text-field"
+                                            multiline
+                                            rows={4}
+                                            value={thinkDraft?.sentence ?? ""}
+                                            placeholder="いまの気持ちをつぶやいてみよう！"
+                                            variant="outlined"
+                                            fullWidth
+                                            InputLabelProps={{
+                                                shrink: false,
+                                            }}
+                                        />
+                                    </Typography>
+                                </Box>
+                                <Box sx={{width: "100%", display: "inline-block", textAlign: "end", paddingTop: 2}}>
+                                    <Button onClick={addThinkButtonHandler}>
+                                        投稿する
+                                    </Button>
+                                </Box>
+
+                            </CardContent>
+                        </Card>
                     </Box>
-                </Grid>
-                <Grid xs={12} sm={7} md={7} lg={7} sx={{backgroundColor: "gray",height: "85vh", overflow:"auto"}}>
-                    <Box sx={styleOfOnlyDisplayPc}>
-                        <Box sx={{textAlign: "center", paddingBottom: 0.2}}>
+                </Box>
+                <Box sx={styleOfOnlyDisplaySmartPhone}>
+                    <Box sx={{position: "relative"}}>
+                        <Fab sx={{position:"fixed", bottom: 100, right: 40}} color="primary" aria-label="add" onClick={() => openAddThinkModalHandler()}>
+                            <AddIcon/>
+                        </Fab>
+                    </Box>
+                    <Drawer
+                        anchor="bottom"
+                        open={isDrawerOpen}
+                        onClose={() => toggleDrawer(false)}
+                        sx={{
+                            '& .MuiDrawer-paper': {
+                                padding: 2,
+                                borderTopLeftRadius: 20,
+                                borderTopRightRadius: 20,
+                                backgroundColor: "#000000"
+                            }
+                        }}
+                    >
+                        <Box sx={{width: 'auto', padding: 2}}>
+                            <Box display={"flex"}>
+                                <Box width={"100%"}>
+                                    <Typography color={"#ffffff"} onClick={() => {
+                                        toggleDrawer(false)
+                                    }}
+                                                sx={{float: 'start', font: 'bold'}}>
+                                        キャンセル
+                                    </Typography>
+                                </Box>
+                                <Box width={"100%"}>
+                                    <Typography color={"#496cff"} sx={{float: 'right', font: 'bold'}}
+                                                onClick={() => {
+                                                    addThinkButtonHandler();
+                                                    setIsDrawerOpen(false);
+                                                }}
+                                    >
+                                        つぶやく
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box paddingTop={4}>
+                                <Typography variant="body1" component="div">
+                                    <TextField
+                                        onChange={(e) => thinkDraftHandler(e)}
+                                        id="add-think-text-field"
+                                        multiline
+                                        rows={20}
+                                        value={thinkDraft?.sentence ?? ""}
+                                        placeholder="いまの気持ちをつぶやいてみよう！"
+                                        variant="outlined"
+                                        fullWidth
+                                        InputLabelProps={{
+                                            shrink: false,
+                                        }}
+                                    />
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Drawer>
+                </Box>
+                <Box sx={{textAlign: "center"}}>
+                    {thinkList.map((think: Think, index) => (
+                        <Box key={index} sx={{paddingBottom: 0.2}}>
                             <Card
-                                sx={{'&:hover': {
+                                sx={{
+                                    padding:0,
+                                    '&:hover': {
                                         boxShadow: 6,
                                         cursor: 'pointer',
-                                        // transform: 'scale(1.05)',
+                                        // transform: 'scale(1.01)',
                                     },
                                     transition: 'transform 0.3s, box-shadow 0.3s',
                                 }}
                             >
-                                <CardContent>
+                                <CardContent sx={{paddingTop: 2}}>
                                     <CardMedia sx={{textAlign: "start"}}>
-                                        <Box sx={{display: "flex"}}>
-                                            <Avatar src={profile.iconImage} alt={profile.nickName}/>
-                                            <Typography sx={{alignContent: "center", paddingLeft: 1}}>
-                                                {profile.nickName}
-                                            </Typography>
+                                        <Box sx={{display: "flex",  padding:0}} onClick={() => {
+                                            console.log('この人のプロフィールへ飛ぶ')
+                                        }}>
+                                            <Avatar src={think.userIconImagePath} alt={'user_icon_image'}/>
+                                            <Box sx={{display: "flex"}}>
+                                                <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={20}>
+                                                    {think.thinkUserName}
+                                                </Typography>
+                                                <Typography sx={{alignContent: "center", paddingLeft: 2}} color={"gray"}
+                                                            fontSize={14}>
+                                                    {think.createdAt}
+                                                </Typography>
+                                            </Box>
                                         </Box>
                                     </CardMedia>
-                                    <Box sx={styleAddThinkTextFillArea}>
+                                    <Box onClick={() => {
+                                        window.location.href = `/think/${think.thinkId}`
+                                    }}>
                                         <Typography variant="body1" component="div">
-                                            <TextField
-                                                onChange={(e) => thinkDraftHandler(e)}
-                                                id="add-think-text-field"
-                                                multiline
-                                                rows={4}
-                                                placeholder="いまの気持ちをつぶやいてみよう！"
-                                                variant="outlined"
-                                                fullWidth
-                                                InputLabelProps={{
-                                                    shrink: false,
-                                                }}
-                                            />
+                                            <Box sx={{paddingLeft: 2, paddingTop: 2, textAlign: "start"}}>
+                                                {think.sentence}
+                                            </Box>
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            <Box sx={{paddingRight: 2, textAlign: "end"}}>
+                                                {think.hashTagList}
+                                            </Box>
                                         </Typography>
                                     </Box>
-                                    <Box sx={{width: "100%", display:"inline-block", textAlign:"end", paddingTop:2}}>
-                                        <Button onClick={addThinkButtonHandler}>
-                                            投稿する
-                                        </Button>
+                                    <Box sx={{width: "100%", display: "flex"}} padding={0}>
+                                        <ReplyIcon sx={{color: "white", width:18, marginRight:3}} onClick={() => {
+                                            console.log('レッツクソリプ！')
+                                        }}/>
+                                        <FavoriteIcon sx={{color: "#ff4c4c", width:18, marginRight:3}} onClick={() => {
+                                            console.log('いいね！')
+                                        }}/>
+                                        <RepeatIcon sx={{color: "#4cffa7", width:18, marginRight:3}} onClick={() => {
+                                            console.log('リポスト！')
+                                        }}/>
+                                        <IosShareIcon sx={{color: "#4cc2ff", width:18, marginRight:3}} onClick={() => {
+                                            console.log('共有する！')
+                                        }}/>
                                     </Box>
-
                                 </CardContent>
                             </Card>
                         </Box>
-                    </Box>
-                    <Box sx={{textAlign: "center"}}>
-                        {thinkList.map((think:Think, index) => (
-                            <Box key={index} sx={{paddingBottom: 0.2}}>
-                                <Card
-                                    sx={{
-                                        '&:hover': {
-                                            boxShadow: 6,
-                                            cursor: 'pointer',
-                                            // transform: 'scale(1.01)',
-                                        },
-                                        transition: 'transform 0.3s, box-shadow 0.3s',
-                                    }}
-                                >
-                                    <CardContent>
-                                        <CardMedia sx={{textAlign: "start"}}>
-                                            <Box sx={{display: "flex"}} onClick={()=>{console.log('この人のプロフィールへ飛ぶ')}}>
-                                                <Avatar src={think.userIconImagePath} alt={'user_icon_image'}/>
-                                                <Box sx={{display: "flex"}}>
-                                                    <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={20}>
-                                                        {think.thinkUserName}
-                                                    </Typography>
-                                                    <Typography sx={{alignContent: "center", paddingLeft: 2}} color={"gray"} fontSize={14}>
-                                                        {think.createdAt}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        </CardMedia>
-                                        <Box onClick={()=>{
-                                            window.location.href=`/think/${think.thinkId}`
-                                        }}>
-                                            <Typography variant="body1" component="div">
-                                                <Box sx={{paddingLeft: 2, paddingTop: 2, textAlign: "start"}}>
-                                                    {think.sentence}
-                                                </Box>
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <Box sx={{paddingRight: 2, paddingTop: 2, textAlign: "end"}}>
-                                                    {think.hashTagList.toString()}
-                                                </Box>
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{width: "100%", display:"flex"}}>
-                                            <IconButton sx={{marginRight:2}} onClick={()=>{console.log('レッツクソリプ！')}}>
-                                                <ReplyIcon sx={{color: "white"}}/>
-                                            </IconButton>
-                                            <IconButton sx={{marginRight:2}} onClick={()=>{console.log('いいね！')}}>
-                                                <FavoriteIcon sx={{color: "#ff4c4c"}}/>
-                                            </IconButton>
-                                            <IconButton sx={{marginRight:2}} onClick={()=>{console.log('リポスト！')}}>
-                                                <RepeatIcon sx={{color: "#4cffa7"}}/>
-                                            </IconButton>
-                                            <IconButton sx={{marginRight:2}} onClick={()=>{console.log('共有する！')}}>
-                                                <IosShareIcon sx={{color: "#4cc2ff"}}/>
-                                            </IconButton>
-                                        </Box>
-                                    </CardContent>
-                                </Card>
-                            </Box>
-                        ))}
-                    </Box>
-                    <Box sx={styleOfOnlyDisplaySmartPhone}>
-                        <AddThinkModal/>
-                    </Box>
-                </Grid>
-                <Grid xs={12} sm={3} md={3} lg={3}>
-                    <Box sx={{textAlign: "center"}}>
-                    </Box>
-                </Grid>
+                    ))}
+                </Box>
             </Grid>
-        </div>
+            <Grid xs={12} sm={3} md={3} lg={3}>
+                <Box sx={{textAlign: "center"}}>
+                </Box>
+            </Grid>
+        </Grid>
     );
 };
 

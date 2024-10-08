@@ -32,7 +32,7 @@ export class ThinkTable {
      * Thinkリストを取得する
      * @param props
      */
-    public async fetchThinkList(props: { accessToken: string, uid: string }): Promise<{ updateCount: number } | void> {
+    public async fetchThinkList(props: { accessToken: string, uid: string }): Promise<ThinkTable> {
         // シンクを取得する
         const accessToken = props.accessToken as string;
         const axiosInstance = axios.create({
@@ -41,40 +41,46 @@ export class ThinkTable {
             }
         });
 
-        await axiosInstance.get(`${endPoint.THINK}?chunk=20`).then((response) => {
-            console.log(response);
-            const updateCount = response.data.thinkList.length;
-            this.thinkList = this.createdThinkListByAPIResponse(response);
-
-            console.log('==========================');
-            console.log(this.thinkList);
-
-            return {updateCount: updateCount};
-        }).then((error) => {
+        try {
+            const response = await axiosInstance.get(`${endPoint.THINK}?chunk=20`);
+            console.log(response.data);
+            const thinkList = this.createdThinkListByAPIResponse(response);
+            return new ThinkTable(thinkList);
+        } catch (error) {
             console.log(error);
-        });
+            return ThinkTable.initThinkTable();
+        }
     }
 
-    private createdThinkListByAPIResponse(response: AxiosResponse): Think[] {
-        const thinkList: ThinkListItem[] = response.data.thinkList;
 
-        return thinkList.map((thinkListItem: ThinkListItem, i: number) => {
-            const dateTime = new Date(thinkList[i].createdAt);
+    private createdThinkListByAPIResponse(response: AxiosResponse): Think[] {
+        console.log("createdThinkListByAPIResponse")
+        console.log(response.data.data)
+
+        const apiResponse:ThinkApiResponseIF[] = response.data.data
+
+        return apiResponse.map((thinkListItem: ThinkApiResponseIF) => {
+            // const dateTime = new Date(thinkList[i].createdAt);
+            // const createdAtString = format(dateTime, 'yyyy-MM-dd HH:mm:ss') as dateTimeString;
+            const dateTime = new Date();
             const createdAtString = format(dateTime, 'yyyy-MM-dd HH:mm:ss') as dateTimeString;
             console.log(createdAtString);
 
             const thinkArgument: ThinkIF = {
-                sentence: thinkList[i].sentence,
-                thinkUserName: thinkList[i].thinkUserName,
-                imagePathList: thinkList[i].imagePathList,
-                thinkId: thinkList[i].thinkId,
-                hashTagList: thinkList[i].hashTagList,
-                mentionList: thinkList[i].mentionList,
-                createdAt: thinkList[i].createdAt,
-                parentThinkId: thinkList[i].parentThinkId,
-                userIconImagePath: thinkList[i].userIconImagePath,
-                favoriteCount: thinkList[i].favoriteCount,
-                repostCount: thinkList[i].repostCount
+                sentence: thinkListItem.Sentence,
+                thinkUserName: thinkListItem.ThinkUserName,
+                // imagePathList: thinkListItem.ImagePathList,
+                imagePathList: [ImagePath.create({alt: "", path: ""})],
+                thinkId: thinkListItem.ThinkId,
+                // hashTagList: thinkListItem.HashTagList,
+                hashTagList: ['#tag1', '#tag2', '#tag3'],
+                // mentionList: thinkListItem.MentionList,
+                mentionList: [Mention.create({idValue: "", idCategory: ""})],
+                createdAt: thinkListItem.CreatedAt,
+                parentThinkId: thinkListItem.ParentThinkId,
+                userIconImagePath: thinkListItem.UserIconImagePath,
+                favoriteCount: thinkListItem.FavoriteCount,
+                repostCount: thinkListItem.RepostCount
             }
 
             return Think.createThinkInstance(thinkArgument);
@@ -84,4 +90,18 @@ export class ThinkTable {
     public getThinkList(): Think[] {
         return this.thinkList;
     }
+}
+
+export interface ThinkApiResponseIF {
+    ThinkId: string
+    ThinkUserName: string
+    UserIconImagePath: string
+    FavoriteCount: number
+    RepostCount: number
+    CreatedAt: string
+    ParentThinkId: string
+    Sentence: string
+    HashTagList: string
+    MentionList: string
+    ImagePathList: string
 }

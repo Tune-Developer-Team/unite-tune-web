@@ -46,24 +46,13 @@ export class TimeLineViewModel implements TimeLineViewModelIF {
 
     /**
      * タイムラインを読み込む
-     * @param props
      */
-    async loadTimeLine(props: { accessToken: string }): Promise<{
-        result: { updateCount: number } | void,
-        ThinkList: Think[]
-    }> {
+    async loadTimeLine(): Promise<ThinkTable> {
         console.log('loadTimeLine');
-        const result = await this.thinkTable.fetchThinkList({
+        return await this.thinkTable.fetchThinkList({
             accessToken: this.authState.getAccessToken(),
             uid: this.authState.getUid()
         });
-
-        console.log(result);
-
-        return {
-            result: result,
-            ThinkList: this.thinkTable.thinkList
-        };
     }
 
     /**
