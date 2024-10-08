@@ -18,6 +18,8 @@ export interface ThinkDraftIF {
     userIconImagePath: string
     favoriteCount: number
     repostCount: number
+    isPublished: boolean
+    ownerUserUid: string
 }
 
 /**
@@ -35,6 +37,8 @@ export class ThinkDraft {
     public hashTagList: hashTagString[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
+    public isPublished: boolean
+    public ownerUserUid: string
 
     /**
      * コンストラクタ
@@ -52,6 +56,8 @@ export class ThinkDraft {
         this.hashTagList = argument.hashTagList;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList;
+        this.isPublished = argument.isPublished;
+        this.ownerUserUid = argument.ownerUserUid;
     }
 
     /**
@@ -96,6 +102,8 @@ export class ThinkDraft {
             favoriteCount: 0,
             createdAt: "",
             repostCount: 0,
+            isPublished: false,
+            ownerUserUid: ""
         }
 
         return new ThinkDraft(argument);
@@ -106,6 +114,20 @@ export class ThinkDraft {
      */
     async saveThink(auth: Authentication) {
         const api = new Api(auth);
-        return await api.post({endPoint: endPoint.THINK, body: this})
+
+        const body = {
+            thinkId: this.thinkId,
+            thinkUserName: this.thinkUserName,
+            userIconImagePath: this.userIconImagePath,
+            parentThinkId: this.parentThinkId,
+            sentence: this.sentence,
+            hashTagList: JSON.stringify(this.hashTagList),
+            mentionList: JSON.stringify(this.mentionList),
+            imagePathList: JSON.stringify(this.imagePathList),
+            isPublished: this.isPublished,
+            ownerUserUid: this.ownerUserUid
+        }
+
+        return await api.post({endPoint: endPoint.THINK, body: body})
     }
 }

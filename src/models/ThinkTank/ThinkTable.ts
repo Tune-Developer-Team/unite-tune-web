@@ -4,6 +4,7 @@ import Mention from "../data/Mention";
 import ImagePath from "../data/ImagePath";
 import {Think, ThinkIF} from "./Think";
 import {format} from "util";
+import {endPoint} from "../../consts/api";
 
 export interface ThinkListItem {
     sentence: string
@@ -32,17 +33,15 @@ export class ThinkTable {
      * @param props
      */
     public async fetchThinkList(props: { accessToken: string, uid: string }): Promise<{ updateCount: number } | void> {
-        // つふやきを取得する
-        const endPoint = process.env.REACT_APP_FETCH_TSUBUYAKI as string;
+        // シンクを取得する
         const accessToken = props.accessToken as string;
         const axiosInstance = axios.create({
             headers: {
-                'Authorization': accessToken,
-                'x-api-key': '1yIDLcQTj28kU0fpfZFdCaZoi4dCoEgC8hLh1duf'
+                'Authorization': accessToken
             }
         });
 
-        await axiosInstance.get(`${endPoint}?chunk=20`).then((response) => {
+        await axiosInstance.get(`${endPoint.THINK}?chunk=20`).then((response) => {
             console.log(response);
             const updateCount = response.data.thinkList.length;
             this.thinkList = this.createdThinkListByAPIResponse(response);

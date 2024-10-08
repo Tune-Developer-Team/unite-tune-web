@@ -18,6 +18,7 @@ import {ThinkDraft, ThinkDraftIF} from "../../models/ThinkTank/ThinkiDraft";
 import ImagePath from "../../models/data/ImagePath";
 import Mention from "../../models/data/Mention";
 import AddThinkModal from "../../ui/addThinkModal/AddThinkModal";
+import { v4 as uuidv4 } from 'uuid';
 
 const timeLineViewModel = new TimeLineViewModel();
 
@@ -27,6 +28,16 @@ const TimeLineView = () => {
     const [viewModel] = useState<TimeLineViewModel>(timeLineViewModel);
     const [thinkList, setThinkList] = useState<Think[]>([]);
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft | null>(null);
+    const [thinkId, setThinkId] = useState<string>("")
+    const [isPublished, setIsPublished] = useState<boolean>(false)
+
+    /**
+     * ThinkIdをリセットする
+     */
+    const initThinkId = () => {
+        const newThinkId = uuidv4();
+        setThinkId(newThinkId)
+    }
 
     /**
      * タイムラインの読み込み
@@ -46,11 +57,12 @@ const TimeLineView = () => {
      */
     const thinkDraftHandler = (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const sentence = event.target.value;
-
         if(sentence === ''){
             setThinkDraft(null);
             return
         }
+        console.log('保存準備');
+        console.log(sentence);
 
         // TODO: 仮
         const imagePathList = [
@@ -69,16 +81,20 @@ const TimeLineView = () => {
             favoriteCount: 0,
             imagePathList: imagePathList,
             repostCount: 0,
-            thinkId: "",
+            thinkId: thinkId,
             thinkUserName: "",
             userIconImagePath: "",
             sentence: sentence,
             hashTagList: ['#abc', '#efg', '#hij'],
             mentionList: mentionList,
-            parentThinkId: ''
+            parentThinkId: '',
+            isPublished: isPublished,
+            ownerUserUid: authState.uid
         }
 
         const draft = ThinkDraft.createThinkDraftInstance(argument)
+
+        console.log(draft);
         setThinkDraft(draft);
     }
 
@@ -89,11 +105,17 @@ const TimeLineView = () => {
         if (thinkDraft === null) {
             return
         }
-        const response = await viewModel.saveThink().then((response) => {
+
+        console.log(thinkDraft);
+
+        const response = await viewModel.saveThink(thinkDraft).then((response) => {
             console.log('成功', response);
 
             // フォームを空にする
             setThinkDraft(null);
+
+            // ThinkId初期化
+            void initThinkId();
 
             // タイムラインの更新
             void loadTimeLine();
@@ -137,6 +159,8 @@ const TimeLineView = () => {
                 email: authState.email
             }
         });
+
+        void initThinkId();
 
         // タイムラインの初期化
         void loadTimeLine();
@@ -188,8 +212,11 @@ const TimeLineView = () => {
                                         </Typography>
                                     </Box>
                                     <Box sx={{width: "100%", display:"inline-block", textAlign:"end", paddingTop:2}}>
-                                        <Button onClick={addThinkButtonHandler}/>
+                                        <Button onClick={addThinkButtonHandler}>
+                                            投稿する
+                                        </Button>
                                     </Box>
+
                                 </CardContent>
                             </Card>
                         </Box>

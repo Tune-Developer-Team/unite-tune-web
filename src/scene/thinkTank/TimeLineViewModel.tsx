@@ -36,12 +36,12 @@ export class TimeLineViewModel implements TimeLineViewModelIF {
     /**
      * Thinkを投稿する
      */
-    public async saveThink() {
+    public async saveThink(thinkDraft: ThinkDraft) {
 
-        if (this.thinkDraft.thinkId !== "") {
+        if (thinkDraft.thinkId === "") {
             return
         }
-        return await this.thinkDraft.saveThink(this.authState);
+        return await thinkDraft.saveThink(this.authState);
     };
 
     /**
