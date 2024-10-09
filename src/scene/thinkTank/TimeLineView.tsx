@@ -316,7 +316,7 @@ const TimeLineView = () => {
                     </Drawer>
                 </Box>
                 <Box sx={{textAlign: "center"}}>
-                    {thinkList.map((think: Think, index) => (
+                    {thinkList.reverse().map((think: Think, index) => (
                         <Box key={index} sx={{paddingBottom: 0.2}}>
                             <Card
                                 sx={{
@@ -356,10 +356,12 @@ const TimeLineView = () => {
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
                                             <Box sx={{paddingRight: 2, textAlign: "end"}}>
+                                                <span style={{fontSize: "0.8rem", color:"#ababab"}}>ハッシュタグ開発中</span>
                                                 {think.hashTagList}
                                             </Box>
                                         </Typography>
                                     </Box>
+                                    <span style={{fontSize: "0.8rem", color:"#ababab"}}>各種ボタン開発中</span>
                                     <Box sx={{width: "100%", display: "flex"}} padding={0}>
                                         <ReplyIcon sx={{color: "white", width:18, marginRight:3}} onClick={() => {
                                             console.log('レッツクソリプ！')
