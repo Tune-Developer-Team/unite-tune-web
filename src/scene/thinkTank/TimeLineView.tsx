@@ -334,14 +334,14 @@ const TimeLineView = () => {
                                         <Box sx={{display: "flex",  padding:0}} onClick={() => {
                                             console.log('この人のプロフィールへ飛ぶ')
                                         }}>
-                                            <Avatar src={think.userIconImagePath} alt={'user_icon_image'}/>
                                             <Box sx={{display: "flex"}}>
-                                                <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={20}>
+                                                <Avatar src={think.userIconImagePath} alt={'user_icon_image'}/>
+                                                <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={12}>
                                                     {think.thinkUserName}
                                                 </Typography>
                                                 <Typography sx={{alignContent: "center", paddingLeft: 2}} color={"gray"}
-                                                            fontSize={14}>
-                                                    {think.createdAt}
+                                                            fontSize={10}>
+                                                    {think.createdAt.toDateString()}
                                                 </Typography>
                                             </Box>
                                         </Box>

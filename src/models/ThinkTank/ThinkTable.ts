@@ -42,7 +42,7 @@ export class ThinkTable {
         });
 
         try {
-            const response = await axiosInstance.get(`${endPoint.THINK}?chunk=20`);
+            const response = await axiosInstance.get(`${endPoint.THINK_TIMELINE}?chunk=20`);
             console.log(response.data);
             const thinkList = this.createdThinkListByAPIResponse(response);
             return new ThinkTable(thinkList);
@@ -66,9 +66,13 @@ export class ThinkTable {
             const createdAtString = format(dateTime, 'yyyy-MM-dd HH:mm:ss') as dateTimeString;
             console.log(createdAtString);
 
+            const iconPath = ImagePath.create({alt: '', path: thinkListItem.IconPath});
+
             const thinkArgument: ThinkIF = {
                 sentence: thinkListItem.Sentence,
-                thinkUserName: thinkListItem.ThinkUserName,
+                thinkUserName: thinkListItem.NickName,
+                iconPath: iconPath,
+                ownerUserUid: thinkListItem.OwnerUserUid,
                 // imagePathList: thinkListItem.ImagePathList,
                 imagePathList: [ImagePath.create({alt: "", path: ""})],
                 thinkId: thinkListItem.ThinkId,
@@ -94,7 +98,9 @@ export class ThinkTable {
 
 export interface ThinkApiResponseIF {
     ThinkId: string
-    ThinkUserName: string
+    NickName: string
+    IconPath: string
+    OwnerUserUid: string
     UserIconImagePath: string
     FavoriteCount: number
     RepostCount: number

@@ -5,6 +5,8 @@ import {hashTagString} from "../data/types";
 export interface ThinkIF {
     sentence: string
     thinkUserName: string
+    iconPath: ImagePath
+    ownerUserUid: string
     thinkId: string
     hashTagList: hashTagString[]
     imagePathList: ImagePath[]
@@ -19,13 +21,14 @@ export interface ThinkIF {
 /**
  * Thinkモデル
  */
-export class Think implements ThinkIF {
+export class Think {
     public thinkId: string
     public thinkUserName: string
+    public ownerUserUid: string
     public userIconImagePath: string
     public favoriteCount: number
     public repostCount: number
-    public createdAt: string
+    public createdAt: Date
     public parentThinkId: string
     public sentence: string
     public hashTagList: hashTagString[]
@@ -37,12 +40,16 @@ export class Think implements ThinkIF {
      * @param argument
      */
     constructor(argument: ThinkIF) {
+
+        const createdAt = new Date(argument.createdAt)
+
         this.thinkId = argument.thinkId;
         this.thinkUserName = argument.thinkUserName;
+        this.ownerUserUid = argument.ownerUserUid;
         this.userIconImagePath = argument.userIconImagePath;
         this.favoriteCount = argument.favoriteCount;
         this.repostCount = argument.repostCount;
-        this.createdAt = argument.createdAt;
+        this.createdAt = createdAt;
         this.parentThinkId = argument.parentThinkId
         this.sentence = argument.sentence;
         this.hashTagList = argument.hashTagList;
