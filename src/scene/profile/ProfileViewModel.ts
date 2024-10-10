@@ -12,7 +12,7 @@ export class ProfileViewModel implements ProfileViewModelIF {
      * セットアップ処理
      * @param argument
      */
-     setUp(argument: { authentication: AuthenticationArgumentIF, uId: string }): ProfileViewModel {
+     setUp(argument: { authentication: AuthenticationArgumentIF, uid: string }): ProfileViewModel {
         this.authState.setAuthentication(argument.authentication);
         return this
     }
@@ -20,9 +20,9 @@ export class ProfileViewModel implements ProfileViewModelIF {
     /**
      * 取得
      */
-    async fetchUserProfile(): Promise<void> {
+    async fetchUserProfile(uid: string): Promise<void> {
         console.log("fetchUserProfile");
-        const profileApiResponse = await this.profile.fetchModel(this.authState.getUid(), this.authState.accessToken);
+        const profileApiResponse = await this.profile.fetchModel(uid, this.authState.accessToken);
         console.log(profileApiResponse.NickName);
         console.log(profileApiResponse.IconImage);
         this.profile.setFromAPIResponse(profileApiResponse);

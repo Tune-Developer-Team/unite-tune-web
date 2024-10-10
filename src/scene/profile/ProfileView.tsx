@@ -31,7 +31,7 @@ const ProfileView = () => {
 
     // ViewModel
     const params = useParams();
-    const uId = params.uid as string;
+    const uid = params.uid as string;
     const [viewModel, setViewModel] = useState<ProfileViewModel>(profileViewModel);
 
     // UI
@@ -70,9 +70,9 @@ const ProfileView = () => {
                 accessToken: authState.accessToken,
                 uid: authState.uid,
                 email: authState.email
-            }, uId: authState.uid,
+            }, uid: authState.uid,
         });
-        await newViewModel.fetchUserProfile();
+        await newViewModel.fetchUserProfile(uid);
         // トグルスイッチ初期化
         setIsPublishedAis(newViewModel.profile.isPublishedAis)
         setIsShowPortfolio(newViewModel.profile.isShowPortfolio)
@@ -80,10 +80,13 @@ const ProfileView = () => {
         // ビューモデル初期化
         setViewModel(newViewModel);
 
-        // グローバルオブジェクトを深いコピーで更新
-        const updatedProfile = Profile.initProfile();  // Profileの新しいインスタンスを作成 RecoilStateはイミュータブルなため。
-        Object.assign(updatedProfile, newViewModel.profile);
-        setGlobalProfile(updatedProfile);
+        // 自分のプロフィールの時
+        if (uid === authState.uid) {
+            // グローバルオブジェクトを深いコピーで更新
+            const updatedProfile = Profile.initProfile();  // Profileの新しいインスタンスを作成 RecoilStateはイミュータブルなため。
+            Object.assign(updatedProfile, newViewModel.profile);
+            setGlobalProfile(updatedProfile);
+        }
 
         setLoading({isLoading: false});
     }
@@ -124,7 +127,7 @@ const ProfileView = () => {
                                 }}
                             />
                         </Box>
-                        <Box textAlign={"end"} width={"100%"} display={uId === authState.uid ? "block" : "none"}>
+                        <Box textAlign={"end"} width={"100%"} display={uid === authState.uid ? "block" : "none"}>
                             <RoundedButton onClick={() => toggleDrawer(true)}>
                                 Edit
                             </RoundedButton>
@@ -159,7 +162,7 @@ const ProfileView = () => {
                       sx={{display: viewModel.profile.isShowPortfolio ? "block" : "none"}}>
                     <Box>
                         <Button onClick={() => {
-                            navigate(`/user/${uId}/portfolio`)
+                            navigate(`/user/${uid}/portfolio`)
                         }}
                         >Please See Portfolio</Button>
                     </Box>
@@ -184,7 +187,7 @@ const ProfileView = () => {
                             if (newIconImage !== null) {
                                 newProfile.iconImage = newIconImage;
                             }
-                            await viewModel.updateProfile(uId, newProfile);
+                            await viewModel.updateProfile(uid, newProfile);
 
                             if (newIconImage !== null) {
                                 newProfile.iconImage = initProfile.iconImage
