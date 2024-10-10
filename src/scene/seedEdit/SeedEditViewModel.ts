@@ -31,20 +31,20 @@ export class SeedEditViewModel implements SeedEditViewModelIF {
         console.log('cleanUp');
     }
 
-    /**
-     * シードを公開用として保存する
-     */
-    async addSeed(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
-        const api = new Api(this.authState);
-        return await api.post({endPoint:endPoint.SEED, body:seedInput})
-    }
+    // /**
+    //  * シードを公開用として保存する
+    //  */
+    // async addSeed(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
+    //     const api = new Api(this.authState);
+    //     return await api.post({endPoint:endPoint.SEED, body:seedInput})
+    // }
 
     /**
-     * 下書きを新規作成・更新する
+     * 新規作成・更新する
      */
-    async addSeedAsDraft(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
+    async saveSeed(seedInput: AddSeedInputParamIF): Promise<AxiosResponse> {
         const api = new Api(this.authState);
-        return await api.post({endPoint: `${endPoint.SAVE_SEED_AS_DRAFT}/${seedInput.seedId}`, body:seedInput})
+        return await api.post({endPoint: `${endPoint.SEED}/${seedInput.seedId}`, body:seedInput})
     }
 
     /**

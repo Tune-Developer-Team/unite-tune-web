@@ -3,7 +3,6 @@ import {useRecoilState} from "recoil";
 import {loaderState} from "../../atoms/LoaderState";
 import {useParams} from "react-router-dom";
 import {authenticationState} from "../../atoms/AuthenticationState";
-import {navigationState} from "../../atoms/NavigationState";
 import React, {useEffect, useState} from "react";
 import {SeedDetail} from "../../models/Seed/SeedDetail/seedDetail";
 import {hashTagString, isHashTag} from "../../models/data/types";
@@ -13,13 +12,8 @@ import {endPoint} from "../../consts/api";
 import {AddSeedInputParamIF} from "./SeedEditViewModelIF";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
-import {CircularProgress, Switch, TextField, ToggleButton, Toolbar} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {CircularProgress, Switch, TextField, Toolbar} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
-import ArticleIcon from "@mui/icons-material/Article";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
@@ -121,11 +115,7 @@ export default function SeedEditUI({viewModel}: SeedEditUIProps) {
             mentionList: JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
 
-        if (param.isPublished) {
-            await viewModel.addSeed(addSeedParam);
-        } else {
-            await viewModel.addSeedAsDraft(addSeedParam);
-        }
+        await viewModel.saveSeed(addSeedParam);
         setIsNeedUpdateDraft(false);
     }
 

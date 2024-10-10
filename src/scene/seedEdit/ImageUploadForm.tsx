@@ -7,6 +7,8 @@ import {Api} from "../../models/Api/Api";
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import Button, {ButtonProps} from "@mui/material/Button";
+import {loaderState} from "../../atoms/LoaderState";
+import Loader from "../../ui/loading/Loader";
 
 // styledの型定義にButtonPropsを渡すことで、componentプロパティを正しく扱えるようにします
 const ImageUploadButton = styled(Button)<ButtonProps>(({theme}) => ({
@@ -48,7 +50,10 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
                                                                       folderName,
                                                                       uploadEndPoint,
                                                                   }) => {
+    // グローバルオブジェクト
     const [authState] = useRecoilState(authenticationState);
+    const [loading, setLoading] = useRecoilState(loaderState);
+    // フォーム
     const [uploadFile, setUploadFile] = useState<File | null>(null);
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +65,8 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
             const newFile = new File([file], newFileName, {type: file.type});
             setUploadFile(newFile);
 
+            // API開始
+            setLoading({isLoading:true});
             const api = new Api(authState);
             api.setConfig({contentsType: "multipart/form-data"});
             await api.post({
@@ -68,16 +75,19 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
             }).then((res) => {
                 const uploadedImagePath = ImagePath.create({alt: newFile.name, path: res.data.url});
                 onFileChange(uploadedImagePath);
+                setLoading({isLoading:false});
             }).catch((err) => {
                 console.log("failure", err);
                 const uploadedImagePath = ImagePath.create({alt: '', path: ''});
                 onFileChange(uploadedImagePath);
+                setLoading({isLoading:false});
             });
         }
     };
 
     return (
         <Box sx={{display: "flex", width: "100%"}}>
+            <Loader/>
             <ImageUploadButton
                 component="label"
                 variant="contained"
