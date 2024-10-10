@@ -44,6 +44,7 @@ const ProfileView = () => {
     const [newProfile, setNewProfile] = useState<Profile>(initProfile)
 
     // フォーム
+    const [newIconImage, setNewIconImage] = useState<ImagePath|null>(null)
     const [isPublishedAis, setIsPublishedAis] = useState<boolean>(false)
     const [isShowPortfolio, setIsShowPortfolio] = useState<boolean>(false)
     const [isShowMbti, setIsShowMbti] = useState<boolean>(false)
@@ -51,8 +52,7 @@ const ProfileView = () => {
     // ファイル変更時に受け取るコールバック関数
     const handleFileChange = async (iconImage: ImagePath) => {
         // プレビュー用画像
-        newProfile.iconImage = iconImage
-        setNewProfile(newProfile);
+        setNewIconImage(iconImage);
     };
 
     const toggleDrawer = (open: boolean) => {
@@ -174,15 +174,17 @@ const ProfileView = () => {
                 <Box sx={{width: 'auto', padding: 2}}>
                     <Box display={"flex"}>
                         <Typography width={"100%"} textAlign={"start"} color={"#f6f6f6"} onClick={async () => {
+                            setNewIconImage(null);
                             toggleDrawer(false)
                         }
                         } sx={{font: 'bold'}}>
                             キャンセル
                         </Typography>
                         <Typography width={"100%"} textAlign={"end"} color={"#325eff"} onClick={async () => {
+                            if (newIconImage !== null) {
+                                newProfile.iconImage = newIconImage;
+                            }
                             await viewModel.updateProfile(uId, newProfile);
-                            // // グローバルステート更新
-                            // setGlobalProfile(viewModel.profile)
                             setViewModel(viewModel);
                             toggleDrawer(false)
                         }
@@ -196,8 +198,8 @@ const ProfileView = () => {
                                 <Box width={"100%"} position={"relative"} paddingBottom={2}>
                                     <Avatar
                                         alt="userIcon"
-                                        src={viewModel.profile.iconImage.path}
-                                        sx={{width: 100, height: 100, position: 'relative', xIndex: 1}} // サイズを大きくする
+                                        src={!newIconImage ? viewModel.profile.iconImage.path : newIconImage.path}
+                                        sx={{width: 100, height: 100, position: 'relative', xIndex: 1}}
                                         onClick={() => {
                                             console.log("ユーザー");
                                         }}

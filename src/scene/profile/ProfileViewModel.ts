@@ -1,6 +1,6 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {ProfileViewModelIF} from "./ProfileViewModelIF";
-import Profile, {ProfileApiResponseIF} from "../../models/Profile/Profile";
+import Profile from "../../models/Profile/Profile";
 import axios from "axios";
 import {endPoint} from "../../consts/api";
 
@@ -42,8 +42,8 @@ export class ProfileViewModel implements ProfileViewModelIF {
 
         const body = {
             nickName:newProfile.nickName,
-            iconImage: JSON.stringify(newProfile.iconImage),
             description:newProfile.description,
+            iconImage: newProfile.iconImage.path !== "" ? JSON.stringify(newProfile.iconImage) : null,
             curios:newProfile.curios,
             curiosValue:newProfile.curiosValue,
             curiosDirection:newProfile.curiosDirection.kind,
@@ -52,6 +52,10 @@ export class ProfileViewModel implements ProfileViewModelIF {
             isShowPortfolio:newProfile.isShowPortfolio,
             mbti:newProfile.mbti
         }
+
+        // if (newProfile.iconImage.path !== "") {
+            // body.iconImage = JSON.stringify(newProfile.iconImage);
+        // }
 
         const response = await api.put(`${endPoint.PROFILE}/${uId}`, body);
         console.log(response.data.data);
