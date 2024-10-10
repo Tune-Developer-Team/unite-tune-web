@@ -185,6 +185,10 @@ const ProfileView = () => {
                                 newProfile.iconImage = newIconImage;
                             }
                             await viewModel.updateProfile(uId, newProfile);
+
+                            if (newIconImage !== null) {
+                                newProfile.iconImage = initProfile.iconImage
+                            }
                             setViewModel(viewModel);
                             toggleDrawer(false)
                         }
