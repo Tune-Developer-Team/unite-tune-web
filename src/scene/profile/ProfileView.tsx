@@ -25,7 +25,7 @@ const profileViewModel = new ProfileViewModel();
 
 const ProfileView = () => {
     // グローバルオブジェクト
-    const [globalProfile, setGlobalProfile] = useRecoilState(profileState)
+    const [globalProfile, setGlobalProfile] = useRecoilState<Profile>(profileState)
     const [authState] = useRecoilState(authenticationState);
     const [loading, setLoading] = useRecoilState(loaderState);
 
@@ -74,7 +74,13 @@ const ProfileView = () => {
         setIsShowMbti(newViewModel.profile.isShowMbti)
         // ビューモデル初期化
         setViewModel(newViewModel);
-        setLoading({isLoading: false})
+
+        // グローバルオブジェクトを深いコピーで更新
+        const updatedProfile = Profile.initProfile();  // Profileの新しいインスタンスを作成 RecoilStateはイミュータブルなため。
+        Object.assign(updatedProfile, newViewModel.profile);
+        setGlobalProfile(updatedProfile);
+
+        setLoading({isLoading: false});
     }
 
     useEffect(() => {

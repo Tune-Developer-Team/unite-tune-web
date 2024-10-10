@@ -31,12 +31,17 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import {AvatarIcon} from "../avatarIcon/AvatarIcon";
+import Profile from "../../models/Profile/Profile";
 
 const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
 const drawerViewModel = new DrawerViewModel();
 // Inside your component
 const HeaderMenu = () => {
+    //　グローバルオブジェクト
+    const [authentication] = useRecoilState(authenticationState);
+    const [profile] = useRecoilState<Profile>(profileState);
+
     // ビューモデル
     const [viewModel] = useState<DrawerViewModel>(drawerViewModel);
     const [open, setOpen] = useState(false);
@@ -46,13 +51,11 @@ const HeaderMenu = () => {
     const [customUrlText, setCustomUrlText] = useState<string>('');
     const [urlIcon, setUrlIcon] = useState<File | null>(null);
     const [customUrlList, setCustomUrlList] = useState<CustomUrl[]>([]);
-    const [authentication] = useRecoilState(authenticationState);
 
     // const handleDrawerToggle = () => {
     //     setOpen(!open);
     // };
     const navigate = useNavigate();
-    const [profile] = useRecoilState(profileState);
     const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
 
     const handleDrawerOpen = () => {
@@ -163,7 +166,7 @@ const HeaderMenu = () => {
                 <Avatar
                     alt="userIcon"
                     sizes={"ss"}
-                    src={"authentication.iconImage.path"}
+                    src={profile.iconImage.path??""}
                     onMouseEnter={handleAvatarMouseEnter}
                     onMouseLeave={handleAvatarMouseLeave}
                     onClick={open ? handleDrawerClose : handleDrawerOpen}

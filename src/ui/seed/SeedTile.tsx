@@ -7,6 +7,9 @@ import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {SeedListItem} from "../../scene/home/HomeViewModelIF";
 import {AvatarIcon} from "../avatarIcon/AvatarIcon";
+import {useRecoilState} from "recoil";
+import Profile from "../../models/Profile/Profile";
+import {profileState} from "../../atoms/ProfileState";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
     width: 180, // Fixed width for square tiles

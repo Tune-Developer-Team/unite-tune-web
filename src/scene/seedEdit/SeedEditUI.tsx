@@ -26,6 +26,8 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {ImageUploadForm} from "./ImageUploadForm";
 import IconButton from "@mui/material/IconButton";
 import ConfirmButton from "../../ui/confirmBottun/ConfirmButton";
+import Profile from "../../models/Profile/Profile";
+import {profileState} from "../../atoms/ProfileState";
 
 function DeleteIcon() {
     return null;
@@ -36,7 +38,10 @@ interface SeedEditUIProps {
 }
 
 export default function SeedEditUI({viewModel}: SeedEditUIProps) {
+    // グローバルオブジェクト
+    const [profile] = useRecoilState<Profile>(profileState);
     const [loading, setLoading] = useRecoilState(loaderState);
+    const [authState] = useRecoilState(authenticationState);
 
     const urlParams = useParams<{ seedId: string }>()
     const seedId = urlParams.seedId ?? '';
@@ -45,8 +50,6 @@ export default function SeedEditUI({viewModel}: SeedEditUIProps) {
         window.location.href = '/';
     }
 
-    const [authState] = useRecoilState(authenticationState);
-    const [navigation, setNavigation] = useRecoilState(navigationState);
     // const [viewModel] = useState<SeedEditViewModel>(seedEditViewModel);
     const [isNeedUpdateDraft, setIsNeedUpdateDraft] = useState<boolean>(false);
 
@@ -137,18 +140,12 @@ export default function SeedEditUI({viewModel}: SeedEditUIProps) {
         }
     }, [isNeedUpdateDraft]);
 
-
-    const setUp = async () => {
-
-    }
-
     /**
      * セットアップ
      */
     useEffect(() => {
         setLoading({isLoading: false});
         console.log(loading);
-        setNavigation({isHidden: false, isEnableRedirect: true});
 
         const setUp = async () => {
             try {
