@@ -1,27 +1,28 @@
 import React, {useEffect, useState} from 'react';
 
 import {useRecoilState} from "recoil";
-import {Button} from "@mui/material";
+import {Button, Switch, TextField} from "@mui/material";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import {v4 as uuidv4} from "uuid";
-import {navigationState} from "../../atoms/NavigationState";
 import {TuneCard} from "../../models/TuneCard/TuneCard";
 import {tuneCardState} from "../../atoms/TuneCardState";
+import {dblogState} from "../../atoms/dblogState";
+import Box from "@mui/material/Box";
 
 const PreferenceView: React.FunctionComponent = () => {
     const [authentication, setAuthentication] = useRecoilState(authenticationState);
-    const [navigation, setNavigation] = useRecoilState(navigationState);
     const [tuneCard, setTuneCard] = useRecoilState<TuneCard>(tuneCardState);
+
+    // dblog連携
+    const [dblog, setDblog] = useRecoilState(dblogState);
 
     const signOut = (): void => {
         // googleLogout();
-        setAuthentication({uid:''});
+        setAuthentication({uid: ''});
     }
 
     useEffect(() => {
-        setNavigation({isHidden: false, isEnableRedirect: true});
     }, []);
 
     return (
@@ -32,19 +33,39 @@ const PreferenceView: React.FunctionComponent = () => {
                 </Typography>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
-                <Typography variant="h6" component="div">
-                    UID : {authentication.uid}
+                UID :
+                <Typography variant="body2" component="div">
+                    {authentication.uid}
                 </Typography>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
-                <Typography variant="h6" component="div">
-                    TuneCard : {tuneCard.serial}
+                TuneCard :
+                <Typography variant="body2" component="div">
+                    {tuneCard.serial}
                 </Typography>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
-                <Typography variant="h6" component="div">
-                    GoogleAccount : {authentication.email}
+                GoogleAccount :
+                <Typography variant="body2" component="div">
+                    {authentication.email}
                 </Typography>
+            </Grid>
+            <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
+                <Box
+                    paddingBottom={2}
+                    display={"flex"}
+                >
+                    dblog111連携 :
+                </Box>
+                    <TextField
+                        fullWidth
+                        label="ペンネーム"
+                        variant="outlined"
+                        value={dblog.penName}
+                        onChange={(event) => {
+                            setDblog({penName: event.target.value});
+                        }}
+                    />
             </Grid>
 
             <Grid sx={{textAlign: "end"}} xs={6} sm={6} md={6} lg={6}>
@@ -52,7 +73,9 @@ const PreferenceView: React.FunctionComponent = () => {
                 </Button>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={6} sm={6} md={6} lg={6}>
-                <Button onClick={()=>{console.log('←アカウントを破棄するらしいコイツ')}}>アカウントを破棄する</Button>
+                <Button onClick={() => {
+                    console.log('←アカウントを破棄するらしいコイツ')
+                }}>アカウントを破棄する</Button>
             </Grid>
         </Grid>
     );
