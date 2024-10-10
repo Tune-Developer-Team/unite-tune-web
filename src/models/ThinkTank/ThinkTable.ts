@@ -66,12 +66,18 @@ export class ThinkTable {
             const createdAtString = format(dateTime, 'yyyy-MM-dd HH:mm:ss') as dateTimeString;
             console.log(createdAtString);
 
-            const iconPath = ImagePath.create({alt: '', path: thinkListItem.IconPath});
+            // オーナーユーザーのアイコン
+            let ownerUserIconImagePath = ImagePath.create({path: "", alt: ""});
+            if (thinkListItem.IconImage !== "") {
+                const ownerUserIconJson = JSON.parse(thinkListItem.IconImage)
+                ownerUserIconImagePath.alt = ownerUserIconJson.alt;
+                ownerUserIconImagePath.path = ownerUserIconJson.path;
+            }
 
             const thinkArgument: ThinkIF = {
                 sentence: thinkListItem.Sentence,
                 thinkUserName: thinkListItem.NickName,
-                iconPath: iconPath,
+                userIconImagePath: ownerUserIconImagePath,
                 ownerUserUid: thinkListItem.OwnerUserUid,
                 // imagePathList: thinkListItem.ImagePathList,
                 imagePathList: [ImagePath.create({alt: "", path: ""})],
@@ -82,7 +88,6 @@ export class ThinkTable {
                 mentionList: [Mention.create({idValue: "", idCategory: ""})],
                 createdAt: thinkListItem.CreatedAt,
                 parentThinkId: thinkListItem.ParentThinkId,
-                userIconImagePath: thinkListItem.UserIconImagePath,
                 favoriteCount: thinkListItem.FavoriteCount,
                 repostCount: thinkListItem.RepostCount
             }
@@ -99,7 +104,7 @@ export class ThinkTable {
 export interface ThinkApiResponseIF {
     ThinkId: string
     NickName: string
-    IconPath: string
+    IconImage: string
     OwnerUserUid: string
     UserIconImagePath: string
     FavoriteCount: number

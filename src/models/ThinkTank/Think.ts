@@ -5,7 +5,6 @@ import {hashTagString} from "../data/types";
 export interface ThinkIF {
     sentence: string
     thinkUserName: string
-    iconPath: ImagePath
     ownerUserUid: string
     thinkId: string
     hashTagList: hashTagString[]
@@ -13,7 +12,7 @@ export interface ThinkIF {
     mentionList: Mention[]
     createdAt: string
     parentThinkId: string
-    userIconImagePath: string
+    userIconImagePath: ImagePath
     favoriteCount: number
     repostCount: number
 }
@@ -25,7 +24,7 @@ export class Think {
     public thinkId: string
     public thinkUserName: string
     public ownerUserUid: string
-    public userIconImagePath: string
+    public userIconImagePath: ImagePath
     public favoriteCount: number
     public repostCount: number
     public createdAt: Date

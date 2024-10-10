@@ -335,7 +335,7 @@ const TimeLineView = () => {
                                             console.log('この人のプロフィールへ飛ぶ')
                                         }}>
                                             <Box sx={{display: "flex"}}>
-                                                <Avatar src={think.userIconImagePath} alt={'user_icon_image'}/>
+                                                <Avatar src={think.userIconImagePath.path} alt={'user_icon_image'}/>
                                                 <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={12}>
                                                     {think.thinkUserName}
                                                 </Typography>
