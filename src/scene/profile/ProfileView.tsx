@@ -56,6 +56,11 @@ const ProfileView = () => {
     };
 
     const toggleDrawer = (open: boolean) => {
+        // グローバルオブジェクトを深いコピーで更新
+        const updatedProfile = Profile.initProfile();  // Profileの新しいインスタンスを作成 RecoilStateはイミュータブルなため。
+        Object.assign(updatedProfile, viewModel.profile);
+        setGlobalProfile(updatedProfile);
+
         setIsDrawerOpen(open);
     };
 

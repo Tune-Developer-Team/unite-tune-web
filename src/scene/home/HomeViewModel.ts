@@ -1,5 +1,5 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {HomeViewModelIF, SeedListApiResponseItemIF, SeedListItem} from "./HomeViewModelIF";
+import {HomeViewModelIF, SeedTileApiResponseItemIF, SeedListItem} from "./HomeViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
@@ -35,11 +35,11 @@ export class HomeViewModel implements HomeViewModelIF {
      */
     async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: SeedListItem[] }> {
         const api = new Api(authentication);
-        const result = await api.get(endPoint.SEED);
+        const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: SeedListApiResponseItemIF) => {
+        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -48,16 +48,25 @@ export class HomeViewModel implements HomeViewModelIF {
                 path: imagePathJson[0].path
             }) : ImagePath.create({alt: "タイトル", path: ""});
 
+            // オーナーユーザーのアイコン
+            const ownerUserIconJson = JSON.parse(item.IconImage)
+            console.log(ownerUserIconJson.path)
+            const ownerUserIconImagePath: ImagePath = imagePathJson.length > 0 ? ImagePath.create({
+                alt: ownerUserIconJson.alt,
+                path: ownerUserIconJson.path
+            }) : ImagePath.create({alt: "ownerUserIcon", path: ""});
+
             const seedListItem: SeedListItem = {
                 seedId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
-                ownerUserName: '', // TODO: バックエンドが未実装
+                ownerUserName: item.NickName,
                 ownerUserUid: item.OwnerUserUid,
                 hashTagStringList: ['#tag1','#tag2','#tag3'], // TODO: JSONを配列に変換
                 imagePath: imagePath,
                 updatedAt: item.UpdatedAt,
-                userIconImagePath: ImagePath.create({alt: '', path: ''}), // TODO: バックエンドが未実装
+                userIconImagePath: ownerUserIconImagePath,
+                // userIconImagePath: ImagePath.create({alt: "ownerUserIcon", path: ""}),
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 

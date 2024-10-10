@@ -12,6 +12,7 @@ export const endPoint = {
     REMOVE_PROFILE_File: `${baseUrl}/profiles/files/remove`,
     // SEED
     SEED: `${baseUrl}/seeds`,
+    SEED_TILE: `${baseUrl}/seed-tiles`,
     SAVE_SEED_AS_DRAFT: `${baseUrl}/save-as-draft`,
     UPLOAD_SEED_IMAGE: `${baseUrl}/upload/seeds`,
     // THINK

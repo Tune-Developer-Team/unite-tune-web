@@ -3,7 +3,7 @@ import {SeedListViewModelIF} from "./SeedListViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
-import {SeedListApiResponseItemIF, SeedListItem} from "../home/HomeViewModelIF";
+import {SeedTileApiResponseItemIF, SeedListItem} from "../home/HomeViewModelIF";
 
 export class SeedListViewModel implements SeedListViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
@@ -40,7 +40,7 @@ export class SeedListViewModel implements SeedListViewModelIF {
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: SeedListApiResponseItemIF) => {
+        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)

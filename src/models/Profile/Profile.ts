@@ -102,7 +102,10 @@ export default class Profile {
 
         const curiosDirectionKind = apiResponse.CuriosDirection ?? 0
 
-        const iconImage = JSON.parse(apiResponse.IconImage);
+        let iconImage = ImagePath.create({path: "", alt: ""});
+        if(apiResponse.IconImage !== ""){
+            iconImage = JSON.parse(apiResponse.IconImage);
+        }
 
         this.nickName = apiResponse.NickName ?? "undefined user";
         this.description = apiResponse.Description ?? "";

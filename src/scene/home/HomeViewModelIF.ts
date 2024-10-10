@@ -27,7 +27,7 @@ export interface SeedListItem {
     favoriteCount: number
 }
 
-export interface SeedListApiResponseItemIF {
+export interface SeedTileApiResponseItemIF {
     ID: number
     SeedId: string
     Title: string
@@ -42,4 +42,6 @@ export interface SeedListApiResponseItemIF {
     CreatedAt: string
     UpdatedAt: string
     DeletedAt: string
+    NickName: string
+    IconImage: string
 }

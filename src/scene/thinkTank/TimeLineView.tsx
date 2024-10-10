@@ -316,7 +316,7 @@ const TimeLineView = () => {
                     </Drawer>
                 </Box>
                 <Box sx={{textAlign: "center"}}>
-                    {thinkList.reverse().map((think: Think, index) => (
+                    {thinkList.map((think: Think, index) => (
                         <Box key={index} sx={{paddingBottom: 0.2}}>
                             <Card
                                 sx={{
