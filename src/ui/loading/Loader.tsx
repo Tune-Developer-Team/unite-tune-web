@@ -12,9 +12,9 @@ const Loader: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <Box>
-            <Box sx={{display: loading.isLoading ? "fixed" : "none"}}>
-                <img src={loadingImage}/>
+        <Box sx={{display: loading.isLoading ? "flex" : "none"}} width={"100%"} position={"relative"}>
+            <Box width={"100%"} position={"fixed"} top={230} left={-10}>
+                <img src={loadingImage} width={"100%"}/>
             </Box>
         </Box>
     );

@@ -1,54 +1,85 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useRecoilState } from "recoil";
-import { authenticationState } from "../../atoms/AuthenticationState";
-import { navigationState } from "../../atoms/NavigationState";
+import {useRecoilState} from "recoil";
+import {authenticationState} from "../../atoms/AuthenticationState";
 import Button from "@mui/material/Button";
-import { useNavigate, useParams } from "react-router-dom";
-import { ProfileViewModel } from "./ProfileViewModel";
+import {useNavigate, useParams} from "react-router-dom";
+import {ProfileViewModel} from "./ProfileViewModel";
 import Profile from "../../models/Profile/Profile";
 import RoundedButton from "../../ui/button/RoundedButton";
 import Avatar from "@mui/material/Avatar";
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import ProfileEditUI from "./ProfileEditUI";
-import { Gauge } from "@mui/x-charts";
-import {Chip} from "@mui/material";
+import {Gauge} from "@mui/x-charts";
+import {MenuItem, Select, SelectChangeEvent, Switch, TextField} from "@mui/material";
+import {ImageUploadForm} from "../seedEdit/ImageUploadForm";
+import {endPoint} from "../../consts/api";
+import CURIOS_DIRECTION from "../../consts/curiosDirection";
+import ImagePath from "../../models/data/ImagePath";
+import {profileState} from "../../atoms/ProfileState";
+import {loaderState} from "../../atoms/LoaderState";
+import Loader from "../../ui/loading/Loader";
 
 const profileViewModel = new ProfileViewModel();
 
 const ProfileView = () => {
+    // グローバルオブジェクト
+    const [globalProfile, setGlobalProfile] = useRecoilState(profileState)
+    const [authState] = useRecoilState(authenticationState);
+    const [loading, setLoading] = useRecoilState(loaderState);
+
+    // ViewModel
     const params = useParams();
     const uId = params.uid as string;
+    const [viewModel, setViewModel] = useState<ProfileViewModel>(profileViewModel);
 
-    const [viewModel] = useState<ProfileViewModel>(profileViewModel);
-    const [targetUid] = useState<string>(uId);
-    const navigate = useNavigate();
-    const [authState] = useRecoilState(authenticationState);
-    const [profile, setProfile] = useState<Profile>(viewModel.profile);
+    // UI
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const navigate = useNavigate();
+
+    // Model
+    const initProfile = viewModel.profile;
+    // プロフィール編集
+    const [newProfile, setNewProfile] = useState<Profile>(initProfile)
+
+    // フォーム
+    const [isPublishedAis, setIsPublishedAis] = useState<boolean>(false)
+    const [isShowPortfolio, setIsShowPortfolio] = useState<boolean>(false)
+    const [isShowMbti, setIsShowMbti] = useState<boolean>(false)
+
+    // ファイル変更時に受け取るコールバック関数
+    const handleFileChange = async (iconImage: ImagePath) => {
+        // プレビュー用画像
+        newProfile.iconImage = iconImage
+        setNewProfile(newProfile);
+    };
 
     const toggleDrawer = (open: boolean) => {
         setIsDrawerOpen(open);
     };
 
     const setUp = async (): Promise<void> => {
-        const newViewModel = await viewModel.setUp({
+        const newViewModel = viewModel.setUp({
             authentication: {
                 accessToken: authState.accessToken,
                 uid: authState.uid,
                 email: authState.email
-            }, uId: targetUid,
+            }, uId: authState.uid,
         });
-        setProfile(newViewModel.getProfile());
+        await newViewModel.fetchUserProfile();
+        // トグルスイッチ初期化
+        setIsPublishedAis(newViewModel.profile.isPublishedAis)
+        setIsShowPortfolio(newViewModel.profile.isShowPortfolio)
+        setIsShowMbti(newViewModel.profile.isShowMbti)
+        // ビューモデル初期化
+        setViewModel(newViewModel);
+        setLoading({isLoading: false})
     }
 
     useEffect(() => {
         void setUp();
-
+        setLoading({isLoading: true})
         return () => {
             viewModel.cleanUp();
         };
@@ -56,6 +87,7 @@ const ProfileView = () => {
 
     return (
         <Box className="Profile" paddingLeft={1}>
+            <Loader/>
             <Grid container spacing={2} className={"projectByLanguage"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
                     <Box width={"100%"} display={"flex"} paddingBottom={2} position="relative">
@@ -65,7 +97,7 @@ const ProfileView = () => {
                             <Gauge
                                 width={140}
                                 height={140}
-                                value={profile.curiosValue}
+                                value={viewModel.profile.curiosValue}
                                 sx={{
                                     position: 'absolute',
                                     top: -19,
@@ -74,8 +106,8 @@ const ProfileView = () => {
                             />
                             <Avatar
                                 alt="userIcon"
-                                src={profile.iconImage.path}
-                                sx={{ width: 100, height: 100, position: 'relative', zIndex: 1 }} // Avatarを上に表示
+                                src={viewModel.profile.iconImage.path}
+                                sx={{width: 100, height: 100, position: 'relative', zIndex: 1}} // Avatarを上に表示
                                 onClick={() => {
                                     console.log("ユーザー");
                                 }}
@@ -87,31 +119,33 @@ const ProfileView = () => {
                             </RoundedButton>
                         </Box>
                     </Box>
-                    <Typography variant="h6" component="div" sx={{ textAlign: "start" }}>
-                        {profile.nickName}&nbsp;&nbsp;
+                    <Typography variant="h6" component="div" sx={{textAlign: "start"}}>
+                        {viewModel.profile.nickName}&nbsp;&nbsp;
                         {/*<Chip label={profile.curiosDirection} size="small" />*/}
                     </Typography>
                 </Grid>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
-                    {profile.description}
+                    <div dangerouslySetInnerHTML={{__html: viewModel.profile.description.replace(/\n/g, '<br />')}}/>
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12}>
-                    MyCurios
+                    MyCurios🚧開発中🚧
                     <Box>
-                        {profile.curios}
+                        {viewModel.profile.curios}
                     </Box>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: profile.isPublicAis ? "block" : "none"}}>
+                <Grid xs={12} sm={12} md={12} lg={12}
+                      sx={{display: viewModel.profile.isPublishedAis ? "block" : "none"}}>
                     <Box>
                         AIS：&nbsp;&nbsp;{"🚧開発中🚧"}
                     </Box>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: profile.isShowMbti ? "block" : "none"}}>
+                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: viewModel.profile.isShowMbti ? "block" : "none"}}>
                     <Box>
-                        性格タイプ：&nbsp;&nbsp;{profile.mbti}
+                        性格タイプ：&nbsp;&nbsp;{viewModel.profile.mbti}
                     </Box>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: profile.isShowPortfolio ? "block" : "none"}}>
+                <Grid xs={12} sm={12} md={12} lg={12}
+                      sx={{display: viewModel.profile.isShowPortfolio ? "block" : "none"}}>
                     <Box>
                         <Button onClick={() => {
                             navigate(`/user/${uId}/portfolio`)
@@ -124,17 +158,202 @@ const ProfileView = () => {
                 anchor="bottom"
                 open={isDrawerOpen}
                 onClose={() => toggleDrawer(false)}
-                sx={{ '& .MuiDrawer-paper': { padding: 2, borderTopLeftRadius: 20, borderTopRightRadius: 20 } }} // 丸みをつける
+                sx={{'& .MuiDrawer-paper': {padding: 2, borderTopLeftRadius: 20, borderTopRightRadius: 20}}}
             >
-                <Box sx={{ width: 'auto', padding: 2 }}>
-                    <Typography color={"#325eff"} onClick={() => {
-                        toggleDrawer(false)}
-                        // TODO: データのリフレッシュ
-                    }
-                                sx={{ float: 'right', font: 'bold'}}>
-                        完了
-                    </Typography>
-                    <ProfileEditUI profile={profile}/>
+                <Box sx={{width: 'auto', padding: 2}}>
+                    <Box display={"flex"}>
+                        <Typography width={"100%"} textAlign={"start"} color={"#f6f6f6"} onClick={async () => {
+                            toggleDrawer(false)
+                        }
+                        } sx={{font: 'bold'}}>
+                            キャンセル
+                        </Typography>
+                        <Typography width={"100%"} textAlign={"end"} color={"#325eff"} onClick={async () => {
+                            await viewModel.updateProfile(uId, newProfile);
+                            // // グローバルステート更新
+                            // setGlobalProfile(viewModel.profile)
+                            setViewModel(viewModel);
+                            toggleDrawer(false)
+                        }
+                        } sx={{font: 'bold'}}>
+                            完了
+                        </Typography>
+                    </Box>
+                    <div className="ProfileEditUI">
+                        <Grid container spacing={2} className={"projectByLanguage"}>
+                            <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                                <Box width={"100%"} position={"relative"} paddingBottom={2}>
+                                    <Avatar
+                                        alt="userIcon"
+                                        src={viewModel.profile.iconImage.path}
+                                        sx={{width: 100, height: 100, position: 'relative', xIndex: 1}} // サイズを大きくする
+                                        onClick={() => {
+                                            console.log("ユーザー");
+                                        }}
+                                    />
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 40,
+                                            left: 0,
+                                            width: 100,
+                                            borderRadius: 4,
+                                            backgroundColor: 'rgba(0,0,0,0.5)', // 半透明の背景色
+                                            zIndex: 2, // フォームをアバターの上に表示
+                                        }}
+                                    >
+                                        <ImageUploadForm onFileChange={handleFileChange}
+                                                         folderName={viewModel.authState.getUid()}
+                                                         uploadEndPoint={endPoint.UPLOAD_PROFILE_File}/>
+                                    </Box>
+                                </Box>
+                                <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.4rem"}}>
+                                    <TextField
+                                        fullWidth
+                                        required
+                                        rows={1}
+                                        variant="standard"
+                                        hiddenLabel
+                                        defaultValue={viewModel.profile.nickName}
+                                        onChange={(event) => {
+                                            newProfile.nickName = event.target.value;
+                                            setNewProfile(newProfile);
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+                            {/*詳細*/}
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                自己紹介
+                            </Grid>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.4rem"}}>
+                                    <TextField
+                                        fullWidth
+                                        required
+                                        multiline
+                                        rows={4}
+                                        variant="standard"
+                                        hiddenLabel
+                                        defaultValue={viewModel.profile.description}
+                                        onChange={(event) => {
+                                            newProfile.description = event.target.value;
+                                            setNewProfile(newProfile)
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                興味
+                            </Grid>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.2rem"}}>
+                                    <TextField
+                                        fullWidth
+                                        required
+                                        multiline
+                                        rows={4}
+                                        variant="standard"
+                                        hiddenLabel
+                                        defaultValue={viewModel.profile.curios}
+                                        onChange={(event) => {
+                                            newProfile.curios = event.target.value;
+                                            setNewProfile(newProfile)
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Box>
+                                    CuriosGaugeの自動設定
+                                </Box>
+                                <Select
+                                    labelId="profile-curios-direction"
+                                    id="profile-curios-direction"
+                                    value={viewModel.profile.curiosDirection.label}
+                                    label="CuriosDirection"
+                                    onChange={(event: SelectChangeEvent) => {
+                                        const label = event.target.value;
+                                        newProfile.curiosDirection.kind = CURIOS_DIRECTION.find(item => item.label === label)?.kind ?? 0
+                                        setNewProfile(newProfile)
+                                    }}
+                                >
+                                    <MenuItem value={"高"}>高</MenuItem>
+                                    <MenuItem value={"中"}>中</MenuItem>
+                                    <MenuItem value={"低"}>低</MenuItem>
+                                    <MenuItem value={"手動"}>手動</MenuItem>
+                                </Select>
+                            </Grid>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Box>
+                                    AIS
+                                    <Switch
+                                        checked={isPublishedAis}
+                                        onChange={(event, checked) => {
+                                            setIsPublishedAis(checked)
+                                            newProfile.isPublishedAis = checked;
+                                            setNewProfile(newProfile);
+                                        }}
+                                        name="IsPublishedAis"
+                                        color="primary"
+                                    />
+                                    {viewModel.profile.isPublishedAis ? "公開する" : "公開しない"}
+                                </Box>
+                            </Grid>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Box>
+                                    ポートフォリオ
+                                    <Switch
+                                        checked={isShowPortfolio}
+                                        onChange={(event, checked) => {
+                                            setIsShowPortfolio(checked)
+                                            newProfile.isShowPortfolio = checked;
+                                            setNewProfile(newProfile);
+                                        }}
+                                        name="isShowMbti"
+                                        color="primary"
+                                    />
+                                    {viewModel.profile.isShowPortfolio ? "公開する" : "公開しない"}
+                                </Box>
+                            </Grid>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Box>
+                                    性格タイプ
+                                    <Switch
+                                        checked={isShowMbti}
+                                        onChange={(event, checked) => {
+                                            setIsShowMbti(checked)
+                                            newProfile.isShowMbti = checked;
+                                            setNewProfile(newProfile);
+                                        }}
+                                        name="isShowMbti"
+                                        color="primary"
+                                    />
+                                    {viewModel.profile.isShowMbti ? "公開する" : "公開しない"}
+                                </Box>
+                                {/*{mbti}*/}
+                                <Select
+                                    labelId="profile-mbti"
+                                    id="profile-mbti"
+                                    value={viewModel.profile.mbti}
+                                    label="Mbti"
+                                    disabled={!newProfile.isShowMbti}
+                                    onChange={(event: SelectChangeEvent) => {
+                                        newProfile.mbti = event.target.value.toString()
+                                        setNewProfile(newProfile)
+                                    }
+                                    }
+                                >
+                                    <MenuItem value={"建築家(INTJ-A)"}>建築家(INTJ-A)</MenuItem>
+                                    <MenuItem value={"建築家(INTJ-T)"}>建築家(INTJ-T)</MenuItem>
+                                    <MenuItem value={"論理学者(INTP-A)"}>論理学者(INTP-A)</MenuItem>
+                                    <MenuItem value={"論理学者(INTP-T)"}>論理学者(INTP-T)</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
+                    </div>
                 </Box>
             </Drawer>
         </Box>

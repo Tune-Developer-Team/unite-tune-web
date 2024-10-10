@@ -56,7 +56,7 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
             const file = event.target.files[0];
             const now = new Date();
             const dateTimeString = now.toISOString().replace(/[:.]/g, '-');
-            const newFileName = `seed-image-${dateTimeString}_${file.name.substring(file.name.lastIndexOf('.'))}`;
+            const newFileName = `${dateTimeString}_${file.name.substring(file.name.lastIndexOf('.'))}`;
             const newFile = new File([file], newFileName, {type: file.type});
             setUploadFile(newFile);
 

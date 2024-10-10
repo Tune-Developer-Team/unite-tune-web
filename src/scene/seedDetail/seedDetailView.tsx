@@ -249,7 +249,8 @@ const SeedDetailView = () => {
                         </Typography>
                         <Typography style={{
                             display: isShowAllDescription ? "block" : "none"
-                        }}>{seedDetail.description}
+                        }}>
+                            <div dangerouslySetInnerHTML={{ __html: seedDetail.description }} />
                             <span style={{color: "#fff"}} onClick={() => {
                                 setIsShowAllDescription(!isShowAllDescription)
                             }}><br/>折りたたむ</span>

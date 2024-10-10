@@ -1,4 +1,7 @@
 import ImagePath from "../data/ImagePath";
+import CURIOS_DIRECTION, {CuriosDirectionType} from "../../consts/curiosDirection";
+import axios, {AxiosResponse} from "axios";
+import {endPoint} from "../../consts/api";
 
 export interface ProfileIF {
     nickName: string
@@ -6,8 +9,8 @@ export interface ProfileIF {
     description: string
     curios: string
     curiosValue: number
-    curiosDirection: string
-    isPublicAis: boolean
+    curiosDirection: CuriosDirectionType
+    isPublishedAis: boolean
     isShowMbti: boolean
     isShowPortfolio: boolean
     mbti: string
@@ -15,48 +18,58 @@ export interface ProfileIF {
 
 export interface ProfileApiResponseIF {
     NickName: string
-    IconImage: ImagePath
+    IconImage: string
     Description: string
     Curios: string
     CuriosValue: number
-    CuriosDirection: string
-    IsPublicAis: boolean
+    CuriosDirection: number
+    IsPublishedAis: boolean
     IsShowMbti: boolean
     IsShowPortfolio: boolean
     Mbti: string
 }
 
-// TODO: 実装
-const description = "最近Goが好き.TypeScript, JavaScript, React, Flutter, Swift, Kotlin, PHP, Python, Go, Docker, AWS,heroku,GoogleCloudPlatform.人と喋るの好きなので、喋りましょう！"
-
 export default class Profile {
+    public nickName: string
+    public iconImage: ImagePath
+    public description: string
+    public curios: string
+    public curiosValue: number
+    public curiosDirection: CuriosDirectionType
+    public isPublishedAis: boolean
+    public isShowMbti: boolean
+    public isShowPortfolio: boolean
+    public mbti: string
+
     private constructor(
-        public nickName: string,
-        public iconImage: ImagePath,
-        public description: string,
-        public curios: string,
-        public curiosValue: number,
-        public curiosDirection: string,
-        public isPublicAis: boolean,
-        public isShowMbti: boolean,
-        public isShowPortfolio: boolean,
-        public mbti: string
+        argument: ProfileIF
     ) {
+        this.nickName = argument.nickName
+        this.iconImage = argument.iconImage
+        this.description = argument.description
+        this.curios = argument.curios
+        this.curiosValue = argument.curiosValue
+        this.curiosDirection = argument.curiosDirection
+        this.isPublishedAis = argument.isPublishedAis
+        this.isShowMbti = argument.isShowMbti
+        this.isShowPortfolio = argument.isShowPortfolio
+        this.mbti = argument.mbti
     }
 
     public static initProfile(): Profile {
-        return new Profile(
-            '',
-            ImagePath.create({path: '', alt: ''}),
-            "",
-            "",
-            0,
-            "",
-            false,
-            false,
-            false,
-            ""
-        );
+        const argument: ProfileIF = {
+            nickName: '',
+            iconImage: ImagePath.create({path: '', alt: ''}),
+            description: "",
+            curios: "",
+            curiosValue: 0,
+            curiosDirection: CURIOS_DIRECTION.find(item => item.kind === 0)!,
+            isPublishedAis: false,
+            isShowMbti: false,
+            isShowPortfolio: false,
+            mbti: ""
+        }
+        return new Profile(argument);
     }
 
     public setProfile(argument: ProfileIF): void {
@@ -66,27 +79,43 @@ export default class Profile {
         this.curios = argument.curios;
         this.curiosValue = argument.curiosValue;
         this.curiosDirection = argument.curiosDirection;
-        this.isPublicAis = argument.isPublicAis;
+        this.isPublishedAis = argument.isPublishedAis;
         this.isShowMbti = argument.isShowMbti;
         this.isShowPortfolio = argument.isShowPortfolio;
         this.mbti = argument.mbti;
     }
 
-    public createFromAPIResponse(apiResponse: ProfileApiResponseIF): Profile {
-        const iconImage = ImagePath.create({path: apiResponse.IconImage?.path??"", alt: apiResponse.IconImage?.alt??""});
+    public async fetchModel(uid: string, accessToken: string): Promise<ProfileApiResponseIF> {
+        const api = axios.create({
+            headers: {
+                'Authorization': accessToken,
+            }
+        });
+        const uri = `${endPoint.PROFILE}/${uid}`;
+        console.log("do API:",uri);
+        const response = await api.get(uri);
+        const apiResponse: ProfileApiResponseIF = response.data.data
+        return apiResponse
+    }
 
-        return new Profile(
-            apiResponse.NickName??"User",
-            iconImage,
-            apiResponse.Description ?? description,
-            apiResponse.Curios??"#Go, #React, #TypeScript, #怪談, #宇宙,#アニメ,#物理学,#猫",
-            apiResponse.CuriosValue??80,
-            apiResponse.CuriosDirection??"いのちだいじに",
-            apiResponse.IsPublicAis??true,
-            apiResponse.IsShowMbti??true,
-            apiResponse.IsShowPortfolio??true,
-            apiResponse.Mbti??"建築家(INTJ-A)",
+    public setFromAPIResponse(apiResponse: ProfileApiResponseIF): void {
 
-        );
+        const curiosDirectionKind = apiResponse.CuriosDirection ?? 0
+
+        const iconImage = JSON.parse(apiResponse.IconImage);
+
+        this.nickName = apiResponse.NickName ?? "undefined user";
+        this.description = apiResponse.Description ?? "";
+        this.curios = apiResponse.Curios ?? "";
+        this.curiosValue = apiResponse.CuriosValue ?? 0;
+        this.curiosDirection = CURIOS_DIRECTION.find(item => item.kind === curiosDirectionKind)!;
+        this.iconImage = ImagePath.create({
+            path: iconImage?.path ?? "",
+            alt: iconImage?.alt ?? ""
+        });
+        this.isPublishedAis = apiResponse.IsPublishedAis ?? false;
+        this.isShowMbti = apiResponse.IsShowMbti ?? false;
+        this.isShowPortfolio = apiResponse.IsShowPortfolio ?? false;
+        this.mbti = apiResponse.Mbti ?? "";
     }
 }
