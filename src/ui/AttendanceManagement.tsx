@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Grid, Button, Box, LinearProgress, Typography } from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Grid, Button, Box, LinearProgress, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 
 /**
@@ -38,7 +38,7 @@ const calculateProgress = (date: Date): { progress: number, color: string } => {
         color = '#ff9800'; // yellow for endWork
     }
 
-    return { progress: progress * 100, color };
+    return {progress: progress * 100, color};
 };
 
 const AttendanceManage: React.FC = () => {
@@ -61,7 +61,7 @@ const AttendanceManage: React.FC = () => {
             case "break":
 
                 //　勤務開始してない
-                if(!isWorking) {
+                if (!isWorking) {
                     return "secondary";
                 }
 
@@ -106,67 +106,63 @@ const AttendanceManage: React.FC = () => {
 
 
     return (
-        <Box>
-            <Box sx={{ width: '100%', marginBottom: 2 }} paddingBottom={5}>
-                <Typography variant="h6" gutterBottom>
-                </Typography>
-                <LinearProgress
-                    variant="determinate"
-                    value={progressData.progress}
-                    sx={{ height: 10, borderRadius: 5, backgroundColor: "#fff", '& .MuiLinearProgress-bar': { backgroundColor: progressData.color } }}
-                />
-            </Box>
-            <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} sm={12} md={12} lg={12} paddingBottom={5}>
-                    <Button
-                        size="large"
-                        variant="contained"
-                        color={getButtonColor("work")}
-                        fullWidth
-                        disabled={isBreaking}
-                        onClick={()=>{
-                            if (isWorking) {
-                                const isConfirm = window.confirm("勤務を終了しますか？");
-                                if (!isConfirm) {
-                                    return;
-                                }
-                            }
-
-                            setTimeout(()=>{
-                                setIsWorking(!isWorking);
-                                setCompleteUpdate(true);
-                            }, 1000);
-                        }}
-                    >
-                        {!isWorking ? "勤務　かいし" : "勤務　おわり"}
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sm={3} md={12} lg={12}>
-                    <Button
-                        size="large"
-                        variant="contained"
-                        color={getButtonColor("break")}
-                        fullWidth
-                        disabled={!isWorking}
-                        onClick={()=>{
-                            // くどいな...
-                            // if (isBreaking) {
-                            //     const isConfirm = window.confirm("休憩を終了しますか？");
-                            //     if (!isConfirm) {
-                            //         return;
-                            //     }
-                            // }
-                            setIsBreaking(!isBreaking);
-                            setTimeout(() => {
-                                setCompleteUpdate(true);
-                            }, 1000);
-                        }}
-                    >
-                        {!isBreaking ? "休憩　かいし" : "休憩　おわり"}
-                    </Button>
-                </Grid>
+        <Grid container spacing={2} paddingTop={2} paddingBottom={2} justifyContent="center">
+            <Grid item xs={6} sm={6} md={6} lg={6}>
+                <Button
+                    size="large"
+                    variant="contained"
+                    color={getButtonColor("break")}
+                    fullWidth
+                    disabled={!isWorking}
+                    onClick={() => {
+                        // くどいな...
+                        // if (isBreaking) {
+                        //     const isConfirm = window.confirm("休憩を終了しますか？");
+                        //     if (!isConfirm) {
+                        //         return;
+                        //     }
+                        // }
+                        setIsBreaking(!isBreaking);
+                        setTimeout(() => {
+                            setCompleteUpdate(true);
+                        }, 1000);
+                    }}
+                >
+                    {!isBreaking ? "休憩　かいし" : "休憩　おわり"}
+                </Button>
             </Grid>
-        </Box>
+            <Grid item xs={6} sm={6} md={6} lg={6}>
+                <Button
+                    size="large"
+                    variant="contained"
+                    color={getButtonColor("work")}
+                    fullWidth
+                    disabled={isBreaking}
+                    onClick={() => {
+                        if (isWorking) {
+                            const isConfirm = window.confirm("勤務を終了しますか？");
+                            if (!isConfirm) {
+                                return;
+                            }
+                        }
+
+                        setTimeout(() => {
+                            setIsWorking(!isWorking);
+                            setCompleteUpdate(true);
+                        }, 1000);
+                    }}
+                >
+                    {!isWorking ? "勤務　かいし" : "勤務　おわり"}
+                </Button>
+            </Grid>
+            {/*<Box sx={{ width: '100%', marginBottom: 2 }} paddingBottom={5}>*/}
+            {/*    <LinearProgress*/}
+            {/*        variant="determinate"*/}
+            {/*        value={progressData.progress}*/}
+            {/*        sx={{ height: 10, borderRadius: 5, backgroundColor: "#fff", '& .MuiLinearProgress-bar': { backgroundColor: progressData.color } }}*/}
+            {/*    />*/}
+            {/*</Box>*/}
+        </Grid>
     );
 };
 

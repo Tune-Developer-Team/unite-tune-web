@@ -14,7 +14,7 @@ import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
 import SeedDetailView from "./scene/seedDetail/seedDetailView";
 import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
-import AISecretary from "./scene/AISecretary";
+import AISecretary from "./scene/crappy/AISecretary";
 import SeedListView from "./scene/seedList/SeedListView";
 import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
