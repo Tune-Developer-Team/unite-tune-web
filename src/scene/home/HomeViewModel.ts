@@ -78,4 +78,104 @@ export class HomeViewModel implements HomeViewModelIF {
             seedList: this.seedList
         };
     }
+
+
+    /**
+     * ホットシードを取得
+     * TODO: API未実装
+     */
+    async fetchHotSeedList(): Promise<{ message: string, seedList: SeedListItem[] }> {
+        const api = new Api(this.authState);
+        const result = await api.get(endPoint.SEED_TILE);
+
+        const apiResponse = result.data.data;
+
+        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
+
+            // SPEC: 1枚目の画像をメイン画像にする
+            const imagePathJson = JSON.parse(item.ImagePathList)
+            const imagePath: ImagePath = imagePathJson.length > 0 ? ImagePath.create({
+                alt: imagePathJson[0].alt,
+                path: imagePathJson[0].path
+            }) : ImagePath.create({alt: "タイトル", path: ""});
+
+            // オーナーユーザーのアイコン
+            let ownerUserIconImagePath = ImagePath.create({path: "", alt: ""});
+            if (item.IconImage !== "") {
+                const ownerUserIconJson = JSON.parse(item.IconImage)
+                ownerUserIconImagePath.alt = ownerUserIconJson.alt;
+                ownerUserIconImagePath.path = ownerUserIconJson.path;
+            }
+
+            const seedListItem: SeedListItem = {
+                seedId: item.SeedId,
+                title: item.Title,
+                description: item.Description,
+                ownerUserName: item.NickName,
+                ownerUserUid: item.OwnerUserUid,
+                hashTagStringList: ['#tag1', '#tag2', '#tag3'], // TODO: JSONを配列に変換
+                imagePath: imagePath,
+                updatedAt: item.UpdatedAt,
+                userIconImagePath: ownerUserIconImagePath,
+                favoriteCount: 0// TODO: バックエンドが未実装
+            }
+
+            return seedListItem
+        })
+
+        return {
+            message: result.data.message,
+            seedList: this.seedList
+        };
+    }
+
+
+    /**
+     * ピックアップを取得
+     * TODO: API未実装
+     */
+    async fetchPickUp(): Promise<{ message: string, seed: SeedListItem }> {
+        const api = new Api(this.authState);
+        const result = await api.get(endPoint.SEED_TILE);
+
+        const apiResponse = result.data.data;
+
+        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
+
+            // SPEC: 1枚目の画像をメイン画像にする
+            const imagePathJson = JSON.parse(item.ImagePathList)
+            const imagePath: ImagePath = imagePathJson.length > 0 ? ImagePath.create({
+                alt: imagePathJson[0].alt,
+                path: imagePathJson[0].path
+            }) : ImagePath.create({alt: "タイトル", path: ""});
+
+            // オーナーユーザーのアイコン
+            let ownerUserIconImagePath = ImagePath.create({path: "", alt: ""});
+            if (item.IconImage !== "") {
+                const ownerUserIconJson = JSON.parse(item.IconImage)
+                ownerUserIconImagePath.alt = ownerUserIconJson.alt;
+                ownerUserIconImagePath.path = ownerUserIconJson.path;
+            }
+
+            const seedListItem: SeedListItem = {
+                seedId: item.SeedId,
+                title: item.Title,
+                description: item.Description,
+                ownerUserName: item.NickName,
+                ownerUserUid: item.OwnerUserUid,
+                hashTagStringList: ['#tag1', '#tag2', '#tag3'], // TODO: JSONを配列に変換
+                imagePath: imagePath,
+                updatedAt: item.UpdatedAt,
+                userIconImagePath: ownerUserIconImagePath,
+                favoriteCount: 0// TODO: バックエンドが未実装
+            }
+
+            return seedListItem
+        })
+
+        return {
+            message: result.data.message,
+            seed: this.seedList[0]
+        };
+    }
 }
