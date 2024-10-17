@@ -20,6 +20,7 @@ import ImagePath from "../../models/data/ImagePath";
 import {profileState} from "../../atoms/ProfileState";
 import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
+import CustomTabs from "../../ui/layout/CustomTabs";
 
 const profileViewModel = new ProfileViewModel();
 
@@ -101,6 +102,7 @@ const ProfileView = () => {
 
     return (
         <Box className="Profile" paddingLeft={1}>
+            <CustomTabs tabItems={viewModel.tabItems}></CustomTabs>
             <Loader/>
             <Grid container spacing={2} className={"projectByLanguage"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>

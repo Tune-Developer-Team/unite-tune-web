@@ -6,6 +6,7 @@ import CrappyIcon from "./CrappyIcon.png";
 import SendIcon from '@mui/icons-material/Send';
 import AttendanceManagement from "../../ui/AttendanceManagement";
 import IconButton from "@mui/material/IconButton";
+import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 
 const AISecretary = () => {
     // メッセージを保持するstate
@@ -150,9 +151,11 @@ const AISecretary = () => {
     };
 
     const [isShowModelView, setIsShowModelView] = useState(true);
+    const tabItems: TabItem[] = [{label: '勤怠'}, {label: '雑談'}, {label: '分析'}, {label: '戦略'}];
 
     return (
         <Grid container spacing={2}>
+            <CustomTabs tabItems={tabItems}></CustomTabs>
             <span
                 style={{
                     paddingLeft: 6,

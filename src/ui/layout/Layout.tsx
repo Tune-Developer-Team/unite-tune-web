@@ -142,6 +142,7 @@ export default function Layout() {
     return (
         <Box>
             <CssBaseline/>
+            {/*PC*/}
             <Box sx={{display: {xs: "none", sm: "none", md: "block", lg: "block"}}}>
                 <Drawer variant="permanent" open={open} anchor={"left"}>
                     <DrawerHeader>
@@ -334,6 +335,7 @@ export default function Layout() {
                         powered by Tune&nbsp;©︎</Typography>
                 </Box>
             </Box>
+            {/*Mobile*/}
             <Box sx={{display: {xs: "block", sm: "block", md: "none", lg: "none"}}}>
                 <HeaderMenu/>
                 <Box paddingLeft={2} paddingRight={2} paddingTop={10}>

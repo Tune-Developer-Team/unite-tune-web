@@ -13,6 +13,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
 import SeedTileBanner from "../../ui/seed/SeedTileBanner";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import CustomTabs from "../../ui/layout/CustomTabs";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
@@ -60,9 +62,10 @@ const HomeView = () => {
         };
     }, []);
 
+
     return (
         <div className="Home">
-
+            <CustomTabs tabItems={viewModel.tabItems}></CustomTabs>
             <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">

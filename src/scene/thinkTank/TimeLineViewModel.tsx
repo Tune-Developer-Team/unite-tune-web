@@ -3,11 +3,14 @@ import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {Think} from "../../models/ThinkTank/Think";
 import {TimeLineViewModelIF} from "./TimeLineViewModelIF";
+import {TabItem} from "../../ui/layout/CustomTabs";
 
 export class TimeLineViewModel implements TimeLineViewModelIF {
     public authState:Authentication;
     public thinkTable: ThinkTable = ThinkTable.initThinkTable();
     public thinkDraft: ThinkDraft = ThinkDraft.initThinkDraft();
+    public tabItems: TabItem[] = [{label: 'All'}, {label: 'Curios'}, {label: 'Tech'}, {label: 'General'}];
+
     constructor(
     ) {
         this.authState = Authentication.initAuthentication();
