@@ -22,6 +22,7 @@ import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
 import CustomTabs from "../../ui/layout/CustomTabs";
 import {topTabState} from "../../atoms/topTabState";
+import threeDModel from "../crappy/crappy.png";
 
 const profileViewModel = new ProfileViewModel();
 
@@ -104,7 +105,6 @@ const ProfileView = () => {
 
     return (
         <Box className="Profile" paddingLeft={1}>
-            {topTab.label}
             <CustomTabs tabItems={viewModel.tabItems}></CustomTabs>
             <Loader/>
             <Grid container spacing={2} className={"header"}>
@@ -182,31 +182,36 @@ const ProfileView = () => {
             {/*ThinkTank*/}
             <Grid container sx={{display: topTab.label === 'ThinkTank' ? "block" : "none"}} spacing={2} className={"ThinkTank"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"addThinkModal"}>
-                    つぶやきの追加モーダル
+                    つぶやきの追加モーダル🚧開発中🚧
                 </Grid>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"timeLine"}>
-                    自分のタイムライン
+                    自分のタイムライン🚧開発中🚧
                 </Grid>
             </Grid>
 
             {/*AIS*/}
             <Grid container sx={{display: topTab.label === 'AIS' ? "block" : "none"}} spacing={2} className={"AIS"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"threeDView"}>
-                    3Dビューでクラッピーくんが表示される
+                    <Box className={"threeDView"}>
+                        <Grid xs={12} sm={12} md={12} lg={12} sx={{padding: 0}}>
+                            <img src={threeDModel} alt={"crappy-image"} width={"100%"}/>
+                        </Grid>
+                    </Box>
                 </Grid>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"description"}>
                     model: Crappy<br/>
                     LearningLevel: 29<br/>
+                    🚧開発中🚧
                 </Grid>
             </Grid>
 
             {/*Goods*/}
             <Grid container sx={{display: topTab.label === 'Goods' ? "block" : "none"}} spacing={2} className={"Goods"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"tab"}>
-                切り替えのタブ
+                forRent / forSell 🚧開発中🚧
                 </Grid>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"table"}>
-                自分の読んだ本とかのテーブル
+                自分の読んだ本とかのテーブル🚧開発中🚧
                 </Grid>
             </Grid>
             <Drawer
