@@ -7,11 +7,11 @@ import SendIcon from '@mui/icons-material/Send';
 import AttendanceManagement from "../../ui/AttendanceManagement";
 import IconButton from "@mui/material/IconButton";
 import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
-import {topTabState} from "../../atoms/topTabState";
+import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import {useRecoilState} from "recoil";
 
 const AISecretary = () => {
-    const [topTab] = useRecoilState<{ label: string }>(topTabState);
+    const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
 
     // メッセージを保持するstate
     const [messages, setMessages] = useState<string[]>([]);
@@ -155,11 +155,16 @@ const AISecretary = () => {
     };
 
     const [isShowModelView, setIsShowModelView] = useState(true);
-    const tabItems: TabItem[] = [{label: '勤怠'}, {label: '雑談'}, {label: '分析'}, {label: '戦略'}];
+    const tabItems: TabItem[] = [
+        {label: '勤怠'},
+        {label: '雑談'},
+        {label: '分析'},
+        {label: '戦略'}
+    ];
 
     return (
         <Box className="Crappy" paddingLeft={1}>
-            <CustomTabs tabItems={tabItems}></CustomTabs>
+            <CustomTabs tabItems={tabItems} bottomTab={'AIS'}/>
             <Box className={"threeDView"}>
                 <span
                     style={{
@@ -181,7 +186,7 @@ const AISecretary = () => {
             </Box>
 
             {/* 勤怠 */}
-            <Grid container sx={{display: topTab.label === '勤怠' ? "block" : "none"}} spacing={2} className={"勤怠"}>
+            <Grid container sx={{display: topTab.AIS.selected.label === '勤怠' ? "block" : "none"}} spacing={2} className={"勤怠"}>
                 <Grid xs={12} sm={12} md={12} lg={12}
                       sx={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, paddingBottom: 60}}>
                     <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -192,7 +197,7 @@ const AISecretary = () => {
             </Grid>
 
             {/* 雑談 */}
-            <Grid container sx={{display: topTab.label === '雑談' ? "block" : "none"}} spacing={2} className={"雑談"}>
+            <Grid container sx={{display: topTab.AIS.selected.label === '雑談' ? "block" : "none"}} spacing={2} className={"雑談"}>
                 <Grid container spacing={2}>
                     <Grid xs={12} sm={12} md={12} lg={12} sx={{padding: 0}} position={"relative"}>
                         <Box width={"100%"}
@@ -252,7 +257,7 @@ const AISecretary = () => {
             </Grid>
 
             {/* 分析 */}
-            <Grid container sx={{display: topTab.label === '分析' ? "block" : "none"}} spacing={2} className={"分析"}>
+            <Grid container sx={{display: topTab.AIS.selected.label === '分析' ? "block" : "none"}} spacing={2} className={"分析"}>
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                     {generateTalkBlock(0, "組織内の動向の分析なら任せてね〜", false)}
                     <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -262,7 +267,7 @@ const AISecretary = () => {
             </Grid>
 
             {/* 戦略 */}
-            <Grid container sx={{display: topTab.label === '戦略' ? "block" : "none"}} spacing={2} className={"戦略"}>
+            <Grid container sx={{display: topTab.AIS.selected.label === '戦略' ? "block" : "none"}} spacing={2} className={"戦略"}>
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                     {generateTalkBlock(0, "君の戦略を僕が一緒に考えるよ！", false)}
                     <div style={{display: 'flex', flexDirection: 'column'}}>

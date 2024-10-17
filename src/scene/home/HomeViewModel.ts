@@ -8,7 +8,6 @@ import {TabItem} from "../../ui/layout/CustomTabs";
 export class HomeViewModel implements HomeViewModelIF {
     protected authState: Authentication = Authentication.initAuthentication();
     public seedList: SeedListItem[] = [];
-    public tabItems: TabItem[] = [{label: 'All'}, {label: 'Seed'}, {label: 'Blog'}, {label: 'Goods'}];
 
     constructor() {
         console.log('====================SignInViewModel_called====================');

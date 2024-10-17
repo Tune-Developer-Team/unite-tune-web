@@ -9,7 +9,12 @@ export class TimeLineViewModel implements TimeLineViewModelIF {
     public authState:Authentication;
     public thinkTable: ThinkTable = ThinkTable.initThinkTable();
     public thinkDraft: ThinkDraft = ThinkDraft.initThinkDraft();
-    public tabItems: TabItem[] = [{label: 'All'}, {label: 'Curios'}, {label: 'Tech'}, {label: 'General'}];
+    public tabItems: TabItem[] = [
+        {label: 'All'},
+        {label: 'Curios'},
+        {label: 'Tech'},
+        {label: 'General'}
+    ];
 
     constructor(
     ) {

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Box, Typography } from '@mui/material';
 import ButtonFrame from './button-frame.svg';
 import {useRecoilState} from "recoil";
 import Profile from "../../models/Profile/Profile";
-import {profileState} from "../../atoms/ProfileState";
-import {topTabState} from "../../atoms/topTabState";
+import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 
 // タブアイテムの型を定義
 export interface TabItem {
@@ -13,14 +12,92 @@ export interface TabItem {
 
 interface CustomTabsProps {
     tabItems: TabItem[];
+    bottomTab: string
 }
 
-const CustomTabs: React.FC<CustomTabsProps> = ({ tabItems }) => {
-    const [topTab, setTopTab] = useRecoilState(topTabState);
+const CustomTabs: React.FC<CustomTabsProps> = ({tabItems, bottomTab}) => {
+    const [topTab, setTopTab] = useRecoilState(selectedTabState);
+
+    const [bottom, setBottomTab] = useState<string>("Home");
+    const [activeTab, setActiveTab] = useState<TabItem>({label: ""});
 
     const handleTabClick = (label: string) => {
-        setTopTab({label:label});
+        let newSelectedTab:SelectedTabIF = {
+            Home: {
+                selected:{
+                    label: topTab.Home.selected.label,
+                }
+            },
+            ThinkTank: {
+                selected:{
+                    label: topTab.ThinkTank.selected.label,
+                }
+            },
+            AIS: {
+                selected:{
+                    label: topTab.AIS.selected.label,
+                }
+            },
+            Profile: {
+                selected:{
+                    label: topTab.Profile.selected.label,
+                }
+            }
+        };
+
+        switch (bottomTab) {
+            case 'Home':
+                newSelectedTab.Home.selected.label = label;
+                break;
+            case 'ThinkTank' :
+                newSelectedTab.ThinkTank.selected.label = label;
+                break;
+            case 'AIS' :
+                newSelectedTab.AIS.selected.label = label;
+                console.log(newSelectedTab.AIS.selected.label)
+                break;
+            case 'Profile' :
+                newSelectedTab.Profile.selected.label = label;
+                break;
+            default:
+                break;
+        }
+
+        console.log(topTab)
+        console.log("更新")
+        setTopTab(newSelectedTab);
     };
+
+    useEffect(() => {
+        setBottomTab(bottomTab);
+
+        switch (bottomTab) {
+            case 'Home':
+                setActiveTab(topTab.Home.selected);
+                break;
+            case 'ThinkTank' :
+                setActiveTab(topTab.ThinkTank.selected);
+                break;
+            case 'AIS' :
+                setActiveTab(topTab.AIS.selected);
+                break;
+            case 'Profile' :
+                setActiveTab(topTab.Profile.selected);
+                break;
+            default:
+                break;
+        }
+
+    });
+
+    let isNotSelectedTab = true;
+
+    tabItems.map((item) => {
+        if (item.label == activeTab.label) {
+            isNotSelectedTab = false;
+        }
+        return item
+    });
 
     return (
         <Box
@@ -50,11 +127,11 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabItems }) => {
                         display: 'flex', // フレックスボックスを使用
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: item.label === topTab ? '#000000' : 'transparent', // 選択時に暗い色
+                        backgroundColor: item.label == activeTab.label ? '#000000' : 'transparent', // 選択時に暗い色
                         borderRadius: '8px', // 全体に角丸を適用
                         transition: 'background-color 0.3s', // 背景色のアニメーション
                         '&:hover': {
-                            backgroundColor: item.label === topTab ? '#030303' : '#256525', // ホバー時に色を変更
+                            backgroundColor: item.label == activeTab.label ? '#030303' : '#256525', // ホバー時に色を変更
                         },
                     }}
                 >
@@ -76,7 +153,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabItems }) => {
                             top: '50%', // 上から50%の位置に配置（中央揃え）
                             left: '50%', // 左から50%の位置に配置（中央揃え）
                             transform: 'translate(-50%, -50%)', // 中央に正確に配置するための変換
-                            color: item.label === topTab ? '#4ccc4c' : '#d3d3d3', // 選択時は文字色を白に変更
+                            color: item.label == activeTab.label ? '#4ccc4c' : '#d3d3d3', // 選択時は文字色を白に変更
                             transition: 'color 0.3s',
                             pointerEvents: 'none', // クリックイベントを無効化
                         }}

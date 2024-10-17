@@ -20,12 +20,14 @@ import Mention from "../../models/data/Mention";
 import {v4 as uuidv4} from 'uuid';
 import AddIcon from '@mui/icons-material/Add';
 import CustomTabs from "../../ui/layout/CustomTabs";
+import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 
 const timeLineViewModel = new TimeLineViewModel();
 
 const TimeLineView = () => {
     const [profile] = useRecoilState(profileState);
     const [authState] = useRecoilState(authenticationState);
+    const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
     const [viewModel] = useState<TimeLineViewModel>(timeLineViewModel);
     const [thinkList, setThinkList] = useState<Think[]>([]);
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft | null>(null);
@@ -207,7 +209,7 @@ const TimeLineView = () => {
 
     return (
         <Grid container spacing={2}>
-            <CustomTabs tabItems={viewModel.tabItems}></CustomTabs>
+            <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/>
             <Grid padding={0} xs={12} sm={12} md={7} lg={7} sx={{height: "85vh", overflow: "auto"}}>
                 <Box sx={styleOfOnlyDisplayPc} width={"100%"}>
                     <Box sx={{textAlign: "center", paddingBottom: 0.5}}>

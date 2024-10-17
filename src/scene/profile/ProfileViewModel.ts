@@ -8,7 +8,12 @@ import {TabItem} from "../../ui/layout/CustomTabs";
 export class ProfileViewModel implements ProfileViewModelIF {
     public authState:Authentication = Authentication.initAuthentication();
     public profile: Profile = Profile.initProfile();
-    public tabItems: TabItem[] = [{label: 'Main'}, {label: 'ThinkTank'}, {label: 'AIS'}, {label: 'Goods'}];
+    public tabItems: TabItem[] = [
+        {label: 'Main'},
+        {label: 'ThinkTank'},
+        {label: 'AIS'},
+        {label: 'Goods'}
+    ];
 
     /**
      * セットアップ処理

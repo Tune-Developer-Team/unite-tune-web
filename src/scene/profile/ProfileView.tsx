@@ -21,7 +21,7 @@ import {profileState} from "../../atoms/ProfileState";
 import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
 import CustomTabs from "../../ui/layout/CustomTabs";
-import {topTabState} from "../../atoms/topTabState";
+import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import threeDModel from "../crappy/crappy.png";
 
 const profileViewModel = new ProfileViewModel();
@@ -31,7 +31,7 @@ const ProfileView = () => {
     const [globalProfile, setGlobalProfile] = useRecoilState<Profile>(profileState)
     const [authState] = useRecoilState(authenticationState);
     const [loading, setLoading] = useRecoilState(loaderState);
-    const [topTab] = useRecoilState<{ label: string }>(topTabState);
+    const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
 
     // ViewModel
     const params = useParams();
@@ -105,7 +105,7 @@ const ProfileView = () => {
 
     return (
         <Box className="Profile" paddingLeft={1}>
-            <CustomTabs tabItems={viewModel.tabItems}></CustomTabs>
+            <CustomTabs tabItems={viewModel.tabItems} bottomTab={'Profile'}/>
             <Loader/>
             <Grid container spacing={2} className={"header"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
@@ -146,7 +146,7 @@ const ProfileView = () => {
             </Grid>
 
             {/*Main*/}
-            <Grid container sx={{display: topTab.label === 'Main' ? "block" : "none"}} spacing={2} className={"Main"}>
+            <Grid container sx={{display: topTab.Profile.selected.label === 'Main' ? "block" : "none"}} spacing={2} className={"Main"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"description"}>
                     <div dangerouslySetInnerHTML={{__html: viewModel.profile.description.replace(/\n/g, '<br />')}}/>
                 </Grid>
@@ -180,7 +180,7 @@ const ProfileView = () => {
             </Grid>
 
             {/*ThinkTank*/}
-            <Grid container sx={{display: topTab.label === 'ThinkTank' ? "block" : "none"}} spacing={2} className={"ThinkTank"}>
+            <Grid container sx={{display: topTab.Profile.selected.label === 'ThinkTank' ? "block" : "none"}} spacing={2} className={"ThinkTank"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"addThinkModal"}>
                     つぶやきの追加モーダル🚧開発中🚧
                 </Grid>
@@ -190,7 +190,7 @@ const ProfileView = () => {
             </Grid>
 
             {/*AIS*/}
-            <Grid container sx={{display: topTab.label === 'AIS' ? "block" : "none"}} spacing={2} className={"AIS"}>
+            <Grid container sx={{display: topTab.Profile.selected.label === 'AIS' ? "block" : "none"}} spacing={2} className={"AIS"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"threeDView"}>
                     <Box className={"threeDView"}>
                         <Grid xs={12} sm={12} md={12} lg={12} sx={{padding: 0}}>
@@ -206,7 +206,7 @@ const ProfileView = () => {
             </Grid>
 
             {/*Goods*/}
-            <Grid container sx={{display: topTab.label === 'Goods' ? "block" : "none"}} spacing={2} className={"Goods"}>
+            <Grid container sx={{display: topTab.Profile.selected.label === 'Goods' ? "block" : "none"}} spacing={2} className={"Goods"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"tab"}>
                 forRent / forSell 🚧開発中🚧
                 </Grid>
