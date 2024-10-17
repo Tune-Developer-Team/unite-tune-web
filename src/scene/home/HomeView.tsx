@@ -15,6 +15,8 @@ import {useNavigate} from "react-router-dom";
 import SeedTileBanner from "../../ui/seed/SeedTileBanner";
 import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
+import BlogPostTileSixColumn from "../../ui/blogPostSixColumn/BlogPostTileSixColumn";
+import AllTabView from "./AllTabView/AllTabView";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
@@ -74,42 +76,9 @@ const HomeView = () => {
         <div className="Home">
             <CustomTabs tabItems={tabItems} bottomTab={'Home'}/>
             {/* All */}
-            <Grid container sx={{display: (topTab.Home.selected.label === 'All') ? "block" : "none"}} spacing={2}
-                  className={"All"}>
-                <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
-                    <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
-                        <Typography variant="h5" component="div">
-                            NEW ARRIVAL
-                        </Typography>
-                        <Box textAlign={"end"} paddingRight={1}>
-                            <Button variant="text" style={{color:"#fff"}} onClick={() => {
-                                navigate(`/blogposts`)
-                            }}>全て表示する</Button>
-                        </Box>
-                    </Grid>
-                    <Grid xs={12} sm={12} md={12} lg={12} >
-                        <BlogPostTileBanner/>
-                    </Grid>
-                </Grid>
-
-                <Grid container spacing={3} className={"seed-banner"} paddingBottom={5}>
-                    <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
-                        <Typography variant="h5" component="div">
-                            {/*このシードがアツい！*/}
-                            Hot SEEDS !
-                        </Typography>
-                        <Box textAlign={"end"} paddingRight={1}>
-                            <Button variant="text" style={{color:"#fff"}} onClick={() => {
-                                navigate(`/seeds`)
-                            }}>全て表示する</Button>
-                        </Box>
-                        <Grid xs={12} sm={12} md={12} lg={12} >
-                            <SeedTileBanner seedList={seedList}/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-
+            <Box sx={{display: topTab.Home.selected.label === 'All' ? "block" : "none"}}>
+            <AllTabView viewModel={viewModel}/>
+            </Box>
             {/* Blog */}
             <Grid container sx={{display: topTab.Home.selected.label === 'Blog' ? "block" : "none"}} spacing={2} className={"Blog"}>
                 <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
