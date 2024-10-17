@@ -3,10 +3,17 @@ import {ProfileViewModelIF} from "./ProfileViewModelIF";
 import Profile from "../../models/Profile/Profile";
 import axios from "axios";
 import {endPoint} from "../../consts/api";
+import {TabItem} from "../../ui/layout/CustomTabs";
 
 export class ProfileViewModel implements ProfileViewModelIF {
     public authState:Authentication = Authentication.initAuthentication();
     public profile: Profile = Profile.initProfile();
+    public tabItems: TabItem[] = [
+        {label: 'Main'},
+        {label: 'ThinkTank'},
+        {label: 'AIS'},
+        {label: 'Goods'}
+    ];
 
     /**
      * セットアップ処理

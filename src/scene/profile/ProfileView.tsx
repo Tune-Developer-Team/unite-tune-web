@@ -20,6 +20,9 @@ import ImagePath from "../../models/data/ImagePath";
 import {profileState} from "../../atoms/ProfileState";
 import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
+import CustomTabs from "../../ui/layout/CustomTabs";
+import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
+import threeDModel from "../crappy/crappy.png";
 
 const profileViewModel = new ProfileViewModel();
 
@@ -28,6 +31,7 @@ const ProfileView = () => {
     const [globalProfile, setGlobalProfile] = useRecoilState<Profile>(profileState)
     const [authState] = useRecoilState(authenticationState);
     const [loading, setLoading] = useRecoilState(loaderState);
+    const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
 
     // ViewModel
     const params = useParams();
@@ -101,8 +105,9 @@ const ProfileView = () => {
 
     return (
         <Box className="Profile" paddingLeft={1}>
+            <CustomTabs tabItems={viewModel.tabItems} bottomTab={'Profile'}/>
             <Loader/>
-            <Grid container spacing={2} className={"projectByLanguage"}>
+            <Grid container spacing={2} className={"header"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
                     <Box width={"100%"} display={"flex"} paddingBottom={2} position="relative">
                         {/* 親要素を相対位置に設定 */}
@@ -138,9 +143,14 @@ const ProfileView = () => {
                         {/*<Chip label={profile.curiosDirection} size="small" />*/}
                     </Typography>
                 </Grid>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+            </Grid>
+
+            {/*Main*/}
+            <Grid container sx={{display: topTab.Profile.selected.label === 'Main' ? "block" : "none"}} spacing={2} className={"Main"}>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"description"}>
                     <div dangerouslySetInnerHTML={{__html: viewModel.profile.description.replace(/\n/g, '<br />')}}/>
                 </Grid>
+
                 <Grid xs={12} sm={12} md={12} lg={12}>
                     MyCurios🚧開発中🚧
                     <Box>
@@ -166,6 +176,42 @@ const ProfileView = () => {
                         }}
                         >Please See Portfolio</Button>
                     </Box>
+                </Grid>
+            </Grid>
+
+            {/*ThinkTank*/}
+            <Grid container sx={{display: topTab.Profile.selected.label === 'ThinkTank' ? "block" : "none"}} spacing={2} className={"ThinkTank"}>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"addThinkModal"}>
+                    つぶやきの追加モーダル🚧開発中🚧
+                </Grid>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"timeLine"}>
+                    自分のタイムライン🚧開発中🚧
+                </Grid>
+            </Grid>
+
+            {/*AIS*/}
+            <Grid container sx={{display: topTab.Profile.selected.label === 'AIS' ? "block" : "none"}} spacing={2} className={"AIS"}>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"threeDView"}>
+                    <Box className={"threeDView"}>
+                        <Grid xs={12} sm={12} md={12} lg={12} sx={{padding: 0}}>
+                            <img src={threeDModel} alt={"crappy-image"} width={"100%"}/>
+                        </Grid>
+                    </Box>
+                </Grid>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"description"}>
+                    model: Crappy<br/>
+                    LearningLevel: 29<br/>
+                    🚧開発中🚧
+                </Grid>
+            </Grid>
+
+            {/*Goods*/}
+            <Grid container sx={{display: topTab.Profile.selected.label === 'Goods' ? "block" : "none"}} spacing={2} className={"Goods"}>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"tab"}>
+                forRent / forSell 🚧開発中🚧
+                </Grid>
+                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"table"}>
+                自分の読んだ本とかのテーブル🚧開発中🚧
                 </Grid>
             </Grid>
             <Drawer

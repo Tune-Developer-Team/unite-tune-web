@@ -2,7 +2,6 @@ import {useState} from 'react';
 import {
     Box,
     Button,
-    Collapse,
     List,
     ListItem,
     ListItemButton,
@@ -13,7 +12,6 @@ import {
     Grid,
     TextField, Drawer
 } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CreateIcon from '@mui/icons-material/Create';
 import {DrawerViewModel} from "./DarawerViewModel";
@@ -21,16 +19,12 @@ import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
-import logo from "../../uniteLogo.svg";
 import {profileState} from "../../atoms/ProfileState";
 import SettingsIcon from '@mui/icons-material/Settings';
 import {authenticationState} from "../../atoms/AuthenticationState";
-import LinkIcon from "@mui/icons-material/Link";
 import AddIcon from "@mui/icons-material/Add";
-import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import {AvatarIcon} from "../avatarIcon/AvatarIcon";
 import Profile from "../../models/Profile/Profile";
 
 const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
@@ -75,6 +69,7 @@ const HeaderMenu = () => {
     const handleAvatarMouseLeave = () => {
         setIsAvatarHovered(false); // Reset hover state
     };
+
     const menuItems = [
         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
         {
@@ -156,14 +151,22 @@ const HeaderMenu = () => {
                     position: 'fixed', // Changed to fixed
                     top: 0,
                     right: 0,
-                    zIndex: 10, // Ensure it stays above other elements
+                    paddingBottom: 6,
+                    zIndex: 1000, // Ensure it stays above other elements
                     backgroundColor:"#000000",
                     width: "100%"
                 }}
                 padding={1}
             >
-                <Box width={"100%"}></Box>
+                <Box width={"100%"}/>
                 <Avatar
+                    sx={{
+                        display: "flex",
+                        position: 'fixed', // Changed to fixed
+                        top: 10,
+                        right: 10,
+                        zIndex: 10, // Ensure it stays above other elements
+                    }}
                     alt="userIcon"
                     sizes={"ss"}
                     src={profile.iconImage.path??""}

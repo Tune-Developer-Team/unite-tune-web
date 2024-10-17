@@ -3,6 +3,7 @@ import {HomeViewModelIF, SeedTileApiResponseItemIF, SeedListItem} from "./HomeVi
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
+import {TabItem} from "../../ui/layout/CustomTabs";
 
 export class HomeViewModel implements HomeViewModelIF {
     protected authState: Authentication = Authentication.initAuthentication();
