@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import ButtonFrame from './button-frame.svg';
+import {useRecoilState} from "recoil";
+import Profile from "../../models/Profile/Profile";
+import {profileState} from "../../atoms/ProfileState";
+import {topTabState} from "../../atoms/topTabState";
 
 // タブアイテムの型を定義
 export interface TabItem {
@@ -12,10 +16,10 @@ interface CustomTabsProps {
 }
 
 const CustomTabs: React.FC<CustomTabsProps> = ({ tabItems }) => {
-    const [value, setValue] = useState(tabItems[0].label); // 初期値を設定
+    const [topTab, setTopTab] = useRecoilState(topTabState);
 
     const handleTabClick = (label: string) => {
-        setValue(label);
+        setTopTab({label:label});
     };
 
     return (
@@ -46,11 +50,11 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabItems }) => {
                         display: 'flex', // フレックスボックスを使用
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: item.label === value ? '#000000' : 'transparent', // 選択時に暗い色
+                        backgroundColor: item.label === topTab ? '#000000' : 'transparent', // 選択時に暗い色
                         borderRadius: '8px', // 全体に角丸を適用
                         transition: 'background-color 0.3s', // 背景色のアニメーション
                         '&:hover': {
-                            backgroundColor: item.label === value ? '#030303' : '#E5F6E5', // ホバー時に色を変更
+                            backgroundColor: item.label === topTab ? '#030303' : '#256525', // ホバー時に色を変更
                         },
                     }}
                 >
@@ -72,7 +76,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabItems }) => {
                             top: '50%', // 上から50%の位置に配置（中央揃え）
                             left: '50%', // 左から50%の位置に配置（中央揃え）
                             transform: 'translate(-50%, -50%)', // 中央に正確に配置するための変換
-                            color: item.label === value ? '#4ccc4c' : '#919191', // 選択時は文字色を白に変更
+                            color: item.label === topTab ? '#4ccc4c' : '#d3d3d3', // 選択時は文字色を白に変更
                             transition: 'color 0.3s',
                             pointerEvents: 'none', // クリックイベントを無効化
                         }}
