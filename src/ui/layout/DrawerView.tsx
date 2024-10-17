@@ -155,7 +155,7 @@ export default function DrawerView() {
                     {[
                         {label: 'home', icon: <HomeIcon/>, linkPath: "/"},
                         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
-                        {label: 'SeedEdit', icon: <CreateIcon/>, linkPath: '/seed/' + viewModel.generateSeedId() + '/edit'},
+                        {label: 'MakeQuest', icon: <CreateIcon/>, linkPath: '/quests/' + viewModel.generateSeedId()},
                         {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: '/timeline'},
                     ].map((item, index) => (
                         <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={()=>{

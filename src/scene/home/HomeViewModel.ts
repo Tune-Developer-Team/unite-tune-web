@@ -1,13 +1,12 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {HomeViewModelIF, SeedTileApiResponseItemIF, SeedListItem} from "./HomeViewModelIF";
+import {HomeViewModelIF, QuestTileApiResponseItemIF, QuestListItem} from "./HomeViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
-import {TabItem} from "../../ui/layout/CustomTabs";
 
 export class HomeViewModel implements HomeViewModelIF {
     protected authState: Authentication = Authentication.initAuthentication();
-    public seedList: SeedListItem[] = [];
+    public seedList: QuestListItem[] = [];
 
     constructor() {
         console.log('====================SignInViewModel_called====================');
@@ -34,13 +33,13 @@ export class HomeViewModel implements HomeViewModelIF {
      * Seedを取得
      * @param authentication
      */
-    async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: SeedListItem[] }> {
+    async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: QuestListItem[] }> {
         const api = new Api(authentication);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
+        this.seedList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -57,8 +56,8 @@ export class HomeViewModel implements HomeViewModelIF {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            const seedListItem: SeedListItem = {
-                seedId: item.SeedId,
+            const seedListItem: QuestListItem = {
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -84,13 +83,13 @@ export class HomeViewModel implements HomeViewModelIF {
      * ホットシードを取得
      * TODO: API未実装
      */
-    async fetchHotSeedList(): Promise<{ message: string, seedList: SeedListItem[] }> {
+    async fetchHotSeedList(): Promise<{ message: string, seedList: QuestListItem[] }> {
         const api = new Api(this.authState);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
+        this.seedList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -107,8 +106,8 @@ export class HomeViewModel implements HomeViewModelIF {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            const seedListItem: SeedListItem = {
-                seedId: item.SeedId,
+            const seedListItem: QuestListItem = {
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -134,13 +133,13 @@ export class HomeViewModel implements HomeViewModelIF {
      * ピックアップを取得
      * TODO: API未実装
      */
-    async fetchPickUp(): Promise<{ message: string, seed: SeedListItem }> {
+    async fetchPickUp(): Promise<{ message: string, seed: QuestListItem }> {
         const api = new Api(this.authState);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
+        this.seedList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -157,8 +156,8 @@ export class HomeViewModel implements HomeViewModelIF {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            const seedListItem: SeedListItem = {
-                seedId: item.SeedId,
+            const seedListItem: QuestListItem = {
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,

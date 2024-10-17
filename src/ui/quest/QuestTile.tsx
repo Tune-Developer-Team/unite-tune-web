@@ -1,11 +1,11 @@
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
-import seedCardBackground from "./seedTileBackground.svg";
+import seedCardBackground from "./QuestTileBackground.svg";
 import parse from "html-react-parser";
 import Typography from "@mui/material/Typography";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {SeedListItem} from "../../scene/home/HomeViewModelIF";
+import {QuestListItem} from "../../scene/home/HomeViewModelIF";
 import {AvatarIcon} from "../avatarIcon/AvatarIcon";
 import {useRecoilState} from "recoil";
 import Profile from "../../models/Profile/Profile";
@@ -57,10 +57,10 @@ const BackGroundImage = styled("img")({
 });
 
 interface SeedTileProps {
-    item:  SeedListItem; // 親コンポーネントから渡されるシード
+    item:  QuestListItem; // 親コンポーネントから渡されるシード
 }
 
-const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
+const QuestTile: React.FC<SeedTileProps> = ({ item }) => {
     const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
 
     const handleAvatarMouseEnter = () => {
@@ -79,7 +79,7 @@ const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
                 image={item.imagePath.path}
                 onClick={()=>{
                     if(!isAvatarHovered){
-                        navigate(`/seed/${item.seedId}`);
+                        navigate(`/quests/${item.questId}`);
                     }
                 }}
             >
@@ -116,11 +116,11 @@ const SeedTile: React.FC<SeedTileProps> = ({ item }) => {
             <Box display={"flex"} paddingTop={1}>
                 <span style={{fontSize:12}}>{item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, '')}
                     <span style={{color:"#fff"}} onClick={() => {
-                        navigate(`/seed/${item.seedId}`)
+                        navigate(`/quests/${item.questId}`)
                     }}>...続きをみる</span>
                 </span>
             </Box>
         </Box>
     );
 }
-export default SeedTile;
+export default QuestTile;

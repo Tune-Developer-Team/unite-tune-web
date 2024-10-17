@@ -2,17 +2,17 @@ import React, {useEffect, useState} from 'react';
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import {useRecoilState, useResetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";
 import {HomeViewModel} from "./HomeViewModel";
-import {SeedListItem} from "./HomeViewModelIF";
+import {QuestListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
 import BlogPostTileBanner from "../../ui/blogPost/BlogPostTileBanner";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
-import SeedTileBanner from "../../ui/seed/SeedTileBanner";
+import QuestTileBanner from "../../ui/quest/QuestTileBanner";
 import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import BlogPostTileSixColumn from "../../ui/blogPostSixColumn/BlogPostTileSixColumn";
@@ -27,7 +27,7 @@ const HomeView = () => {
     const [profile, setProfile] = useRecoilState(profileState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
     const [viewModel] = useState<HomeViewModel>(homeViewModel);
-    const [seedList, setSeedList] = useState<SeedListItem[]>([])
+    const [seedList, setSeedList] = useState<QuestListItem[]>([])
 
     const tabItems: TabItem[] = [
         {label: 'All'},
@@ -84,7 +84,7 @@ const HomeView = () => {
                 <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
                     <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                         <Typography variant="h5" component="div">
-                            NEW ARRIVAL
+                            ✨ NEW ARRIVAL
                         </Typography>
                         <Box textAlign={"end"} paddingRight={1}>
                             <Button variant="text" style={{color:"#fff"}} onClick={() => {
@@ -100,19 +100,19 @@ const HomeView = () => {
 
             {/* Seed */}
             <Grid container sx={{display: topTab.Home.selected.label === 'Seed' ? "block" : "none"}} spacing={2} className={"Seed"}>
-                <Grid container spacing={3} className={"seed-banner"} paddingBottom={5}>
+                <Grid container spacing={3} className={"quest-banner"} paddingBottom={5}>
                     <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                         <Typography variant="h5" component="div">
                             {/*このシードがアツい！*/}
-                            Hot SEEDS !
+                            🔥 HOT QUESTS!
                         </Typography>
                         <Box textAlign={"end"} paddingRight={1}>
                             <Button variant="text" style={{color:"#fff"}} onClick={() => {
-                                navigate(`/seeds`)
+                                navigate(`/quests`)
                             }}>全て表示する</Button>
                         </Box>
                         <Grid xs={12} sm={12} md={12} lg={12} >
-                            <SeedTileBanner seedList={seedList}/>
+                            <QuestTileBanner seedList={seedList}/>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -14,8 +14,8 @@ export interface HomeViewModelIF {
     cleanUp(): void
 }
 
-export interface SeedListItem {
-    seedId: string
+export interface QuestListItem {
+    questId: string
     title: string
     description: string
     ownerUserName: string
@@ -27,9 +27,9 @@ export interface SeedListItem {
     favoriteCount: number
 }
 
-export interface SeedTileApiResponseItemIF {
+export interface QuestTileApiResponseItemIF {
     ID: number
-    SeedId: string
+    QuestId: string
     Title: string
     OwnerUserUid: string
     Description: string

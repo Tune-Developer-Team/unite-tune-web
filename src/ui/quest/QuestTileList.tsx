@@ -2,12 +2,12 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
-import {SeedListItem} from "../../scene/home/HomeViewModelIF";
+import {QuestListItem} from "../../scene/home/HomeViewModelIF";
 import {useNavigate} from "react-router-dom";
-import SeedTile from "./SeedTile";
+import QuestTile from "./QuestTile";
 
-interface SeedTileListProps {
-    seedList: SeedListItem[];
+interface QuestTileListProps {
+    questList: QuestListItem[];
 }
 
 const GridContainer = styled(Box)({
@@ -18,21 +18,21 @@ const GridContainer = styled(Box)({
     overflow: "auto",
 });
 
-const SeedTileList: React.FC<SeedTileListProps> = ({ seedList }) => {
+const QuestTileList: React.FC<QuestTileListProps> = ({ questList }) => {
     const navigate = useNavigate();
     return (
         <div className="PostList" >
             <Typography variant="h5" component="div">
                 {/*自分のアイデア、みんなのシード。*/}
-                My IDEA, Our SEED.
+                My IDEA, Our QUESTS.
             </Typography>
             <GridContainer>
-                {seedList.map((item, index) => (
-                    <SeedTile item={item}/>
+                {questList.map((item, index) => (
+                    <QuestTile item={item}/>
                 ))}
             </GridContainer>
         </div>
     );
 };
 
-export default SeedTileList;
+export default QuestTileList;

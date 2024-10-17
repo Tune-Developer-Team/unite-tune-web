@@ -1,13 +1,13 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {SeedListViewModelIF} from "./SeedListViewModelIF";
+import {QuestListViewModelIF} from "./QuestListViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
-import {SeedTileApiResponseItemIF, SeedListItem} from "../home/HomeViewModelIF";
+import {QuestTileApiResponseItemIF, QuestListItem} from "../home/HomeViewModelIF";
 
-export class SeedListViewModel implements SeedListViewModelIF {
+export class QuestListViewModel implements QuestListViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
-    public seedList: SeedListItem[] = [];
+    public questList: QuestListItem[] = [];
     constructor(
     ) {
         console.log('====================SignInViewModel_called====================');
@@ -33,21 +33,21 @@ export class SeedListViewModel implements SeedListViewModelIF {
      * Seedを取得
      * @param authentication
      */
-    async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: SeedListItem[] }> {
+    async fetchQuestList(authentication: Authentication): Promise<{ message: string, questList: QuestListItem[] }> {
         // console.log(authentication.accessToken)
         const api = new Api(authentication);
         const result = await api.get(endPoint.SEED);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: SeedTileApiResponseItemIF) => {
+        this.questList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
             const imagePath: ImagePath = ImagePath.create({alt: imagePathJson[0].alt, path: imagePathJson[0].path});
 
-            const seedListItem: SeedListItem = {
-                seedId: item.SeedId,
+            const questListItem: QuestListItem = {
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: '', // TODO: バックエンドが未実装
@@ -59,14 +59,14 @@ export class SeedListViewModel implements SeedListViewModelIF {
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 
-            return seedListItem
+            return questListItem
         })
 
-        console.log(this.seedList[0].title)
+        console.log(this.questList[0].title)
 
         return {
             message: result.data.message,
-            seedList: this.seedList
+            questList: this.questList
         };
     }
 }

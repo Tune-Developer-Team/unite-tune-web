@@ -7,18 +7,16 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import {RecoilRoot} from "recoil";
 import Profile from "./scene/profile/ProfileView";
 import Portfolio from "./scene/portfolio";
-import SeedEditView from "./scene/seedEdit/SeedEditView";
 import HomeView from "./scene/home/HomeView";
 import TuneCardView from "./scene/tuneCard/tuneCardView";
 import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
-import SeedDetailView from "./scene/seedDetail/seedDetailView";
 import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
 import AISecretary from "./scene/crappy/AISecretary";
-import SeedListView from "./scene/seedList/SeedListView";
 import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
 import TimeLineView from "./scene/thinkTank/TimeLineView";
+import QuestView from "./scene/Quest/QuestView";
 
 function App() {
     const [darkMode] = useState(true);
@@ -56,14 +54,18 @@ function App() {
                         <Route path='/' element={<Layout />} >
                             <Route path='/preference' element={<PreferenceView />} />
                             <Route path='/home' element={<HomeView />} />
-                            <Route path='/seed/:seedId/edit' element={<SeedEditView />} />
-                            <Route path='/seed/:seedId' element={<SeedDetailView />} />
+                            <Route path='/quests/:questId/edit' element={<QuestView />} />
+                            <Route path='/quests/:questId' element={<QuestView />} />
                             <Route path='/timeline' element={<TimeLineView />} />
                             <Route path='/timeline/:thinkId' element={<TimeLineView />} />
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
-                            <Route path='/user/:uid/portfolio' element={<Portfolio />} />ほんほ
-                            <Route path='/seeds' element={<SeedListView />} />
+                            <Route path='/user/:uid/portfolio' element={<Portfolio />} />
+                            {/*Seedの機能実装は延期する*/}
+                            {/*<Route path='/quest/:seedId/edit' element={<SeedEditView />} />*/}
+                            {/*<Route path='/quest/:seedId' element={<SeedDetailView />} />*/}
+                            {/*<Route path='/seeds' element={<SeedListView />} />*/}
+                            <Route path='/quests' element={<QuestView />} />
                             <Route path='/blogposts' element={<BlogPostTileList />} />
                         </Route>
                         <Route path="*" element={<NotFound/>}/>

@@ -1,6 +1,6 @@
 import {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 
-export interface SeedListViewModelIF {
+export interface QuestListViewModelIF {
     /**
      * データのフェッチやモデルのインスタンス化などを行う
      */

@@ -157,9 +157,9 @@ export default function Layout() {
                             {label: 'home', icon: <HomeIcon/>, linkPath: "/"},
                             {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
                             {
-                                label: 'SeedEdit',
+                                label: 'MakeQuest',
                                 icon: <CreateIcon/>,
-                                linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'
+                                linkPath: 'quests/' + viewModel.generateSeedId()
                             },
                             {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: `/timeline`},
                         ].map((item, index) => (
