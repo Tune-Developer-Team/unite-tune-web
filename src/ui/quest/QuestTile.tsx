@@ -63,6 +63,9 @@ interface SeedTileProps {
 const QuestTile: React.FC<SeedTileProps> = ({ item }) => {
     const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
 
+    console.log(item.title);
+    console.log(item.imagePath.path);
+
     const handleAvatarMouseEnter = () => {
         console.log("hovering");
         setIsAvatarHovered(true); // Set hover state to true

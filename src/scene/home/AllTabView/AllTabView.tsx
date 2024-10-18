@@ -33,7 +33,7 @@ const AllTabView = (props: AllTabViewProps) => {
     const viewModel = props.viewModel;
     const [profile] = useRecoilState(profileState);
     const navigate = useNavigate();
-    const [seedList, setSeedList] = useState<QuestListItem[]>([]);
+    const [questList, setQuestList] = useState<QuestListItem[]>([]);
     const [pickUp, setPickUp] = useState<TileInfoIF>(
         {
             title: '',
@@ -50,10 +50,10 @@ const AllTabView = (props: AllTabViewProps) => {
      */
     const loadSeedList = async (): Promise<void> => {
         console.log("===loadSeedList===");
-        await viewModel.fetchHotSeedList().then((response) => {
+        await viewModel.fetchHotQuestList().then((response) => {
             console.log("---------------------成功------------------------")
             console.log(response)
-            setSeedList(response.seedList);
+            setQuestList(response.questList);
         }).catch((error) => {
             console.log("---------------------失敗------------------------")
             console.log(error);
@@ -170,7 +170,7 @@ const AllTabView = (props: AllTabViewProps) => {
                         }}>全て表示する</Button>
                     </Box>
                     <Grid xs={12} sm={12} md={12} lg={12}>
-                        <QuestTileBanner seedList={seedList}/>
+                        <QuestTileBanner questList={questList}/>
                     </Grid>
                 </Grid>
             </Grid>

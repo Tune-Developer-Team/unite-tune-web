@@ -5,14 +5,14 @@ import QuestTile from './QuestTile';
 import ScrollContainer from "../container/ScrollContainer";
 
 interface SeedTileBannerProps {
-    seedList: QuestListItem[]; // 親コンポーネントから渡されるシードリスト
+    questList: QuestListItem[]; // 親コンポーネントから渡されるシードリスト
 }
 
-const QuestTileBanner: React.FC<SeedTileBannerProps> = ({ seedList }) => {
+const QuestTileBanner: React.FC<SeedTileBannerProps> = ({ questList }) => {
 
     return (
         <ScrollContainer>
-            {seedList.map((item, index) => (
+            {questList.map((item, index) => (
                 <QuestTile key={index} item={item} />
             ))}
         </ScrollContainer>

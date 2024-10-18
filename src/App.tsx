@@ -17,6 +17,7 @@ import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
 import TimeLineView from "./scene/thinkTank/TimeLineView";
 import QuestView from "./scene/Quest/QuestView";
+import QuestListView from "./scene/questList/QuestListView";
 
 function App() {
     const [darkMode] = useState(true);
@@ -65,7 +66,7 @@ function App() {
                             {/*<Route path='/quest/:seedId/edit' element={<SeedEditView />} />*/}
                             {/*<Route path='/quest/:seedId' element={<SeedDetailView />} />*/}
                             {/*<Route path='/seeds' element={<SeedListView />} />*/}
-                            <Route path='/quests' element={<QuestView />} />
+                            <Route path='/quests' element={<QuestListView />} />
                             <Route path='/blogposts' element={<BlogPostTileList />} />
                         </Route>
                         <Route path="*" element={<NotFound/>}/>

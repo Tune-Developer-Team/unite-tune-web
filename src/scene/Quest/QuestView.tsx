@@ -21,6 +21,10 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import {ImageUploadForm} from "../seedEdit/ImageUploadForm";
+import {endPoint} from "../../consts/api";
+import IconButton from "@mui/material/IconButton";
+import {Api} from "../../models/Api/Api";
 
 const questViewModel = new QuestViewModel();
 
@@ -51,13 +55,36 @@ const QuestView = () => {
     const [newQuestDetail, setNewQuestDetail] = useState<QuestDetail>(initialQuestDetail)
     // const [newIconImage, setNewIconImage] = useState<ImagePath | null>(null) // TODO: 画像未実装
     const [isShowDetailSetting, setIsShowDetailSetting] = useState<boolean>(false)
+    const [imagePathList, setImagePathList] = useState<ImagePath[]>([]);
 
-    // TODO: 画像未実装
-    // // ファイル変更時に受け取るコールバック関数
-    // const handleFileChange = async (iconImage: ImagePath) => {
-    //     // プレビュー用画像
-    //     setNewIconImage(iconImage);
-    // };
+    // ファイル変更時に受け取るコールバック関数
+    const handleFileChange = async (imagePath: ImagePath) => {
+        // アップロード済みの画像パスをリストに追加
+        setImagePathList((prevList: ImagePath[]) => [...prevList, imagePath]);
+    };
+
+    // 画像削除処理
+    const handleImageDelete = async (index: number, imagePath: ImagePath) => {
+        const api = new Api(viewModel.authState);
+        try {
+            const objectName = imagePath.getGCSObjectName();
+
+            const params = {
+                ObjectName: objectName,
+                BucketName: "auth-tune"
+            };
+            await api.post({
+                endPoint: `${endPoint.DELETE_IMAGE}`,
+                body: params
+            });
+            console.log("Image deleted successfully");
+
+            // 画像をリストから削除
+            setImagePathList((prevList) => prevList.filter((_, i) => i !== index));
+        } catch (error) {
+            console.log("Failed to delete image", error);
+        }
+    };
 
     // 詳細な設定
     const toggleDetailSetting = () => {
@@ -254,12 +281,23 @@ const QuestView = () => {
                         キャンセル
                     </Typography>
                     <Typography width={"100%"} textAlign={"end"} color={"#325eff"} onClick={async () => {
+
+                        // 画像の更新
+                        if (imagePathList.length > 0) {
+                            newQuestDetail.imagePathList = imagePathList;
+                        }
+
+                        // モデルインスタンスの更新
                         setNewQuestDetail(newQuestDetail);
 
+                        // DBへ保存
                         await saveQuest(newQuestDetail);
 
+                        // ビューモデルの更新
                         viewModel.questDetail = newQuestDetail;
                         setViewModel(viewModel);
+
+                        // ドロワーを閉じる
                         toggleDrawer(false);
                     }
                     } sx={{font: 'bold'}}>
@@ -324,6 +362,50 @@ const QuestView = () => {
                             />
                         </Box>
                     </Grid>
+
+                    {/*画像*/}
+                    <Grid xs={12} sm={12} md={12} lg={12}>
+                        <ImageUploadForm onFileChange={handleFileChange}
+                                         folderName={questId}
+                                         uploadEndPoint={endPoint.UPLOAD_SEED_IMAGE}/>
+                        <Box>
+                            {imagePathList.map((imagePath: ImagePath, index: number) => (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        position: "relative",
+                                        width: 100,
+                                        height: 100,
+                                    }}
+                                >
+                                    <img
+                                        src={imagePath.path}
+                                        alt={imagePath.alt}
+                                        width="100"
+                                        height="100"
+                                        style={{objectFit: "cover"}}
+                                    />
+                                    {/* ホバーで表示される削除ボタン */}
+                                    <IconButton
+                                        onClick={() => handleImageDelete(index, imagePath)}
+                                        sx={{
+                                            position: "absolute",
+                                            top: 0,
+                                            right: 0,
+                                            color: "white",
+                                            bgcolor: "rgba(255,255,255,0.5)",
+                                            '&:hover': {
+                                                bgcolor: "rgba(255, 0, 0, 0.7)"
+                                            },
+                                        }}
+                                    >
+                                        <span color={"#ff3737"}>削除</span>
+                                    </IconButton>
+                                </Box>
+                            ))}
+                        </Box>
+                    </Grid>
+
                     {/*詳細な設定 切り替えボタン*/}
                     <Grid xs={12} sm={12} md={12} lg={12} paddingBottom={4}>
                         <Typography textAlign={"center"} color={"#43bbff"} onClick={() => {

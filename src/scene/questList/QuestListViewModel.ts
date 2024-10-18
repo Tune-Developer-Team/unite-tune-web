@@ -1,9 +1,20 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {QuestListViewModelIF} from "./QuestListViewModelIF";
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
 import {QuestTileApiResponseItemIF, QuestListItem} from "../home/HomeViewModelIF";
+
+interface QuestListViewModelIF {
+    /**
+     * データのフェッチやモデルのインスタンス化などを行う
+     */
+    setUp(argument: { authentication: AuthenticationArgumentIF }): void
+
+    /**
+     * インスタンスの明示的な破棄や、状態の保存や確認を行う
+     */
+    cleanUp(): void
+}
 
 export class QuestListViewModel implements QuestListViewModelIF {
     protected authState:Authentication = Authentication.initAuthentication();
@@ -44,10 +55,18 @@ export class QuestListViewModel implements QuestListViewModelIF {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
-            const imagePath: ImagePath = ImagePath.create({alt: imagePathJson[0].alt, path: imagePathJson[0].path});
+
+            let imagePath: ImagePath = ImagePath.create({alt: "", path: ""});
+
+            if (imagePathJson.length > 0) {
+                imagePath = ImagePath.create({
+                    alt: imagePathJson[0].alt,
+                    path: imagePathJson[0].path
+                });
+            }
 
             const questListItem: QuestListItem = {
-                questId: item.QuestId,
+                questId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: '', // TODO: バックエンドが未実装

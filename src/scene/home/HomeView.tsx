@@ -27,24 +27,24 @@ const HomeView = () => {
     const [profile, setProfile] = useRecoilState(profileState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
     const [viewModel] = useState<HomeViewModel>(homeViewModel);
-    const [seedList, setSeedList] = useState<QuestListItem[]>([])
+    const [questList, setQuestList] = useState<QuestListItem[]>([])
 
     const tabItems: TabItem[] = [
         {label: 'All'},
-        {label: 'Seed'},
+        {label: 'Quest'},
         {label: 'Blog'},
         {label: 'Goods'}
     ];
 
     /**
-     * seedリストの読み込み
+     * questリストの読み込み
      */
-    const loadSeedList = async (): Promise<void> => {
-        console.log("===loadSeedList===");
-        await viewModel.fetchSeedList(authState).then((response)=>{
+    const loadQuestList = async (): Promise<void> => {
+        console.log("===loadQuestList===");
+        await viewModel.fetchQuestList(authState).then((response)=>{
             console.log("---------------------成功------------------------")
             console.log(response)
-            setSeedList(response.seedList);
+            setQuestList(response.questList);
         }).catch((error)=>{
             console.log("---------------------失敗------------------------")
             console.log(error);
@@ -63,7 +63,7 @@ const HomeView = () => {
             }
         });
 
-        void loadSeedList();
+        void loadQuestList();
 
         return () => {
             // クリーンアップ
@@ -98,8 +98,8 @@ const HomeView = () => {
                 </Grid>
             </Grid>
 
-            {/* Seed */}
-            <Grid container sx={{display: topTab.Home.selected.label === 'Seed' ? "block" : "none"}} spacing={2} className={"Seed"}>
+            {/* Quest */}
+            <Grid container sx={{display: topTab.Home.selected.label === 'Quest' ? "block" : "none"}} spacing={2} className={"Quest"}>
                 <Grid container spacing={3} className={"quest-banner"} paddingBottom={5}>
                     <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                         <Typography variant="h5" component="div">
@@ -112,7 +112,7 @@ const HomeView = () => {
                             }}>全て表示する</Button>
                         </Box>
                         <Grid xs={12} sm={12} md={12} lg={12} >
-                            <QuestTileBanner seedList={seedList}/>
+                            <QuestTileBanner questList={questList}/>
                         </Grid>
                     </Grid>
                 </Grid>

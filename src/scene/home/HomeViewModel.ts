@@ -6,7 +6,7 @@ import ImagePath from "../../models/data/ImagePath";
 
 export class HomeViewModel implements HomeViewModelIF {
     protected authState: Authentication = Authentication.initAuthentication();
-    public seedList: QuestListItem[] = [];
+    public questList: QuestListItem[] = [];
 
     constructor() {
         console.log('====================SignInViewModel_called====================');
@@ -19,7 +19,7 @@ export class HomeViewModel implements HomeViewModelIF {
     async setUp(argument: { authentication: AuthenticationArgumentIF }): Promise<void> {
         console.log('====================TimeLineViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
-        await this.fetchSeedList(this.authState)
+        await this.fetchQuestList(this.authState)
     }
 
     /**
@@ -30,16 +30,16 @@ export class HomeViewModel implements HomeViewModelIF {
     }
 
     /**
-     * Seedを取得
+     * Questを取得
      * @param authentication
      */
-    async fetchSeedList(authentication: Authentication): Promise<{ message: string, seedList: QuestListItem[] }> {
+    async fetchQuestList(authentication: Authentication): Promise<{ message: string, questList: QuestListItem[] }> {
         const api = new Api(authentication);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
+        this.questList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -56,8 +56,8 @@ export class HomeViewModel implements HomeViewModelIF {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            const seedListItem: QuestListItem = {
-                questId: item.QuestId,
+            const questListItem: QuestListItem = {
+                questId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -69,12 +69,12 @@ export class HomeViewModel implements HomeViewModelIF {
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 
-            return seedListItem
+            return questListItem
         })
 
         return {
             message: result.data.message,
-            seedList: this.seedList
+            questList: this.questList
         };
     }
 
@@ -83,13 +83,13 @@ export class HomeViewModel implements HomeViewModelIF {
      * ホットシードを取得
      * TODO: API未実装
      */
-    async fetchHotSeedList(): Promise<{ message: string, seedList: QuestListItem[] }> {
+    async fetchHotQuestList(): Promise<{ message: string, questList: QuestListItem[] }> {
         const api = new Api(this.authState);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
+        this.questList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -106,8 +106,8 @@ export class HomeViewModel implements HomeViewModelIF {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            const seedListItem: QuestListItem = {
-                questId: item.QuestId,
+            const questListItem: QuestListItem = {
+                questId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -119,12 +119,12 @@ export class HomeViewModel implements HomeViewModelIF {
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 
-            return seedListItem
+            return questListItem
         })
 
         return {
             message: result.data.message,
-            seedList: this.seedList
+            questList: this.questList
         };
     }
 
@@ -139,7 +139,7 @@ export class HomeViewModel implements HomeViewModelIF {
 
         const apiResponse = result.data.data;
 
-        this.seedList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
+        this.questList = apiResponse.map((item: QuestTileApiResponseItemIF) => {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
@@ -156,8 +156,8 @@ export class HomeViewModel implements HomeViewModelIF {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            const seedListItem: QuestListItem = {
-                questId: item.QuestId,
+            const questListItem: QuestListItem = {
+                questId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -169,12 +169,12 @@ export class HomeViewModel implements HomeViewModelIF {
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 
-            return seedListItem
+            return questListItem
         })
 
         return {
             message: result.data.message,
-            seed: this.seedList[0]
+            seed: this.questList[0]
         };
     }
 }
