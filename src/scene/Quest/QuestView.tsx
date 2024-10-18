@@ -284,7 +284,7 @@ const QuestView = () => {
 
                         // 画像の更新
                         if (imagePathList.length > 0) {
-                            newQuestDetail.imagePathList = imagePathList;
+                            Object.assign(newQuestDetail.imagePathList, imagePathList)
                         }
 
                         // モデルインスタンスの更新
