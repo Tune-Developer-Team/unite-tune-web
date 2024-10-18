@@ -41,13 +41,12 @@ export class QuestListViewModel implements QuestListViewModelIF {
     }
 
     /**
-     * Seedを取得
+     * Questを取得
      * @param authentication
      */
     async fetchQuestList(authentication: Authentication): Promise<{ message: string, questList: QuestListItem[] }> {
-        // console.log(authentication.accessToken)
         const api = new Api(authentication);
-        const result = await api.get(endPoint.SEED);
+        const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;
 
@@ -55,33 +54,34 @@ export class QuestListViewModel implements QuestListViewModelIF {
 
             // SPEC: 1枚目の画像をメイン画像にする
             const imagePathJson = JSON.parse(item.ImagePathList)
+            const imagePath: ImagePath = imagePathJson.length > 0 ? ImagePath.create({
+                alt: imagePathJson[0].alt,
+                path: imagePathJson[0].path
+            }) : ImagePath.create({alt: "タイトル", path: ""});
 
-            let imagePath: ImagePath = ImagePath.create({alt: "", path: ""});
-
-            if (imagePathJson.length > 0) {
-                imagePath = ImagePath.create({
-                    alt: imagePathJson[0].alt,
-                    path: imagePathJson[0].path
-                });
+            // オーナーユーザーのアイコン
+            let ownerUserIconImagePath = ImagePath.create({path: "", alt: ""});
+            if (item.IconImage !== "") {
+                const ownerUserIconJson = JSON.parse(item.IconImage)
+                ownerUserIconImagePath.alt = ownerUserIconJson.alt;
+                ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
             const questListItem: QuestListItem = {
                 questId: item.SeedId,
                 title: item.Title,
                 description: item.Description,
-                ownerUserName: '', // TODO: バックエンドが未実装
+                ownerUserName: item.NickName,
                 ownerUserUid: item.OwnerUserUid,
-                hashTagStringList: ['#tag1','#tag2','#tag3'], // TODO: JSONを配列に変換
+                hashTagStringList: ['#tag1', '#tag2', '#tag3'], // TODO: JSONを配列に変換
                 imagePath: imagePath,
                 updatedAt: item.UpdatedAt,
-                userIconImagePath: ImagePath.create({alt: '', path: ''}), // TODO: バックエンドが未実装
+                userIconImagePath: ownerUserIconImagePath,
                 favoriteCount: 0// TODO: バックエンドが未実装
             }
 
             return questListItem
         })
-
-        console.log(this.questList[0].title)
 
         return {
             message: result.data.message,
