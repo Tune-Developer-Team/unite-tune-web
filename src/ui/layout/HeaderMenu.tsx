@@ -73,9 +73,9 @@ const HeaderMenu = () => {
     const menuItems = [
         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
         {
-            label: 'SeedEdit',
+            label: 'MakeQuest',
             icon: <CreateIcon/>,
-            linkPath: 'seed/' + viewModel.generateSeedId() + '/edit'
+            linkPath: 'quests/' + viewModel.generateSeedId()
         },
         {
             label: 'Preference',

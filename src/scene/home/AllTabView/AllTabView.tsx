@@ -3,10 +3,10 @@ import Typography from "@mui/material/Typography";
 import BlogPostTileSixColumn, {BlogService} from "../../../ui/blogPostSixColumn/BlogPostTileSixColumn";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import SeedTileBanner from "../../../ui/seed/SeedTileBanner";
+import QuestTileBanner from "../../../ui/quest/QuestTileBanner";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {SeedListItem} from "../HomeViewModelIF";
+import {QuestListItem} from "../HomeViewModelIF";
 import {HomeViewModel} from "../HomeViewModel";
 import {useRecoilState} from "recoil";
 import {profileState} from "../../../atoms/ProfileState";
@@ -33,7 +33,7 @@ const AllTabView = (props: AllTabViewProps) => {
     const viewModel = props.viewModel;
     const [profile] = useRecoilState(profileState);
     const navigate = useNavigate();
-    const [seedList, setSeedList] = useState<SeedListItem[]>([]);
+    const [questList, setQuestList] = useState<QuestListItem[]>([]);
     const [pickUp, setPickUp] = useState<TileInfoIF>(
         {
             title: '',
@@ -50,10 +50,10 @@ const AllTabView = (props: AllTabViewProps) => {
      */
     const loadSeedList = async (): Promise<void> => {
         console.log("===loadSeedList===");
-        await viewModel.fetchHotSeedList().then((response) => {
+        await viewModel.fetchHotQuestList().then((response) => {
             console.log("---------------------成功------------------------")
             console.log(response)
-            setSeedList(response.seedList);
+            setQuestList(response.questList);
         }).catch((error) => {
             console.log("---------------------失敗------------------------")
             console.log(error);
@@ -101,7 +101,7 @@ const AllTabView = (props: AllTabViewProps) => {
                 setPickUp({
                     title: response.seed.title,
                     description: response.seed.description,
-                    link: `seed/${response.seed.seedId}`,
+                    link: `quests/${response.seed.questId}`,
                     image: response.seed.imagePath.path,
                     ownerUid: response.seed.ownerUserUid,
                     ownerName: response.seed.ownerUserName,
@@ -127,7 +127,7 @@ const AllTabView = (props: AllTabViewProps) => {
     return (
         <Box>
             <Grid container spacing={2} className={"new-arrival-banner"}>
-                <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
+                <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12} paddingBottom={4}>
                     <Typography variant="h5" component="div">
                         ✨ NEW ARRIVAL
                     </Typography>
@@ -148,7 +148,7 @@ const AllTabView = (props: AllTabViewProps) => {
                                 さんの興味に基づく
                             </Typography>
                             <Typography variant="h5" component="div">
-                                🎁 PICK&nbsp;UP
+                                PICK&nbsp;UP
                             </Typography>
                         </Box>
                     </span>
@@ -158,19 +158,19 @@ const AllTabView = (props: AllTabViewProps) => {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={3} className={"seed-banner"}>
+            <Grid container spacing={3} className={"quest-banner"}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
                         {/*このシードがアツい！*/}
-                        🔥 HOT SEEDS !
+                        🔥 HOT QUESTS !
                     </Typography>
                     <Box textAlign={"end"} paddingRight={1}>
                         <Button variant="text" style={{color: "#fff"}} onClick={() => {
-                            navigate(`/seeds`)
+                            navigate(`/quests`)
                         }}>全て表示する</Button>
                     </Box>
                     <Grid xs={12} sm={12} md={12} lg={12}>
-                        <SeedTileBanner seedList={seedList}/>
+                        <QuestTileBanner questList={questList}/>
                     </Grid>
                 </Grid>
             </Grid>

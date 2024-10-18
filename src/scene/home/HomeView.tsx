@@ -2,21 +2,24 @@ import React, {useEffect, useState} from 'react';
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import {useRecoilState, useResetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";
 import {HomeViewModel} from "./HomeViewModel";
-import {SeedListItem} from "./HomeViewModelIF";
+import {QuestListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
 import BlogPostTileBanner from "../../ui/blogPost/BlogPostTileBanner";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
-import SeedTileBanner from "../../ui/seed/SeedTileBanner";
+import QuestTileBanner from "../../ui/quest/QuestTileBanner";
 import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import BlogPostTileSixColumn from "../../ui/blogPostSixColumn/BlogPostTileSixColumn";
 import AllTabView from "./AllTabView/AllTabView";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import {Switch} from "@mui/material";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
@@ -27,24 +30,24 @@ const HomeView = () => {
     const [profile, setProfile] = useRecoilState(profileState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
     const [viewModel] = useState<HomeViewModel>(homeViewModel);
-    const [seedList, setSeedList] = useState<SeedListItem[]>([])
+    const [questList, setQuestList] = useState<QuestListItem[]>([])
 
     const tabItems: TabItem[] = [
         {label: 'All'},
-        {label: 'Seed'},
+        {label: 'Quest'},
         {label: 'Blog'},
         {label: 'Goods'}
     ];
 
     /**
-     * seedリストの読み込み
+     * questリストの読み込み
      */
-    const loadSeedList = async (): Promise<void> => {
-        console.log("===loadSeedList===");
-        await viewModel.fetchSeedList(authState).then((response)=>{
+    const loadQuestList = async (): Promise<void> => {
+        console.log("===loadQuestList===");
+        await viewModel.fetchQuestList(authState).then((response)=>{
             console.log("---------------------成功------------------------")
             console.log(response)
-            setSeedList(response.seedList);
+            setQuestList(response.questList);
         }).catch((error)=>{
             console.log("---------------------失敗------------------------")
             console.log(error);
@@ -63,13 +66,27 @@ const HomeView = () => {
             }
         });
 
-        void loadSeedList();
+        void loadQuestList();
 
         return () => {
             // クリーンアップ
             viewModel.cleanUp()
         };
     }, []);
+
+    const [value, setValue] = React.useState(0);
+    const [isActiveOwnerMode, setIsActiveOwnerMode] = React.useState(false);
+    const questTabItemList = [{index: 0, label: '終了済み'}, {index: 1, label: '募集中'}];
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
+
+    function a11yProps(index: number) {
+        return {
+            id: `seededit-tab-${index}`,
+            'aria-controls': `seededit-tabpanel-${index}`,
+        };
+    }
 
     console.log(topTab.Home.selected.label);
     return (
@@ -84,7 +101,7 @@ const HomeView = () => {
                 <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
                     <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                         <Typography variant="h5" component="div">
-                            NEW ARRIVAL
+                            ✨ NEW ARRIVAL
                         </Typography>
                         <Box textAlign={"end"} paddingRight={1}>
                             <Button variant="text" style={{color:"#fff"}} onClick={() => {
@@ -98,21 +115,49 @@ const HomeView = () => {
                 </Grid>
             </Grid>
 
-            {/* Seed */}
-            <Grid container sx={{display: topTab.Home.selected.label === 'Seed' ? "block" : "none"}} spacing={2} className={"Seed"}>
-                <Grid container spacing={3} className={"seed-banner"} paddingBottom={5}>
+            {/* Quest */}
+            <Grid container sx={{display: topTab.Home.selected.label === 'Quest' ? "block" : "none"}} spacing={2}
+                  className={"Quest"}>
+                <Box width={"100%"} display={"flex"} paddingRight={4}>
+                    <Box width={"100%"} textAlign={"center"}>
+                        <Typography>{isActiveOwnerMode ? "OwnerMode" : "WorkerMode"}</Typography>
+                    </Box>
+                    <Box textAlign={"end"}>
+                        <Switch
+                            checked={isActiveOwnerMode}
+                            onChange={(event, checked) => {
+                                setIsActiveOwnerMode(!isActiveOwnerMode);
+                            }}
+                            name="IsPublishedAis"
+                            color="primary"
+                        />
+                    </Box>
+                </Box>
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                    {questTabItemList.map((item) => (
+                        <Tab sx={{width: '50%'}} key={item.index}
+                             label={item.label} {...a11yProps(item.index)} />
+                    ))}
+                </Tabs>
+                <Grid container spacing={3} className={"quest-banner"} paddingBottom={5}>
                     <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                         <Typography variant="h5" component="div">
                             {/*このシードがアツい！*/}
-                            Hot SEEDS !
+                            ⚡️ QUESTS
                         </Typography>
                         <Box textAlign={"end"} paddingRight={1}>
-                            <Button variant="text" style={{color:"#fff"}} onClick={() => {
-                                navigate(`/seeds`)
-                            }}>全て表示する</Button>
+                            {/*<Button variant="text" style={{color:"#fff"}} onClick={() => {*/}
+                            {/*    navigate(`/quests`)*/}
+                            {/*}}>全て表示する</Button>*/}
                         </Box>
                         <Grid xs={12} sm={12} md={12} lg={12} >
-                            <SeedTileBanner seedList={seedList}/>
+                            <QuestTileBanner questList={questList.filter((questItem) => {
+                                if (isActiveOwnerMode) {
+                                    return questItem.ownerUserUid === authState.uid
+                                } else {
+                                    return questItem.ownerUserUid !== authState.uid
+                                }
+                            })}/>
                         </Grid>
                     </Grid>
                 </Grid>
