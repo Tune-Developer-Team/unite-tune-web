@@ -114,7 +114,7 @@ const QuestView = () => {
             termsFrom: 0, // TODO: 仮
             termsTo: 0, // TODO: 仮
             hashTagStringList: '', // TODO: 仮
-            relationSeedIdList: JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
+            relationQuestIdList: JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
             mentionList: JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
 

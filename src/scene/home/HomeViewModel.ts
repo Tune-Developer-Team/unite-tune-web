@@ -60,7 +60,7 @@ export class HomeViewModel implements HomeViewModelIF {
             }
 
             const questListItem: QuestListItem = {
-                questId: item.SeedId,
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -110,7 +110,7 @@ export class HomeViewModel implements HomeViewModelIF {
             }
 
             const questListItem: QuestListItem = {
-                questId: item.SeedId,
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,
@@ -160,7 +160,7 @@ export class HomeViewModel implements HomeViewModelIF {
             }
 
             const questListItem: QuestListItem = {
-                questId: item.SeedId,
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,

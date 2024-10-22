@@ -21,7 +21,7 @@ const Portfolio = () => {
                     </Typography>
                     <br/>
                     <Typography>
-                        【開発中】<br/>自分が取り組んできたSeedの連動情報
+                        【開発中】<br/>自分が取り組んできたQuestの連動情報
                     </Typography>
                     <br/>
                     <Typography>

@@ -68,7 +68,7 @@ export class QuestListViewModel implements QuestListViewModelIF {
             }
 
             const questListItem: QuestListItem = {
-                questId: item.SeedId,
+                questId: item.QuestId,
                 title: item.Title,
                 description: item.Description,
                 ownerUserName: item.NickName,

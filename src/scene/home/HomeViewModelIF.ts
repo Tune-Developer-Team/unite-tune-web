@@ -29,7 +29,7 @@ export interface QuestListItem {
 
 export interface QuestTileApiResponseItemIF {
     ID: number
-    SeedId: string
+    QuestId: string
     Title: string
     OwnerUserUid: string
     Description: string

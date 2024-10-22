@@ -18,7 +18,7 @@ export interface SaveQuestParamIF {
     hashTagStringList: string;
     isPublished: boolean;
     description: string;
-    relationSeedIdList: string;
+    relationQuestIdList: string;
     title: string;
     mentionList: string;
     benefit: string;
