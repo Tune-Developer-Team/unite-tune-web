@@ -35,17 +35,6 @@ export class DrawerViewModel {
     /**
      *
      */
-    generateSeedId(): string {
-        // 新規作成の際のseedIdを生成 TODO: やっつけなのでちゃんと設計する
-        const date = Date();
-        const dateString = dayjs(date).format("YYYYMMDDhhmmss");
-        console.log(this.authState);
-        return this.authState.getUid() + dateString;
-    }
-
-    /**
-     *
-     */
     async addCustomUrl(param: { uid: string, urlString: string, textString: string }): Promise<AxiosResponse> {
         const endPoint = process.env.REACT_APP_ADD_CUSTOM_URL_API as string;
         const api = new Api(this.authState);

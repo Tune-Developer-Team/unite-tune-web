@@ -3,9 +3,12 @@ import {HomeViewModelIF, QuestTileApiResponseItemIF, QuestListItem} from "./Home
 import {Api} from "../../models/Api/Api";
 import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
+import dayjs from "dayjs";
+import {AxiosResponse} from "axios";
+import {SaveQuestParamIF} from "../Quest/QuestViewModel";
 
 export class HomeViewModel implements HomeViewModelIF {
-    protected authState: Authentication = Authentication.initAuthentication();
+    public authState: Authentication = Authentication.initAuthentication();
     public questList: QuestListItem[] = [];
 
     constructor() {
@@ -176,5 +179,34 @@ export class HomeViewModel implements HomeViewModelIF {
             message: result.data.message,
             seed: this.questList[0]
         };
+    }
+
+    /**
+     *
+     */
+    generateQuestId(): string {
+        // 新規作成の際のseedIdを生成 TODO: やっつけなのでちゃんと設計する
+        const date = Date();
+        const dateString = dayjs(date).format("YYYYMMDDhhmmss");
+        console.log(this.authState);
+        return this.authState.getUid() + dateString;
+    }
+
+    /**
+     * 新規作成・更新する
+     * // TODO: QUWSTのviewModelにもあるので、Model側で持たせるようにリファクタ
+     */
+    async saveQuest(saveQuestParam: SaveQuestParamIF): Promise<AxiosResponse> {
+
+        if (saveQuestParam.ownerUserUid !== this.authState.getUid()) {
+            throw Error("parameter is wrong 'ownerUserUd'.");
+        }
+
+        console.log("=========================================");
+        console.log(saveQuestParam);
+        console.log("=========================================");
+
+        const api = new Api(this.authState);
+        return await api.post({endPoint: `${endPoint.SEED}/${saveQuestParam.questId}`, body: saveQuestParam})
     }
 }
