@@ -10,11 +10,11 @@ export const endPoint = {
     PROFILE: `${baseUrl}/profiles`,
     UPLOAD_PROFILE_File: `${baseUrl}/profiles/files/upload`,
     REMOVE_PROFILE_File: `${baseUrl}/profiles/files/remove`,
-    // SEED
-    SEED: `${baseUrl}/seeds`,
-    SEED_TILE: `${baseUrl}/seed-tiles`,
+    // QUEST
+    SEED: `${baseUrl}/quests`,
+    SEED_TILE: `${baseUrl}/quest-tiles`,
     SAVE_SEED_AS_DRAFT: `${baseUrl}/save-as-draft`,
-    UPLOAD_SEED_IMAGE: `${baseUrl}/upload/seeds`,
+    UPLOAD_SEED_IMAGE: `${baseUrl}/upload/quests`,
     // THINK
     THINK_TIMELINE: `${baseUrl}/thinks-timeline`,
     THINK: `${baseUrl}/thinks`,
