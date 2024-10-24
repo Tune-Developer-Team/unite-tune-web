@@ -158,7 +158,6 @@ const ProfileView = () => {
                 <Grid xs={12} sm={12} md={12} lg={12}>
                     MyCurios
                     <Box>
-                        {/*{viewModel.profile.curios}*/}
                         {generateCuriosTagChips(viewModel.profile.curios)}
                     </Box>
                 </Grid>
@@ -325,41 +324,6 @@ const ProfileView = () => {
                             </Grid>
                             <Grid xs={12} sm={12} md={12} lg={12}>
                                 <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.2rem"}}>
-                                    {/*<TextField*/}
-                                    {/*    fullWidth*/}
-                                    {/*    required*/}
-                                    {/*    multiline*/}
-                                    {/*    rows={4}*/}
-                                    {/*    variant="standard"*/}
-                                    {/*    hiddenLabel*/}
-                                    {/*    defaultValue={viewModel.profile.curios}*/}
-                                    {/*    error={!!error} // エラー状態を反映*/}
-                                    {/*    helperText={error} // エラーメッセージを表示*/}
-                                    {/*    onChange={(event) => {*/}
-                                    {/*        const inputValue = event.target.value;*/}
-
-                                    {/*        // タグを分割して処理*/}
-                                    {/*        const allTags = inputValue*/}
-                                    {/*            .split(',')*/}
-                                    {/*            .map(tag => tag.trim()); // 空白を取り除く*/}
-
-                                    {/*        // ハッシュタグのフォーマットを満たすもののみ抽出*/}
-                                    {/*        const validTags = allTags.filter(tag => tag.startsWith('#') && tag.length > 1);*/}
-
-                                    {/*        // ハッシュタグのフォーマットを満たしていないものをチェック*/}
-                                    {/*        const invalidTagsExist = allTags.some(tag => !tag.startsWith('#') || tag.length <= 1);*/}
-
-                                    {/*        if (invalidTagsExist) {*/}
-                                    {/*            // 無効な入力が存在する場合*/}
-                                    {/*            setError('無効なタグがあります: タグは「#」で始まり、1文字以上の長さが必要です。');*/}
-                                    {/*        } else {*/}
-                                    {/*            // 無効なタグがない場合はエラーをクリアし、プロフィールを更新*/}
-                                    {/*            setError(null);*/}
-                                    {/*            newProfile.curios = Array.from(new Set(validTags)); // 重複を排除*/}
-                                    {/*            setNewProfile(newProfile);*/}
-                                    {/*        }*/}
-                                    {/*    }}*/}
-                                    {/*/>*/}
                                     <CuriosTagInput tags={newTags} setTags={setNewTags} />
                                 </Box>
                             </Grid>

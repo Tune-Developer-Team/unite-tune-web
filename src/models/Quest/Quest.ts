@@ -22,7 +22,7 @@ export interface QuestDetailIF {
     termsFrom: string
     termsTo: string
     relationQuestIdList: string[]
-    hashTagStringList: hashTagString[]
+    hashTagStringList: string[]
     imagePathList: ImagePath[]
     mentionList: Mention[]
 }
@@ -37,7 +37,7 @@ export interface QuestDetailApiResponseIF {
     Title: string;
     MentionList: Mention[];
     Benefit: string;
-    HashTagList: hashTagString[];
+    HashTagList: string;
     QuestId: string
     OwnerUserUid: string
     OwnerUserName: string
@@ -57,7 +57,7 @@ export class QuestDetail {
     public termsFrom: string
     public termsTo: string
     public relationQuestIdList: string[]
-    public hashTagStringList: hashTagString[]
+    public hashTagStringList: string[]
     public imagePathList: ImagePath[]
     public mentionList: Mention[]
 
@@ -101,6 +101,18 @@ export class QuestDetail {
             return ImagePath.create({alt: imagePath.alt, path: imagePath.path});
         });
 
+        let curiosTags:string[] = [];
+        if (apiResponse.HashTagList !== "") {
+            curiosTags = Array.from(
+                new Set(
+                    apiResponse.HashTagList
+                        .split(',')
+                        .map(tag => tag.trim()) // 空白を取り除く
+                        .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
+                )
+            );
+        }
+
         const input: QuestDetailIF = {
             questId: apiResponse.QuestId,
             ownerUserUid: apiResponse.OwnerUserUid,
@@ -113,7 +125,7 @@ export class QuestDetail {
             termsFrom: apiResponse.TermsFrom,
             termsTo: apiResponse.TermsTo,
             relationQuestIdList: apiResponse.RelationQuestIdList,
-            hashTagStringList: apiResponse.HashTagList,
+            hashTagStringList: curiosTags,
             imagePathList: imagePathList,
             mentionList: apiResponse.MentionList
         }
@@ -140,42 +152,6 @@ export class QuestDetail {
             hashTagStringList: [],
             imagePathList: [],
             mentionList: []
-        }
-
-        return new QuestDetail(input);
-    }
-
-    /**
-     * ファクトリメソッド
-     */
-    createFromAPIResponse(apiResponse: QuestDetailApiResponseIF
-    ): QuestDetail {
-
-        const imagePathJson = JSON.parse(apiResponse.ImagePathList)
-        const imagePathList: ImagePath[] = imagePathJson.map((imagePath: { alt: string, path: string }) => {
-            return ImagePath.create({alt: imagePath.alt, path: imagePath.path});
-        });
-
-        apiResponse.HashTagList = ['#tag1','#tag2','#tag3']; // TODO: JSONを配列に変換
-        apiResponse.OwnerUserName = '山田 太郎'; // TODO: バックエンドが未実装
-
-
-
-        const input: QuestDetailIF = {
-            questId: apiResponse.QuestId,
-            ownerUserUid: apiResponse.OwnerUserUid,
-            ownerUserName: apiResponse.OwnerUserName,
-            isPublished: apiResponse.IsPublished,
-            updatedAt: apiResponse.UpdatedAt,
-            title: apiResponse.Title,
-            description: apiResponse.Description,
-            benefit: apiResponse.Benefit,
-            termsFrom: apiResponse.TermsFrom,
-            termsTo: apiResponse.TermsTo,
-            relationQuestIdList: apiResponse.RelationQuestIdList,
-            hashTagStringList: apiResponse.HashTagList,
-            imagePathList: imagePathList,
-            mentionList: apiResponse.MentionList
         }
 
         return new QuestDetail(input);

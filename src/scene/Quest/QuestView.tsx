@@ -25,6 +25,8 @@ import {ImageUploadForm} from "../seedEdit/ImageUploadForm";
 import {endPoint} from "../../consts/api";
 import IconButton from "@mui/material/IconButton";
 import {Api} from "../../models/Api/Api";
+import generateCuriosTagChips from "../../ui/curiosTag/CuriosTagChips";
+import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
 const questViewModel = new QuestViewModel();
 
@@ -56,6 +58,7 @@ const QuestView = () => {
     // const [newIconImage, setNewIconImage] = useState<ImagePath | null>(null) // TODO: 画像未実装
     const [isShowDetailSetting, setIsShowDetailSetting] = useState<boolean>(false)
     const [imagePathList, setImagePathList] = useState<ImagePath[]>([]);
+    const [newTags, setNewTags] = useState<string[]>([]);
 
     // ファイル変更時に受け取るコールバック関数
     const handleFileChange = async (imagePath: ImagePath) => {
@@ -113,7 +116,7 @@ const QuestView = () => {
             imagePathList: JSON.stringify(model.imagePathList),
             termsFrom: 0, // TODO: 仮
             termsTo: 0, // TODO: 仮
-            hashTagStringList: '', // TODO: 仮
+            hashTagStringList: JSON.stringify(model.hashTagStringList),
             relationQuestIdList: JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
             mentionList: JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
@@ -216,6 +219,15 @@ const QuestView = () => {
                     </Box>
                 </Grid>
 
+                {/*CuriosTags*/}
+                <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
+                    <Box sx={{textAlign: "start"}}>
+                        <Typography>
+                            {generateCuriosTagChips(newQuestDetail.hashTagStringList)}
+                        </Typography>
+                    </Box>
+                </Grid>
+
                 {/*RelationalUser*/}
                 <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12} paddingTop={4}>
                     <Typography fontSize={"1.3rem"}>
@@ -286,6 +298,9 @@ const QuestView = () => {
                         if (imagePathList.length > 0) {
                             Object.assign(newQuestDetail.imagePathList, imagePathList)
                         }
+
+                        // キュリオスタグの更新
+                        newQuestDetail.hashTagStringList = newTags
 
                         // モデルインスタンスの更新
                         setNewQuestDetail(newQuestDetail);
@@ -403,6 +418,13 @@ const QuestView = () => {
                                     </IconButton>
                                 </Box>
                             ))}
+                        </Box>
+                    </Grid>
+
+                    <Grid xs={12} sm={12} md={12} lg={12} paddingBottom={4}>
+                        {/*TODO: CuriosTag設定実装*/}
+                        <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.2rem"}}>
+                            <CuriosTagInput tags={newTags} setTags={setNewTags}/>
                         </Box>
                     </Grid>
 
