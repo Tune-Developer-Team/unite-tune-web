@@ -7,7 +7,7 @@ export interface ProfileIF {
     nickName: string
     iconImage: ImagePath
     description: string
-    curios: string
+    curios: string[]
     curiosValue: number
     curiosDirection: CuriosDirectionType
     isPublishedAis: boolean
@@ -20,7 +20,7 @@ export interface ProfileApiResponseIF {
     NickName: string
     IconImage: string
     Description: string
-    Curios: string
+    CuriosTags: string
     CuriosValue: number
     CuriosDirection: number
     IsPublishedAis: boolean
@@ -33,7 +33,7 @@ export default class Profile {
     public nickName: string
     public iconImage: ImagePath
     public description: string
-    public curios: string
+    public curios: string[]
     public curiosValue: number
     public curiosDirection: CuriosDirectionType
     public isPublishedAis: boolean
@@ -61,7 +61,7 @@ export default class Profile {
             nickName: '',
             iconImage: ImagePath.create({path: '', alt: ''}),
             description: "",
-            curios: "",
+            curios: [],
             curiosValue: 0,
             curiosDirection: CURIOS_DIRECTION.find(item => item.kind === 0)!,
             isPublishedAis: false,
@@ -107,9 +107,23 @@ export default class Profile {
             iconImage = JSON.parse(apiResponse.IconImage);
         }
 
+        let curiosTags:string[] = [];
+        if (apiResponse.CuriosTags !== "") {
+            curiosTags = Array.from(
+                new Set(
+                    apiResponse.CuriosTags
+                        .split(',')
+                        .map(tag => tag.trim()) // 空白を取り除く
+                        .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
+                )
+            );
+        }
+        console.log(apiResponse.CuriosTags)
+        console.log(curiosTags)
+
         this.nickName = apiResponse.NickName ?? "undefined user";
         this.description = apiResponse.Description ?? "";
-        this.curios = apiResponse.Curios ?? "";
+        this.curios = curiosTags;
         this.curiosValue = apiResponse.CuriosValue ?? 0;
         this.curiosDirection = CURIOS_DIRECTION.find(item => item.kind === curiosDirectionKind)!;
         this.iconImage = ImagePath.create({

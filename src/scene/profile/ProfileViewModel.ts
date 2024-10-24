@@ -30,10 +30,7 @@ export class ProfileViewModel implements ProfileViewModelIF {
     async fetchUserProfile(uid: string): Promise<void> {
         console.log("fetchUserProfile");
         const profileApiResponse = await this.profile.fetchModel(uid, this.authState.accessToken);
-        console.log(profileApiResponse.NickName);
-        console.log(profileApiResponse.IconImage);
         this.profile.setFromAPIResponse(profileApiResponse);
-        console.log(this.profile.nickName);
     }
 
     getProfile():Profile {
@@ -51,7 +48,7 @@ export class ProfileViewModel implements ProfileViewModelIF {
             nickName:newProfile.nickName,
             description:newProfile.description,
             iconImage: newProfile.iconImage.path !== "" ? JSON.stringify(newProfile.iconImage) : null,
-            curios:newProfile.curios,
+            curiosTagSentenceList: JSON.stringify(newProfile.curios),
             curiosValue:newProfile.curiosValue,
             curiosDirection:newProfile.curiosDirection.kind,
             isPublishedAis:newProfile.isPublishedAis,
