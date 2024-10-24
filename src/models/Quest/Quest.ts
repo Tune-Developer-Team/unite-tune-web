@@ -37,7 +37,7 @@ export interface QuestDetailApiResponseIF {
     Title: string;
     MentionList: Mention[];
     Benefit: string;
-    HashTagList: string;
+    CuriosTags: string;
     QuestId: string
     OwnerUserUid: string
     OwnerUserName: string
@@ -95,17 +95,16 @@ export class QuestDetail {
     }
 
     async setFromAPIResponse(apiResponse: QuestDetailApiResponseIF): Promise<QuestDetail> {
-
         const imagePathJson = JSON.parse(apiResponse.ImagePathList)
         const imagePathList: ImagePath[] = imagePathJson.map((imagePath: { alt: string, path: string }) => {
             return ImagePath.create({alt: imagePath.alt, path: imagePath.path});
         });
 
         let curiosTags:string[] = [];
-        if (apiResponse.HashTagList !== "") {
+        if (apiResponse.CuriosTags !== "") {
             curiosTags = Array.from(
                 new Set(
-                    apiResponse.HashTagList
+                    apiResponse.CuriosTags
                         .split(',')
                         .map(tag => tag.trim()) // 空白を取り除く
                         .filter(tag => tag && tag !== '#') // 空文字や # のみを除外

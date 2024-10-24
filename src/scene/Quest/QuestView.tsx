@@ -109,14 +109,15 @@ const QuestView = () => {
         const saveQuestParam: SaveQuestParamIF = {
             questId: questId,
             ownerUserUid: authState.uid as string,
-            isPublished: model.isPublished,
+            isPublished: true,
             title: model.title,
             description: model.description,
             benefit: model.benefit,
             imagePathList: JSON.stringify(model.imagePathList),
             termsFrom: 0, // TODO: 仮
             termsTo: 0, // TODO: 仮
-            hashTagStringList: JSON.stringify(model.hashTagStringList),
+            curiosTagSentenceList: JSON.stringify(newTags),
+            // curiosTagSentenceList: JSON.stringify(["#a","#d"]),
             relationQuestIdList: JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
             mentionList: JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
@@ -283,10 +284,10 @@ const QuestView = () => {
                 <Box display={"flex"} paddingBottom={4}>
                     <Typography width={"100%"} textAlign={"start"} color={"#f6f6f6"} onClick={async () => {
 
-                        // SPEC: タイトルが空のままでは閉じさせない
-                        if (newQuestDetail.title == '') {
-                            return
-                        }
+                        // // SPEC: タイトルが空のままでは閉じさせない
+                        // if (newQuestDetail.title == '') {
+                        //     return
+                        // }
                         toggleDrawer(false);
                     }
                     } sx={{font: 'bold'}}>
@@ -421,8 +422,8 @@ const QuestView = () => {
                         </Box>
                     </Grid>
 
+                    {/*CuriosTag*/}
                     <Grid xs={12} sm={12} md={12} lg={12} paddingBottom={4}>
-                        {/*TODO: CuriosTag設定実装*/}
                         <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.2rem"}}>
                             <CuriosTagInput tags={newTags} setTags={setNewTags}/>
                         </Box>

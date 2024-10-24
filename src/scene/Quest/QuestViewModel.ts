@@ -15,7 +15,7 @@ export interface SaveQuestParamIF {
     imagePathList: string;
     termsFrom: number;
     termsTo: number;
-    hashTagStringList: string;
+    curiosTagSentenceList: string;
     isPublished: boolean;
     description: string;
     relationQuestIdList: string;

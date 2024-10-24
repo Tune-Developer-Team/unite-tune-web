@@ -34,22 +34,29 @@ import {QuestDetail} from "../../models/Quest/Quest";
 import {Api} from "../../models/Api/Api";
 import {SaveQuestParamIF} from "../Quest/QuestViewModel";
 import {FileUploadForm} from "../Quest/FileUploadForm";
+import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
 const homeViewModel = new HomeViewModel();
 const HomeView = () => {
     const navigate = useNavigate();
 
+    // グローバル
     const [navigation, setNavigation] = useRecoilState(navigationState);
     const [authState, setAuthentication] = useRecoilState(authenticationState);
     const [profile, setProfile] = useRecoilState(profileState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
+
+    // UI
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [viewModel] = useState<HomeViewModel>(homeViewModel);
+
+    // QUEST作成
     const [questList, setQuestList] = useState<QuestListItem[]>([]);
     const [newQuestDetail, setNewQuestDetail] = useState<QuestDetail>(QuestDetail.initQuestDetail());
     const [newQuestId, setNewQuestId] = useState<string>(viewModel.generateQuestId());
     const [isShowDetailSetting, setIsShowDetailSetting] = useState<boolean>(false);
     const [imagePathList, setImagePathList] = useState<ImagePath[]>([]);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [newTags, setNewTags] = useState<string[]>([]);
 
     const tabItems: TabItem[] = [
         {label: 'All'},
@@ -79,14 +86,14 @@ const HomeView = () => {
         const saveQuestParam: SaveQuestParamIF = {
             questId: newQuestId,
             ownerUserUid: authState.uid as string,
-            isPublished: model.isPublished,
+            isPublished: true,
             title: model.title,
             description: model.description,
             benefit: model.benefit,
             imagePathList: JSON.stringify(model.imagePathList),
             termsFrom: 0, // TODO: 仮
             termsTo: 0, // TODO: 仮
-            hashTagStringList: '', // TODO: 仮
+            curiosTagSentenceList: JSON.stringify(newTags),
             relationQuestIdList: JSON.stringify([]), // TODO: 未実装_関連するSeedを指定する機能
             mentionList: JSON.stringify([]) // TODO: 未実装_メンション_ユーザーにメンションできる機能
         };
@@ -345,6 +352,13 @@ const HomeView = () => {
                                                 setNewQuestDetail(newQuestDetail);
                                             }}
                                         />
+                                    </Box>
+                                </Grid>
+
+                                {/*CuriosTag*/}
+                                <Grid xs={12} sm={12} md={12} lg={12} paddingBottom={4}>
+                                    <Box sx={{backgroundColor: "#3d3f41", borderRadius: "0.2rem"}}>
+                                        <CuriosTagInput tags={newTags} setTags={setNewTags}/>
                                     </Box>
                                 </Grid>
 
