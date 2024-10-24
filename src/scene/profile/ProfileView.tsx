@@ -113,24 +113,24 @@ const ProfileView = () => {
             <Loader/>
             <Grid container spacing={2} className={"header"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
-                    <Box width={"100%"} display={"flex"} paddingBottom={2} position="relative">
+                    <Box width={"100%"} display={"flex"} paddingBottom={0} position="relative">
                         {/* 親要素を相対位置に設定 */}
                         <Box position="relative" width={100} height={100}>
                             {/* Gaugeを絶対位置に設定し、Avatarに沿わせる */}
                             <Gauge
-                                width={140}
-                                height={140}
+                                width={116}
+                                height={116}
                                 value={viewModel.profile.curiosValue}
                                 sx={{
                                     position: 'absolute',
-                                    top: -19,
-                                    left: -19
+                                    top: -18,
+                                    left: -18
                                 }}
                             />
                             <Avatar
                                 alt="userIcon"
                                 src={viewModel.profile.iconImage.path}
-                                sx={{width: 100, height: 100, position: 'relative', zIndex: 1}} // Avatarを上に表示
+                                sx={{width: 80, height: 80, position: 'relative', zIndex: 1}} // Avatarを上に表示
                                 onClick={() => {
                                     console.log("ユーザー");
                                 }}
@@ -159,12 +159,6 @@ const ProfileView = () => {
                     MyCurios
                     <Box>
                         {generateCuriosTagChips(viewModel.profile.curios)}
-                    </Box>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12}
-                      sx={{display: viewModel.profile.isPublishedAis ? "block" : "none"}}>
-                    <Box>
-                        AIS：&nbsp;&nbsp;{"🚧開発中🚧"}
                     </Box>
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12} sx={{display: viewModel.profile.isShowMbti ? "block" : "none"}}>
@@ -412,6 +406,35 @@ const ProfileView = () => {
                                     <MenuItem value={"建築家(INTJ-T)"}>建築家(INTJ-T)</MenuItem>
                                     <MenuItem value={"論理学者(INTP-A)"}>論理学者(INTP-A)</MenuItem>
                                     <MenuItem value={"論理学者(INTP-T)"}>論理学者(INTP-T)</MenuItem>
+                                    <MenuItem value={"指揮官(ENTJ-A)"}>指揮官(ENTJ-A)</MenuItem>
+                                    <MenuItem value={"指揮官(ENTJ-T)"}>指揮官(ENTJ-T)</MenuItem>
+                                    <MenuItem value={"討論者(ENTP-A)"}>討論者(ENTP-A)</MenuItem>
+                                    <MenuItem value={"討論者(ENTP-T)"}>討論者(ENTP-T)</MenuItem>
+                                    <MenuItem value={"提唱者(INFJ-A)"}>提唱者(INFJ-A)</MenuItem>
+                                    <MenuItem value={"提唱者(INFJ-T)"}>提唱者(INFJ-T)</MenuItem>
+                                    <MenuItem value={"仲介者(INFP-A)"}>仲介者(INFP-A)</MenuItem>
+                                    <MenuItem value={"仲介者(INFP-T)"}>仲介者(INFP-T)</MenuItem>
+                                    <MenuItem value={"主人公(ENFJ-A)"}>主人公(ENFJ-A)</MenuItem>
+                                    <MenuItem value={"主人公(ENFJ-T)"}>主人公(ENFJ-T)</MenuItem>
+                                    <MenuItem value={"広報運動家(ENFP-A)"}>広報運動家(ENFP-A)</MenuItem>
+                                    <MenuItem value={"広報運動家(ENFP-T)"}>広報運動家(ENFP-T)</MenuItem>
+                                    <MenuItem value={"管理者(ISTJ-A)"}>管理者(ISTJ-A)</MenuItem>
+                                    <MenuItem value={"管理者(ISTJ-T)"}>管理者(ISTJ-T)</MenuItem>
+                                    <MenuItem value={"擁護者(ISFJ-A)"}>擁護者(ISFJ-A)</MenuItem>
+                                    <MenuItem value={"擁護者(ISFJ-T)"}>擁護者(ISFJ-T)</MenuItem>
+                                    <MenuItem value={"巨匠(ISTP-A)"}>巨匠(ISTP-A)</MenuItem>
+                                    <MenuItem value={"巨匠(ISTP-T)"}>巨匠(ISTP-T)</MenuItem>
+                                    <MenuItem value={"冒険者(ISFP-A)"}>冒険者(ISFP-A)</MenuItem>
+                                    <MenuItem value={"冒険者(ISFP-T)"}>冒険者(ISFP-T)</MenuItem>
+                                    <MenuItem value={"幹部(ESTJ-A)"}>幹部(ESTJ-A)</MenuItem>
+                                    <MenuItem value={"幹部(ESTJ-T)"}>幹部(ESTJ-T)</MenuItem>
+                                    <MenuItem value={"領事(ESFJ-A)"}>領事(ESFJ-A)</MenuItem>
+                                    <MenuItem value={"領事(ESFJ-T)"}>領事(ESFJ-T)</MenuItem>
+                                    <MenuItem value={"起業家(ESTP-A)"}>起業家(ESTP-A)</MenuItem>
+                                    <MenuItem value={"起業家(ESTP-T)"}>起業家(ESTP-T)</MenuItem>
+                                    <MenuItem value={"エンターテイナー(ESFP-A)"}>エンターテイナー(ESFP-A)</MenuItem>
+                                    <MenuItem value={"エンターテイナー(ESFP-T)"}>エンターテイナー(ESFP-T)</MenuItem>
+
                                 </Select>
                             </Grid>
                         </Grid>
