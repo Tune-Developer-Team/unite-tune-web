@@ -21,6 +21,7 @@ import {v4 as uuidv4} from 'uuid';
 import AddIcon from '@mui/icons-material/Add';
 import CustomTabs from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
+import {useNavigate} from "react-router-dom";
 
 const timeLineViewModel = new TimeLineViewModel();
 
@@ -33,6 +34,7 @@ const TimeLineView = () => {
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft | null>(null);
     const [thinkId, setThinkId] = useState<string>("")
     const [isPublished, setIsPublished] = useState<boolean>(false)
+    const navigate = useNavigate();
 
     /**
      * ThinkIdをリセットする
@@ -336,7 +338,7 @@ const TimeLineView = () => {
                                 <CardContent sx={{paddingTop: 2}}>
                                     <CardMedia sx={{textAlign: "start"}}>
                                         <Box sx={{display: "flex",  padding:0}} onClick={() => {
-                                            console.log('この人のプロフィールへ飛ぶ')
+                                            navigate(`/user/${think.ownerUserUid}`)
                                         }}>
                                             <Box sx={{display: "flex"}}>
                                                 <Avatar src={think.userIconImagePath.path} alt={'user_icon_image'}/>
