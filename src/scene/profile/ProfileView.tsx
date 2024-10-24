@@ -23,8 +23,8 @@ import Loader from "../../ui/loading/Loader";
 import CustomTabs from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import threeDModel from "../crappy/crappy.png";
-import generateCuriosTagChips from "./CuriosTagChips";
-import CuriosTagInput from "./CuriosTagInput";
+import generateCuriosTagChips from "../../ui/curiosTag/CuriosTagChips";
+import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
 const profileViewModel = new ProfileViewModel();
 
