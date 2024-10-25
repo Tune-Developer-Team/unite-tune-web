@@ -8,11 +8,11 @@ import {AxiosResponse} from "axios";
 import {SaveQuestParamIF} from "../Quest/QuestViewModel";
 
 export class HomeViewModel implements HomeViewModelIF {
-    public authState: Authentication = Authentication.initAuthentication();
     public questList: QuestListItem[] = [];
+    private readonly authState: Authentication;
 
-    constructor() {
-        console.log('====================SignInViewModel_called====================');
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
     }
 
     /**
@@ -22,7 +22,14 @@ export class HomeViewModel implements HomeViewModelIF {
     async setUp(argument: { authentication: AuthenticationArgumentIF }): Promise<void> {
         console.log('====================TimeLineViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
-        await this.fetchQuestList(this.authState)
+        await this.fetchQuestList();
+    }
+
+    /**
+     * APIを生成。後で消す。
+     */
+    generateApi(): Api {
+        return new Api(this.authState);
     }
 
     /**
@@ -34,10 +41,9 @@ export class HomeViewModel implements HomeViewModelIF {
 
     /**
      * Questを取得
-     * @param authentication
      */
-    async fetchQuestList(authentication: Authentication): Promise<{ message: string, questList: QuestListItem[] }> {
-        const api = new Api(authentication);
+    async fetchQuestList(): Promise<{ message: string, questList: QuestListItem[] }> {
+        const api = new Api(this.authState);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;

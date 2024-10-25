@@ -115,6 +115,12 @@ export class ThinkDraft {
     async saveThink(auth: Authentication) {
         const api = new Api(auth);
 
+        if(auth.getUid() === "" || undefined){
+            throw Error("uid is wrong.")
+        }
+
+        const uid = auth.getUid();
+
         const body = {
             thinkId: this.thinkId,
             thinkUserName: this.thinkUserName,
@@ -125,7 +131,7 @@ export class ThinkDraft {
             mentionList: JSON.stringify(this.mentionList),
             imagePathList: JSON.stringify(this.imagePathList),
             isPublished: this.isPublished,
-            ownerUserUid: this.ownerUserUid
+            ownerUserUid: uid
         }
 
         return await api.post({endPoint: endPoint.THINK, body: body})

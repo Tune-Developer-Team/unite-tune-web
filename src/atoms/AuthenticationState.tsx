@@ -1,13 +1,20 @@
-import { recoilPersist } from 'recoil-persist'
-import { atom } from 'recoil'
-const { persistAtom } = recoilPersist()
+import { recoilPersist } from 'recoil-persist';
+import { atom } from 'recoil';
 
-export const authenticationState = atom({
-    key: 'authentication' ,
+const { persistAtom } = recoilPersist();
+
+export interface AuthenticationStateIF {
+    accessToken: string;
+    uid: string;
+    email: string;
+}
+
+export const authenticationState = atom<AuthenticationStateIF>({
+    key: 'authentication',
     default: {
-        uid:'',
-        credential:'',
-        token:''
+        accessToken: '',
+        uid: '',
+        email: ''
     },
     effects_UNSTABLE: [persistAtom]
 });

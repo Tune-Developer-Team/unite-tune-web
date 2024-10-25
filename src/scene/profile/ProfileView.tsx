@@ -13,7 +13,6 @@ import Avatar from "@mui/material/Avatar";
 import Drawer from '@mui/material/Drawer';
 import {Gauge} from "@mui/x-charts";
 import {MenuItem, Select, SelectChangeEvent, Switch, TextField} from "@mui/material";
-import {ImageUploadForm} from "../seedEdit/ImageUploadForm";
 import {endPoint} from "../../consts/api";
 import CURIOS_DIRECTION from "../../consts/curiosDirection";
 import ImagePath from "../../models/data/ImagePath";
@@ -25,20 +24,19 @@ import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import threeDModel from "../crappy/crappy.png";
 import generateCuriosTagChips from "../../ui/curiosTag/CuriosTagChips";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
-
-const profileViewModel = new ProfileViewModel();
+import {ImageUploadForm} from "./ImageUploadForm";
 
 const ProfileView = () => {
     // グローバルオブジェクト
-    const [globalProfile, setGlobalProfile] = useRecoilState<Profile>(profileState)
     const [authState] = useRecoilState(authenticationState);
+    const [globalProfile, setGlobalProfile] = useRecoilState<Profile>(profileState)
     const [loading, setLoading] = useRecoilState(loaderState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
 
     // ViewModel
     const params = useParams();
     const uid = params.uid as string;
-    const [viewModel, setViewModel] = useState<ProfileViewModel>(profileViewModel);
+    const [viewModel, setViewModel] = useState<ProfileViewModel>(new ProfileViewModel(authState));
 
     // UI
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -272,7 +270,7 @@ const ProfileView = () => {
                                         }}
                                     >
                                         <ImageUploadForm onFileChange={handleFileChange}
-                                                         folderName={viewModel.authState.getUid()}
+                                                         folderName={viewModel.generateFolderName()}
                                                          uploadEndPoint={endPoint.UPLOAD_PROFILE_File}/>
                                     </Box>
                                 </Box>

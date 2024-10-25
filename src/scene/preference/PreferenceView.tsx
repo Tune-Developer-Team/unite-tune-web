@@ -1,25 +1,28 @@
 import React, {useEffect, useState} from 'react';
 
-import {useRecoilState} from "recoil";
+import {useRecoilState, useResetRecoilState} from "recoil";
 import {Button, Switch, TextField} from "@mui/material";
-import {authenticationState} from "../../atoms/AuthenticationState";
+import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import {TuneCard} from "../../models/TuneCard/TuneCard";
 import {tuneCardState} from "../../atoms/TuneCardState";
 import {dblogState} from "../../atoms/dblogState";
 import Box from "@mui/material/Box";
+import Authentication from "../../models/Authentication/Authentication";
 
 const PreferenceView: React.FunctionComponent = () => {
-    const [authentication, setAuthentication] = useRecoilState(authenticationState);
+    const [authState, setAuthState] = useRecoilState(authenticationState);
     const [tuneCard, setTuneCard] = useRecoilState<TuneCard>(tuneCardState);
 
     // dblog連携
     const [dblog, setDblog] = useRecoilState(dblogState);
 
+    const googleLogout = useResetRecoilState(authenticationState);
+
     const signOut = (): void => {
-        // googleLogout();
-        setAuthentication({uid: ''});
+        // ユーザーの認証情報のストアを更新
+        googleLogout();
     }
 
     useEffect(() => {
@@ -35,7 +38,7 @@ const PreferenceView: React.FunctionComponent = () => {
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                 UID :
                 <Typography variant="body2" component="div">
-                    {authentication.uid}
+                    {authState.uid}
                 </Typography>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
@@ -47,7 +50,7 @@ const PreferenceView: React.FunctionComponent = () => {
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                 GoogleAccount :
                 <Typography variant="body2" component="div">
-                    {authentication.email}
+                    {authState.email}
                 </Typography>
             </Grid>
             <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>

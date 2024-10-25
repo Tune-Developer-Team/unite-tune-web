@@ -36,7 +36,6 @@ import {SaveQuestParamIF} from "../Quest/QuestViewModel";
 import {FileUploadForm} from "../Quest/FileUploadForm";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
-const homeViewModel = new HomeViewModel();
 const HomeView = () => {
     const navigate = useNavigate();
 
@@ -48,7 +47,7 @@ const HomeView = () => {
 
     // UI
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [viewModel] = useState<HomeViewModel>(homeViewModel);
+    const [viewModel] = useState<HomeViewModel>(new HomeViewModel(authState));
 
     // QUEST作成
     const [questList, setQuestList] = useState<QuestListItem[]>([]);
@@ -70,7 +69,7 @@ const HomeView = () => {
      */
     const loadQuestList = async (): Promise<void> => {
         console.log("===loadQuestList===");
-        await viewModel.fetchQuestList(authState).then((response)=>{
+        await viewModel.fetchQuestList().then((response)=>{
             console.log("---------------------成功------------------------")
             console.log(response)
             setQuestList(response.questList);
@@ -138,7 +137,7 @@ const HomeView = () => {
 
     // 画像削除処理
     const handleImageDelete = async (index: number, imagePath: ImagePath) => {
-        const api = new Api(viewModel.authState);
+        const api = viewModel.generateApi();
         try {
             const objectName = imagePath.getGCSObjectName();
 
@@ -243,9 +242,11 @@ const HomeView = () => {
                         <Grid xs={12} sm={12} md={12} lg={12} >
                             <QuestTileBanner questList={questList.filter((questItem) => {
                                 if (isActiveOwnerMode) {
+                                    // TODO: 実装
                                     return questItem.ownerUserUid === authState.uid
                                 } else {
-                                    return questItem.ownerUserUid !== authState.uid
+                                    // TODO: 実装
+                                    return questItem.ownerUserUid !== authState.email
                                 }
                             })}/>
                         </Grid>

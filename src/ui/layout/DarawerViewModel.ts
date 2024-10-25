@@ -1,17 +1,15 @@
-import Authentication from "../../models/Authentication/Authentication";
-import dayjs from "dayjs";
+import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import Profile, {ProfileIF} from "../../models/Profile/Profile";
 import {Api} from "../../models/Api/Api";
 import {AxiosResponse} from "axios";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 
 export class DrawerViewModel {
-    public authState: Authentication = Authentication.initAuthentication();
     public profile: Profile = Profile.initProfile();
     public customUrlList: CustomUrl[] = [];
-    constructor(
-    ) {
-        console.log('====================DrawerViewModel_called====================');
+    public authState: Authentication;
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
     }
 
     /**

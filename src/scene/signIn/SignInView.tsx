@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {useRecoilState} from "recoil";
 import swal from "sweetalert";
-import {authenticationState} from "../../atoms/AuthenticationState";
+import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
 import Box from "@mui/material/Box";
 import GoogleAuthenticationButton from "./authorization/google/GoogleAuthenticationButton";
 import {profileState} from "../../atoms/ProfileState";
 import {SignInViewModel} from "./SignInViewModel";
 import {navigationState} from "../../atoms/NavigationState";
+import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 
 const languageLocale = 'ja';
 const explainJa = <span>Googleアカウントでサインインしてください.</span>
 const explainEn = <span>Please sign in with your Google account.</span>
 const signUp = languageLocale === 'ja' ? 'サインイン' : 'please sign in.';
-
-const signInViewModel = new SignInViewModel();
 
 const redirectUriSignIn = process.env.REACT_APP_GOOGLE_REDIRECT_URI_SIGNIN as string;
 
@@ -25,7 +24,7 @@ const SignInView: () => JSX.Element = () => {
     const [profile, setProfile] = useRecoilState(profileState);
     const [navigation, setNavigation] = useRecoilState(navigationState);
     const [googleOneTimeCode, setGoogleOneTimeCode] = useState(code);
-    const [viewModel] = useState<SignInViewModel>(signInViewModel);
+    const [viewModel, setViewModel] = useState<SignInViewModel>(new SignInViewModel(authState));
 
     // ログイン中はホームへ遷移する
     console.log(authState);
@@ -53,11 +52,14 @@ const SignInView: () => JSX.Element = () => {
                     console.log('成功', res);
 
                     // ユーザーの認証情報のストアを更新
-                    setAuthentication({
-                        uid: response.data.data.uid,
+                    // TODO:認証クラスに持たせる
+                    const responseData: AuthenticationStateIF = {
                         accessToken: response.data.data.access_token,
-                        email: response.data.data.email
-                    });
+                        email: response.data.data.email,
+                        uid: response.data.data.uid,
+                    };
+                    setAuthentication(responseData);
+                    setViewModel(new SignInViewModel(responseData));
 
                     // ユーザー情報のストアを更新
                     setProfile({

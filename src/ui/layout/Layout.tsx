@@ -9,17 +9,16 @@ import Divider from '@mui/material/Divider';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {Container, Grid, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, TextField} from "@mui/material";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import CreateIcon from '@mui/icons-material/Create';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import {authenticationState} from "../../atoms/AuthenticationState";
 import AddIcon from '@mui/icons-material/Add';
 
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {DrawerViewModel} from "./DarawerViewModel";
 import {useEffect, useState} from "react";
-import {profileState} from "../../atoms/ProfileState";
+// import {profileState} from "../../atoms/ProfileState";
 import Button from "@mui/material/Button";
 import LinkIcon from '@mui/icons-material/Link';
 
@@ -31,6 +30,7 @@ import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import HeaderMenu from "./HeaderMenu";
 import FooterMenu from "./FooterMenu";
 import Profile from "../../models/Profile/Profile";
+import Authentication from "../../models/Authentication/Authentication";
 
 const drawerWidth = 240;
 
@@ -81,20 +81,19 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-const drawerViewModel = new DrawerViewModel();
 export default function Layout() {
     const navigate = useNavigate();
+    const [authentication] = useRecoilState(authenticationState);
 
     // ビューモデル
-    const [viewModel] = useState<DrawerViewModel>(drawerViewModel);
+    const [viewModel] = useState<DrawerViewModel>(new DrawerViewModel(authentication));
 
-    const [authentication] = useRecoilState(authenticationState);
-    const [profile] = useRecoilState<Profile>(profileState);
+    // const [profile] = useRecoilState<Profile>(profileState);
 
     // カスタムURL
     const [urlString, setUrlString] = useState<string>('');
     const [customUrlText, setCustomUrlText] = useState<string>('');
-    const [urlIcon, setUrlIcon] = useState<File | null>(null);
+    // const [urlIcon, setUrlIcon] = useState<File | null>(null);
     const [customUrlList, setCustomUrlList] = useState<CustomUrl[]>([]);
 
     // ドロワー制御
@@ -107,30 +106,40 @@ export default function Layout() {
     };
 
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const authState = useRecoilValue(authenticationState);
+    const authInstance = Authentication.fromState(authState);
 
     useEffect(() => {
-        // セットアップ
-        viewModel.setUp({
-            authentication: {
-                accessToken: authentication.accessToken,
-                uid: authentication.uid,
-                email: authentication.email
-            },
-            profile: profile
-        });
+        try {
+            console.log(authInstance.getUid());
+        } catch (error) {
+            console.error(error);
+        }
+    }, [authInstance]);
 
-        void viewModel.fetchCustomUrl().then((response) => {
-            console.log(response);
-            setCustomUrlList(response.data.customUrlList)
-        }).catch((error: AxiosResponse) => {
-            console.log(error);
-        });
-
-        return () => {
-            // クリーンアップ
-            viewModel.cleanUp();
-        };
-    }, []);
+    // useEffect(() => {
+    //     // セットアップ
+    //     viewModel.setUp({
+    //         authentication: {
+    //             accessToken: authentication.accessToken,
+    //             uid: authentication.uid,
+    //             email: authentication.email
+    //         },
+    //         profile: profile
+    //     });
+    //
+    //     void viewModel.fetchCustomUrl().then((response) => {
+    //         console.log(response);
+    //         setCustomUrlList(response.data.customUrlList)
+    //     }).catch((error: AxiosResponse) => {
+    //         console.log(error);
+    //     });
+    //
+    //     return () => {
+    //         // クリーンアップ
+    //         viewModel.cleanUp();
+    //     };
+    // }, []);
 
     // ログイン前の場合は遷移する
     const isLogin: boolean = authentication.uid.length > 0;
@@ -147,8 +156,8 @@ export default function Layout() {
                 <Drawer variant="permanent" open={open} anchor={"left"}>
                     <DrawerHeader>
                         <Button style={{color: "#fff"}} onClick={open ? handleDrawerClose : handleDrawerOpen}>
-                            {open ? <span> <ChevronLeftIcon/> <img src={logo} width={20}/> </span> :
-                                <img src={logo} width={20} style={{marginLeft: 10}}/>}
+                            {open ? <span> <ChevronLeftIcon/> <img src={logo} width={20} alt={""}/> </span> :
+                                <img src={logo} width={20} style={{marginLeft: 10}} alt={""}/>}
                         </Button>
                     </DrawerHeader>
                     <Divider/>
@@ -161,7 +170,7 @@ export default function Layout() {
                             //     icon: <CreateIcon/>,
                             //     linkPath: 'quests/' + viewModel.generateSeedId()
                             // },
-                            {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: `/timeline`},
+                            {label: 'ThinkTank', icon: <img src={tsubuyakiIcon} alt={""}/>, linkPath: `/timeline`},
                         ].map((item, index) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={() => {
                                 navigate(item.linkPath);
@@ -190,7 +199,7 @@ export default function Layout() {
                     <Divider/>
                     <List>
                         {[
-                            {label: 'AIS', icon: <img src={aiIcon}/>, linkPath: `/user/${authentication.uid}/ais`},
+                            {label: 'AIS', icon: <img src={aiIcon} alt={""}/>, linkPath: `/user/${authentication.uid}/ais`},
                             {label: 'Preference', icon: <SettingsIcon/>, linkPath: "/preference"},
                         ].map((item, index) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={() => {

@@ -18,7 +18,10 @@ export interface SignUpInputIF {
 }
 
 export class RegisterViewModel {
-    protected authState: Authentication = Authentication.initAuthentication();
+    private readonly authState: Authentication;
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
+    }
 
     setUp(argument: { authentication: AuthenticationArgumentIF }): void {
         console.log('====================TimeLineViewModel_setup====================');

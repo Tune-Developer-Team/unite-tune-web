@@ -6,7 +6,6 @@ import {endPoint} from "../../consts/api";
 import {TabItem} from "../../ui/layout/CustomTabs";
 
 export class ProfileViewModel implements ProfileViewModelIF {
-    public authState:Authentication = Authentication.initAuthentication();
     public profile: Profile = Profile.initProfile();
     public tabItems: TabItem[] = [
         {label: 'Main'},
@@ -14,6 +13,11 @@ export class ProfileViewModel implements ProfileViewModelIF {
         {label: 'AIS'},
         {label: 'Goods'}
     ];
+    private readonly authState: Authentication;
+
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
+    }
 
     /**
      * セットアップ処理
@@ -66,6 +70,13 @@ export class ProfileViewModel implements ProfileViewModelIF {
 
         // プロフィールインスタンス更新
         this.profile.setFromAPIResponse(response.data.data);
+    }
+
+    /**
+     * アップロードするフォルダ名
+     */
+    generateFolderName():string {
+        return this.authState.getUid();
     }
 
     /**

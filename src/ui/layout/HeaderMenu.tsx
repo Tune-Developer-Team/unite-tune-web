@@ -13,7 +13,6 @@ import {
     TextField, Drawer
 } from '@mui/material';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import CreateIcon from '@mui/icons-material/Create';
 import {DrawerViewModel} from "./DarawerViewModel";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
@@ -29,7 +28,6 @@ import Profile from "../../models/Profile/Profile";
 
 const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
-const drawerViewModel = new DrawerViewModel();
 // Inside your component
 const HeaderMenu = () => {
     //　グローバルオブジェクト
@@ -37,13 +35,13 @@ const HeaderMenu = () => {
     const [profile] = useRecoilState<Profile>(profileState);
 
     // ビューモデル
-    const [viewModel] = useState<DrawerViewModel>(drawerViewModel);
+    const [viewModel] = useState<DrawerViewModel>(new DrawerViewModel(authentication));
     const [open, setOpen] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
     // カスタムURL
     const [urlString, setUrlString] = useState<string>('');
     const [customUrlText, setCustomUrlText] = useState<string>('');
-    const [urlIcon, setUrlIcon] = useState<File | null>(null);
+    // const [urlIcon, setUrlIcon] = useState<File | null>(null);
     const [customUrlList, setCustomUrlList] = useState<CustomUrl[]>([]);
 
     // const handleDrawerToggle = () => {

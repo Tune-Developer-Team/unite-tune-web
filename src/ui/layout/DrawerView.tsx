@@ -82,15 +82,14 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-const drawerViewModel = new DrawerViewModel();
 export default function DrawerView() {
     const navigate = useNavigate();
+    const [authentication] = useRecoilState(authenticationState);
 
     // ビューモデル
-    const [viewModel] = useState<DrawerViewModel>(drawerViewModel);
+    const [viewModel] = useState<DrawerViewModel>(new DrawerViewModel(authentication));
 
     const [navigation] = useRecoilState(navigationState);
-    const [authentication] = useRecoilState(authenticationState);
     const [profile] = useRecoilState<Profile>(profileState);
 
     // カスタムURL

@@ -2,12 +2,13 @@ import axios, {AxiosResponse} from "axios";
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 import {SignInViewModelIF} from "./SignInViewModelIF";
 import {endPoint} from "../../consts/api";
+import {AuthenticationStateIF} from "../../atoms/AuthenticationState";
 
 export class SignInViewModel implements SignInViewModelIF {
-    protected authState:Authentication = Authentication.initAuthentication();
-    constructor(
+    protected authState:Authentication;
+    constructor(state: AuthenticationStateIF
     ) {
-        console.log('====================SignInViewModel_called====================');
+        this.authState = Authentication.fromState(state);
     }
 
     /**
@@ -15,9 +16,7 @@ export class SignInViewModel implements SignInViewModelIF {
      * @param argument
      */
     setUp(argument: { authentication: AuthenticationArgumentIF }): void {
-        console.log('====================TimeLineViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
-        console.log('====================TimeLineViewModel_setup_end====================');
     }
 
     /**

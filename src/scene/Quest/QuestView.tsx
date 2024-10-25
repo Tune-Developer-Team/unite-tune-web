@@ -8,7 +8,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {QuestViewModel, SaveQuestParamIF} from "./QuestViewModel";
 import Avatar from "@mui/material/Avatar";
 import Drawer from '@mui/material/Drawer';
-import {Switch, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import ImagePath from "../../models/data/ImagePath";
 import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
@@ -21,14 +21,15 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import {ImageUploadForm} from "../seedEdit/ImageUploadForm";
 import {endPoint} from "../../consts/api";
 import IconButton from "@mui/material/IconButton";
 import {Api} from "../../models/Api/Api";
 import generateCuriosTagChips from "../../ui/curiosTag/CuriosTagChips";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
-const questViewModel = new QuestViewModel();
+function ImageUploadForm(props: { onFileChange: (imagePath: ImagePath) => Promise<void>, folderName: string, uploadEndPoint: string }) {
+    return null;
+}
 
 const QuestView = () => {
     // グローバルオブジェクト
@@ -39,7 +40,7 @@ const QuestView = () => {
     // ViewModel
     const params = useParams();
     const questId = params.questId as string;
-    const [viewModel, setViewModel] = useState<QuestViewModel>(questViewModel);
+    const [viewModel, setViewModel] = useState<QuestViewModel>(new QuestViewModel(authState));
 
     // タブメニュー
     const tabItems: TabItem[] = [
@@ -68,7 +69,7 @@ const QuestView = () => {
 
     // 画像削除処理
     const handleImageDelete = async (index: number, imagePath: ImagePath) => {
-        const api = new Api(viewModel.authState);
+        const api = viewModel.generateApi();
         try {
             const objectName = imagePath.getGCSObjectName();
 

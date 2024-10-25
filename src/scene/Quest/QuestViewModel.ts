@@ -1,12 +1,8 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 
-import axios from "axios";
 import {endPoint} from "../../consts/api";
-import {TabItem} from "../../ui/layout/CustomTabs";
-import {QuestDetail, QuestDetailApiResponseIF} from "../../models/Quest/Quest";
+import {QuestDetail} from "../../models/Quest/Quest";
 import ImagePath from "../../models/data/ImagePath";
-import {hashTagString} from "../../models/data/types";
-import {AddSeedInputParamIF} from "../seedEdit/SeedEditViewModelIF";
 import {AxiosResponse} from "axios/index";
 import {Api} from "../../models/Api/Api";
 
@@ -38,9 +34,12 @@ export interface QuestViewModelIF {
 }
 
 export class QuestViewModel implements QuestViewModelIF {
-    public authState:Authentication = Authentication.initAuthentication();
     public questDetail: QuestDetail = QuestDetail.initQuestDetail();
     public coverImage: ImagePath = ImagePath.create({path: '', alt: ''});
+    private readonly authState: Authentication;
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
+    }
 
     /**
      * セットアップ処理
@@ -62,6 +61,13 @@ export class QuestViewModel implements QuestViewModelIF {
 
     getQuestDetail():QuestDetail {
         return this.questDetail
+    }
+
+    /**
+     * UI側で直接叩きたいが為に応急処置として対応。まあ直すけど。
+     */
+    generateApi(): Api {
+        return new Api(this.authState);
     }
 
     /**

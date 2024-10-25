@@ -9,6 +9,7 @@ import {authenticationState} from "../../atoms/AuthenticationState";
 import Button, {ButtonProps} from "@mui/material/Button";
 import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
+import Authentication from "../../models/Authentication/Authentication";
 
 // styledの型定義にButtonPropsを渡すことで、componentプロパティを正しく扱えるようにします
 const ImageUploadButton = styled(Button)<ButtonProps>(({theme}) => ({
@@ -67,7 +68,7 @@ export const ImageUploadForm: React.FC<ImageUploadFormPropsIF> = ({
 
             // API開始
             setLoading({isLoading:true});
-            const api = new Api(authState);
+            const api = new Api(Authentication.fromState(authState));
             api.setConfig({contentsType: "multipart/form-data"});
             await api.post({
                 endPoint: `${uploadEndPoint}/${folderName}`,

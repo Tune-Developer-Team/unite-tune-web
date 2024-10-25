@@ -17,11 +17,11 @@ interface QuestListViewModelIF {
 }
 
 export class QuestListViewModel implements QuestListViewModelIF {
-    protected authState:Authentication = Authentication.initAuthentication();
     public questList: QuestListItem[] = [];
-    constructor(
-    ) {
-        console.log('====================SignInViewModel_called====================');
+    private readonly authState: Authentication;
+
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
     }
 
     /**
@@ -36,7 +36,7 @@ export class QuestListViewModel implements QuestListViewModelIF {
     /**
      * クリーンアップ処理
      */
-    cleanUp():void {
+    cleanUp(): void {
         console.log('cleanUp');
     }
 
@@ -44,8 +44,8 @@ export class QuestListViewModel implements QuestListViewModelIF {
      * Questを取得
      * @param authentication
      */
-    async fetchQuestList(authentication: Authentication): Promise<{ message: string, questList: QuestListItem[] }> {
-        const api = new Api(authentication);
+    async fetchQuestList(): Promise<{ message: string, questList: QuestListItem[] }> {
+        const api = new Api(this.authState);
         const result = await api.get(endPoint.SEED_TILE);
 
         const apiResponse = result.data.data;

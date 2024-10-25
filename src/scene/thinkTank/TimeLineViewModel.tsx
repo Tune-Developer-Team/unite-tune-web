@@ -1,12 +1,10 @@
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {Think} from "../../models/ThinkTank/Think";
 import {TimeLineViewModelIF} from "./TimeLineViewModelIF";
 import {TabItem} from "../../ui/layout/CustomTabs";
 
 export class TimeLineViewModel implements TimeLineViewModelIF {
-    public authState:Authentication;
     public thinkTable: ThinkTable = ThinkTable.initThinkTable();
     public thinkDraft: ThinkDraft = ThinkDraft.initThinkDraft();
     public tabItems: TabItem[] = [
@@ -15,10 +13,9 @@ export class TimeLineViewModel implements TimeLineViewModelIF {
         {label: 'Tech'},
         {label: 'General'}
     ];
-
-    constructor(
-    ) {
-        this.authState = Authentication.initAuthentication();
+    private readonly authState: Authentication;
+    constructor(state: AuthenticationArgumentIF) {
+        this.authState = Authentication.fromState(state);
     }
 
     /**
@@ -58,7 +55,7 @@ export class TimeLineViewModel implements TimeLineViewModelIF {
     async loadTimeLine(): Promise<ThinkTable> {
         console.log('loadTimeLine');
         return await this.thinkTable.fetchThinkList({
-            accessToken: this.authState.getAccessToken(),
+            accessToken: this.authState.accessToken,
             uid: this.authState.getUid()
         });
     }

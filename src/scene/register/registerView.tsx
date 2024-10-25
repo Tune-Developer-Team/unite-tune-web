@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {useRecoilState} from "recoil";
+import {useRecoilState, useResetRecoilState} from "recoil";
 import Grid from "@mui/material/Unstable_Grid2";
 import {RegisterResponseIF, RegisterViewModel} from "./registerViewModel";
 import {navigationState} from "../../atoms/NavigationState";
@@ -12,19 +12,16 @@ import swal from "sweetalert";
 import {tuneCardState} from "../../atoms/TuneCardState";
 import {TuneCard} from "../../models/TuneCard/TuneCard";
 import axios, {AxiosResponse} from "axios";
-
-const registerViewModel = new RegisterViewModel();
+import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code") ?? '';
-
 const RegisterView: React.FunctionComponent = () => {
-    const [viewModel] = useState<RegisterViewModel>(registerViewModel);
-    const [navigation, setNavigation] = useRecoilState(navigationState);
+    const [authState, setAuthentication] = useRecoilState(authenticationState);
+    const [viewModel, setViewModel] = useState<RegisterViewModel>(new RegisterViewModel(authState));
     const [tuneCard, setTuneCard] = useRecoilState<TuneCard>(tuneCardState);
     const [profile, setProfile] = useRecoilState(profileState);
     const [googleOneTimeCode, setGoogleOneTimeCode] = useState(code);
-    const [authState, setAuthentication] = useRecoilState(authenticationState);
 
     console.log("========================================");
     console.log(code);
@@ -47,23 +44,22 @@ const RegisterView: React.FunctionComponent = () => {
                 void swal("ようこそ.", response.userRegister.uid ?? 'undefined', "success").then(res => {
                     console.log('成功', res);
 
-                    console.log(response.userRegister);
-
                     // ユーザーの認証情報のストアを更新
-                    setAuthentication({
-                        uid: response.userRegister.uid,
+                    const responseData: AuthenticationArgumentIF = {
                         accessToken: response.userRegister.accessToken,
-                        email: response.userRegister.email
-                    });
+                        email: response.userRegister.email,
+                        uid: response.userRegister.uid,
+                    };
+                    // ユーザーの認証情報のストアを更新
+                    // TODO:認証クラスに持たせる
+                    setAuthentication(responseData);
+                    setViewModel(new RegisterViewModel(responseData));
 
                     // ユーザー情報のストアを更新
                     setProfile({
                         nickName: response.userRegister.nickName ?? 'user',
                         iconImage: response.userRegister.iconImagePath ?? '',
                     });
-
-                    // ナビゲーションバーを表示
-                    setNavigation({isHidden: false, isEnableRedirect: true});
 
                     // ホーム画面へ遷移
                     window.location.href = '/';
@@ -79,6 +75,9 @@ const RegisterView: React.FunctionComponent = () => {
             });
     }
 
+    // TODO: ログアウト処理を実装
+    const resetAuthState = useResetRecoilState(authenticationState);
+
     // 開発環境においてStrictModeの2回目を無視するフラグ
     let strictModeIgnore = false;
     useEffect(() => {
@@ -89,7 +88,7 @@ const RegisterView: React.FunctionComponent = () => {
 
         if (isLogin) {
             if (window.confirm('ログアウトして新規登録画面に遷移します.')) {
-                setAuthentication({uid:""}) // TODO: ログアウト処理を実装
+                resetAuthState();
             } else {
                 window.location.href = '/';
             }
@@ -98,9 +97,6 @@ const RegisterView: React.FunctionComponent = () => {
         if ((tuneCard.serial != '') && (tuneCard.uid != '') && (!tuneCard.isActivated)) {
             window.location.href = '/';
         }
-
-        // ナビゲーションバーを非表示
-        setNavigation({isHidden: true, isEnableRedirect: false});
 
         viewModel.setUp({
             authentication: {
