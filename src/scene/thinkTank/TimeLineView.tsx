@@ -42,7 +42,7 @@ const TimeLineView = () => {
     const [isPublished, setIsPublished] = useState<boolean>(false)
     const [newTags, setNewTags] = useState<string[]>([]);
     const navigate = useNavigate();
-    const [parentThink, setParentThink] = useState<Think|null>(null);
+    const [parentThink, setParentThink] = useState<Think | null>(null);
 
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
@@ -53,12 +53,12 @@ const TimeLineView = () => {
         await addThinkButtonHandler()
     }
 
-    const handleFavorite = (think:Think) => {
+    const handleFavorite = (think: Think) => {
         console.log("API_Favorite", think);
         window.alert("ごめんまだ開発中");
     }
 
-    const handleRethink = (think:Think) => {
+    const handleRethink = (think: Think) => {
         console.log("API_Rethink", think);
         window.alert("ごめんまだ開発中");
     }
@@ -146,7 +146,7 @@ const TimeLineView = () => {
             initState();
             return
         }
-        if(thinkDraft.sentence == "") {
+        if (thinkDraft.sentence == "") {
             window.alert("本文なしなのでダメ");
             //　状態の初期化
             initState();
@@ -186,7 +186,7 @@ const TimeLineView = () => {
     /**
      * 状態の初期化
      */
-    const initState = ()=> {
+    const initState = () => {
         // フォームを空にする
         setThinkDraft(ThinkDraft.initThinkDraft());
         setParentThink(null);
@@ -230,8 +230,8 @@ const TimeLineView = () => {
         setIsDrawerOpen(true);
     }
 
-    const generatePlaceholder = ():string => {
-        const to = parentThink?.thinkUserName??"";
+    const generatePlaceholder = (): string => {
+        const to = parentThink?.thinkUserName ?? "";
         return isReply ? `${to}さんへ返信しよう` : "いまの気持ちをつぶやいてみよう！";
 
     }
@@ -318,14 +318,14 @@ const TimeLineView = () => {
                     </Box>
                 </Box>
                 <Box sx={styleOfOnlyDisplaySmartPhone}>
-                    <Box sx={{ position: "relative" }}>
+                    <Box sx={{position: "relative"}}>
                         <Fab
-                            sx={{ position: "fixed", bottom: 100, right: 40 }}
+                            sx={{position: "fixed", bottom: 100, right: 40}}
                             color="primary"
                             aria-label="add"
                             onClick={() => openAddThinkModalHandler()}
                         >
-                            <AddIcon />
+                            <AddIcon/>
                         </Fab>
                     </Box>
                     <Drawer
@@ -353,13 +353,13 @@ const TimeLineView = () => {
                             }
                         }}
                     >
-                        <Box sx={{ width: 'auto', padding: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{width: 'auto', padding: 2, height: '100%', display: 'flex', flexDirection: 'column'}}>
                             <Box display={"flex"} position="sticky" top={10} zIndex={10}>
                                 <Box width={"100%"}>
                                     <Typography
                                         color={"#ffffff"}
                                         onClick={() => toggleDrawer(false)}
-                                        sx={{ float: 'start', font: 'bold' }}
+                                        sx={{float: 'start', font: 'bold'}}
                                     >
                                         キャンセル
                                     </Typography>
@@ -367,7 +367,7 @@ const TimeLineView = () => {
                                 <Box width={"100%"}>
                                     <Typography
                                         color={"#496cff"}
-                                        sx={{ float: 'right', font: 'bold' }}
+                                        sx={{float: 'right', font: 'bold'}}
                                         onClick={() => {
                                             addThinkButtonHandler();
                                             setIsDrawerOpen(false);
@@ -395,7 +395,8 @@ const TimeLineView = () => {
                                         <Box sx={{display: "flex"}} paddingBottom={1} paddingTop={1}>
                                             <img src={replyBar} alt={"replyBar"} height={60} width={10}/>
                                             <Box paddingTop={1} paddingLeft={2} display={"flex"} height={10}>
-                                                <Avatar src={parentThink.userIconImagePath.path} alt={'user_icon_image'}/>
+                                                <Avatar src={parentThink.userIconImagePath.path}
+                                                        alt={'user_icon_image'}/>
                                                 <Typography textAlign={"center"} paddingTop={1}>
                                                     さんへの返信
                                                 </Typography>
@@ -423,7 +424,7 @@ const TimeLineView = () => {
                                         overflow: 'auto',
                                     }}
                                 />
-                                <CuriosTagInput tags={newTags} setTags={setNewTags} />
+                                <CuriosTagInput tags={newTags} setTags={setNewTags}/>
                             </Box>
                         </Box>
                     </Drawer>
@@ -434,7 +435,7 @@ const TimeLineView = () => {
                         <Box key={index} sx={{paddingBottom: 0.2}}>
                             <Card
                                 sx={{
-                                    padding:0,
+                                    padding: 0,
                                     '&:hover': {
                                         boxShadow: 6,
                                         cursor: 'pointer',
@@ -445,7 +446,7 @@ const TimeLineView = () => {
                             >
                                 <CardContent sx={{paddingTop: 2}}>
                                     <CardMedia sx={{textAlign: "start"}}>
-                                        <Box sx={{display: "flex",  padding:0}} onClick={() => {
+                                        <Box sx={{padding: 0}} onClick={() => {
                                             navigate(`/user/${think.ownerUserUid}`)
                                         }}>
                                             <Box sx={{display: "flex"}}>
@@ -453,11 +454,13 @@ const TimeLineView = () => {
                                                 <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={14}>
                                                     {think.thinkUserName}
                                                 </Typography>
-                                                <Typography sx={{alignContent: "center", paddingLeft: 2}} color={"gray"}
-                                                            fontSize={10}>
-                                                    {think.getTimeFormattedStamp()}
-                                                </Typography>
                                             </Box>
+                                        </Box>
+                                        <Box sx={{paddingRight: 2, textAlign: "start"}}>
+                                            <Typography sx={{textAlign: "start", paddingLeft: 6}} color={"gray"}
+                                                        fontSize={10}>
+                                                {think.getTimeFormattedStamp()}
+                                            </Typography>
                                         </Box>
                                     </CardMedia>
                                     <Box paddingTop={2}>
@@ -485,14 +488,16 @@ const TimeLineView = () => {
                                         <FavoriteIcon
                                             sx={{
                                                 // color: think.isFavorite ? "#ff4c4c" : "white",
-                                                width: 18, marginRight: 3}}
+                                                width: 18, marginRight: 3
+                                            }}
                                             onClick={() => {
                                                 handleFavorite(think);
                                             }}/>
                                         <RepeatIcon
                                             sx={{
                                                 // color: think.isRethink ? "#4cffa7" : "white",
-                                                width: 18, marginRight: 3}}
+                                                width: 18, marginRight: 3
+                                            }}
                                             onClick={() => {
                                                 handleRethink(think);
                                             }}/>
