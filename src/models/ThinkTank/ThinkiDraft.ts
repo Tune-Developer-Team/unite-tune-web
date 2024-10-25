@@ -121,7 +121,7 @@ export class ThinkDraft {
             userIconImagePath: this.userIconImagePath,
             parentThinkId: this.parentThinkId,
             sentence: this.sentence,
-            curiosTags: JSON.stringify(this.curiosTags),
+            curiosTagSentenceList: JSON.stringify(this.curiosTags),
             mentionList: JSON.stringify(this.mentionList),
             imagePathList: JSON.stringify(this.imagePathList),
             isPublished: this.isPublished,

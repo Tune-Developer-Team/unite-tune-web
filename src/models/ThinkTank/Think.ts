@@ -1,5 +1,6 @@
 import ImagePath from "../data/ImagePath";
 import Mention from "../data/Mention";
+import {convertNewlinesToBreaks, convertTextToLinks} from "../../util/htmlTools";
 
 export interface ThinkIF {
     sentence: string
@@ -53,6 +54,16 @@ export class Think {
         this.curiosTags = argument.curiosTags;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList
+    }
+
+
+    /**
+     *
+     */
+    public getSentenceWithHtml(){
+        let sentence = convertTextToLinks(this.sentence);
+        sentence = convertNewlinesToBreaks(sentence);
+        return sentence
     }
 
     /**

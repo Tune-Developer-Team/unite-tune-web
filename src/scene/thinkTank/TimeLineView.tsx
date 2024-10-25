@@ -21,6 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CustomTabs from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import {useNavigate} from "react-router-dom";
+import replyBar from "./replyBar.svg"
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
 const timeLineViewModel = new TimeLineViewModel();
@@ -41,6 +42,31 @@ const TimeLineView = () => {
     const [isPublished, setIsPublished] = useState<boolean>(false)
     const [newTags, setNewTags] = useState<string[]>([]);
     const navigate = useNavigate();
+    const [parentThink, setParentThink] = useState<Think|null>(null);
+
+    // アクション
+    const [isReply, setIsReply] = useState<boolean>(false);
+
+    const handleReply = async (parentThink: Think) => {
+        setIsReply(true);
+        setParentThink(parentThink);
+        await addThinkButtonHandler()
+    }
+
+    const handleFavorite = (think:Think) => {
+        console.log("API_Favorite", think);
+        window.alert("ごめんまだ開発中");
+    }
+
+    const handleRethink = (think:Think) => {
+        console.log("API_Rethink", think);
+        window.alert("ごめんまだ開発中");
+    }
+
+    const handleShare = (think: Think) => {
+        console.log("share", think);
+        window.alert("ごめんまだ開発中");
+    }
 
     /**
      * ThinkIdをリセットする
@@ -112,13 +138,31 @@ const TimeLineView = () => {
      * シンクの投稿をおこなう
      */
     const addThinkButtonHandler = async (): Promise<void> => {
+
+        // ガード節
         if (thinkDraft === null) {
+            window.alert("入力なしなのでダメ");
+            //　状態の初期化
+            initState();
+            return
+        }
+        if(thinkDraft.sentence == "") {
+            window.alert("本文なしなのでダメ");
+            //　状態の初期化
+            initState();
             return
         }
 
-        thinkDraft.curiosTags = newTags
+        if (parentThink !== null) {
+            thinkDraft.parentThinkId = parentThink.thinkId
+            window.alert("ごめんまだ開発中");
+            //　状態の初期化
+            initState();
+            return
+        }
 
-        console.log(thinkDraft);
+        // キュリオスタグをセット
+        thinkDraft.curiosTags = newTags;
 
         const response = await viewModel.saveThink(thinkDraft).then((response) => {
 
@@ -128,14 +172,8 @@ const TimeLineView = () => {
 
             console.log('成功', response);
 
-            // フォームを空にする
-            setThinkDraft(ThinkDraft.initThinkDraft());
-
-            // ThinkId初期化
-            void initThinkId();
-
-            // タイムラインの更新
-            void loadTimeLine();
+            //　状態の初期化
+            initState();
 
             return response;
         }).catch((error) => {
@@ -143,6 +181,22 @@ const TimeLineView = () => {
             return error;
         });
         console.log(response);
+    }
+
+    /**
+     * 状態の初期化
+     */
+    const initState = ()=> {
+        // フォームを空にする
+        setThinkDraft(ThinkDraft.initThinkDraft());
+        setParentThink(null);
+        setIsReply(false);
+
+        // ThinkId初期化
+        void initThinkId();
+
+        // タイムラインの更新
+        void loadTimeLine();
     }
 
     /**
@@ -168,34 +222,23 @@ const TimeLineView = () => {
         textAlign: "start"
     }
 
-    const [isOpenThinkModal, setIsOpenThinkModal] = useState<boolean>(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const openAddThinkModalHandler = () => {
         console.log('push addThink button');
-        // setIsOpenThinkModal(true);
+
         setIsDrawerOpen(true);
     }
 
-    const closeAddThinkModalHandler = () => {
-        console.log('push addThink button');
-        // setIsOpenThinkModal(false);
-        setIsDrawerOpen(true);
-    }
+    const generatePlaceholder = ():string => {
+        const to = parentThink?.thinkUserName??"";
+        return isReply ? `${to}さんへ返信しよう` : "いまの気持ちをつぶやいてみよう！";
 
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
+    }
 
     const toggleDrawer = (open: boolean) => {
+        setParentThink(null);
+        setIsReply(false);
         setIsDrawerOpen(open);
     };
 
@@ -255,7 +298,7 @@ const TimeLineView = () => {
                                             multiline
                                             rows={4}
                                             value={thinkDraft?.sentence ?? ""}
-                                            placeholder="いまの気持ちをつぶやいてみよう！"
+                                            placeholder={generatePlaceholder()}
                                             variant="outlined"
                                             fullWidth
                                             InputLabelProps={{
@@ -335,13 +378,38 @@ const TimeLineView = () => {
                                 </Box>
                             </Box>
                             {/* TextFieldを含むボックスを余白なしで表示させる */}
-                            <Box sx={{ paddingTop: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                            <Box sx={{paddingTop: 4, flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
+                                {parentThink !== null ?
+                                    <Box sx={{display: isReply ? "block" : "none"}} padding={0}>
+                                        <Typography variant="body1" color="text.primary" textAlign={"start"}
+                                                    dangerouslySetInnerHTML={{__html: parentThink.getSentenceWithHtml()}}
+                                        />
+                                        <span>{parentThink.curiosTags.map((tag, index) => {
+                                            return (
+                                                <Typography color="text.secondary" display={"inline-flex"}>
+                                                    {tag}
+                                                </Typography>
+                                            )
+                                        })
+                                        }</span>
+                                        <Box sx={{display: "flex"}} paddingBottom={1} paddingTop={1}>
+                                            <img src={replyBar} alt={"replyBar"} height={60} width={10}/>
+                                            <Box paddingTop={1} paddingLeft={2} display={"flex"} height={10}>
+                                                <Avatar src={parentThink.userIconImagePath.path} alt={'user_icon_image'}/>
+                                                <Typography textAlign={"center"} paddingTop={1}>
+                                                    さんへの返信
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                    : ""
+                                }
                                 <TextField
                                     onChange={(e) => thinkDraftHandler(e)}
                                     id="add-think-text-field"
                                     multiline
                                     value={thinkDraft?.sentence ?? ""}
-                                    placeholder="いまの気持ちをつぶやいてみよう！"
+                                    placeholder={generatePlaceholder()}
                                     variant="outlined"
                                     fullWidth
                                     minRows={15}
@@ -392,12 +460,10 @@ const TimeLineView = () => {
                                             </Box>
                                         </Box>
                                     </CardMedia>
-                                    <Box paddingTop={2} onClick={() => {
-                                        window.location.href = `/think/${think.thinkId}`
-                                    }}>
-                                        <Typography variant="body1" color="text.primary" textAlign={"start"}>
-                                                {think.sentence}
-                                        </Typography>
+                                    <Box paddingTop={2}>
+                                        <Typography variant="body1" color="text.primary" textAlign={"start"}
+                                                    dangerouslySetInnerHTML={{__html: think.getSentenceWithHtml()}}
+                                        />
                                         <Typography variant="body2" color="text.secondary" textAlign={"start"}>
                                             {think.curiosTags.map((tag, index) => {
                                                 return (
@@ -410,17 +476,28 @@ const TimeLineView = () => {
                                         </Typography>
                                     </Box>
                                     <Box sx={{width: "100%", display: "flex"}} padding={0}>
-                                        <ReplyIcon sx={{color: "white", width:18, marginRight:3}} onClick={() => {
-                                            console.log('レッツクソリプ！')
-                                        }}/>
-                                        <FavoriteIcon sx={{color: "#ff4c4c", width:18, marginRight:3}} onClick={() => {
-                                            console.log('いいね！')
-                                        }}/>
-                                        <RepeatIcon sx={{color: "#4cffa7", width:18, marginRight:3}} onClick={() => {
-                                            console.log('リポスト！')
-                                        }}/>
-                                        <IosShareIcon sx={{color: "#4cc2ff", width:18, marginRight:3}} onClick={() => {
-                                            console.log('共有する！')
+                                        <ReplyIcon sx={{color: "white", width: 18, marginRight: 3}}
+                                                   onClick={() => {
+                                                       setIsReply(true);
+                                                       setParentThink(think);
+                                                       openAddThinkModalHandler();
+                                                   }}/>
+                                        <FavoriteIcon
+                                            sx={{
+                                                // color: think.isFavorite ? "#ff4c4c" : "white",
+                                                width: 18, marginRight: 3}}
+                                            onClick={() => {
+                                                handleFavorite(think);
+                                            }}/>
+                                        <RepeatIcon
+                                            sx={{
+                                                // color: think.isRethink ? "#4cffa7" : "white",
+                                                width: 18, marginRight: 3}}
+                                            onClick={() => {
+                                                handleRethink(think);
+                                            }}/>
+                                        <IosShareIcon sx={{width: 18, marginRight: 3}} onClick={() => {
+                                            handleShare(think);
                                         }}/>
                                     </Box>
                                 </CardContent>

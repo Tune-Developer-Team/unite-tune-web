@@ -68,41 +68,41 @@ export class ThinkTable {
 
             // オーナーユーザーのアイコン
             let ownerUserIconImagePath = ImagePath.create({path: "", alt: ""});
-            if (thinkListItem.IconImage !== "") {
-                const ownerUserIconJson = JSON.parse(thinkListItem.IconImage)
+            if (thinkListItem.userIconImagePath !== "") {
+                const ownerUserIconJson = JSON.parse(thinkListItem.userIconImagePath)
                 ownerUserIconImagePath.alt = ownerUserIconJson.alt;
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
-            // キュリオスタグ TODO:API改修後にコメント外す
+            // キュリオスタグ
+            console.log(thinkListItem.curiosTags)
             let curiosTags:string[] = [];
-            // if (thinkListItem.CuriosTags !== "") {
-            //     curiosTags = Array.from(
-            //         new Set(
-            //             thinkListItem.CuriosTags
-            //                 .split(',')
-            //                 .map(tag => tag.trim()) // 空白を取り除く
-            //                 .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
-            //         )
-            //     );
-            // }
+            if (thinkListItem.curiosTags !== "") {
+                curiosTags = Array.from(
+                    new Set(
+                        thinkListItem.curiosTags
+                            .split(',')
+                            .map(tag => tag.trim()) // 空白を取り除く
+                            .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
+                    )
+                );
+            }
 
             const thinkArgument: ThinkIF = {
-                sentence: thinkListItem.Sentence,
-                thinkUserName: thinkListItem.NickName,
+                sentence: thinkListItem.sentence,
+                thinkUserName: thinkListItem.thinkUserName,
                 userIconImagePath: ownerUserIconImagePath,
-                ownerUserUid: thinkListItem.OwnerUserUid,
+                ownerUserUid: thinkListItem.ownerUserUid,
                 // imagePathList: thinkListItem.ImagePathList,
                 imagePathList: [ImagePath.create({alt: "", path: ""})],
-                thinkId: thinkListItem.ThinkId,
-                // curiosTags: curiosTags,TODO:API改修後にコメント外す
-                curiosTags: ["aa","bbb"],
+                thinkId: thinkListItem.thinkId,
+                curiosTags: curiosTags,
                 // mentionList: thinkListItem.MentionList,
                 mentionList: [Mention.create({idValue: "", idCategory: ""})],
-                createdAt: thinkListItem.CreatedAt,
-                parentThinkId: thinkListItem.ParentThinkId,
-                favoriteCount: thinkListItem.FavoriteCount,
-                repostCount: thinkListItem.RepostCount
+                createdAt: thinkListItem.createdAt,
+                parentThinkId: thinkListItem.parentThinkId,
+                favoriteCount: 0,
+                repostCount: thinkListItem.rethinkCount,
             }
 
             return Think.createThinkInstance(thinkArgument);
@@ -115,17 +115,16 @@ export class ThinkTable {
 }
 
 export interface ThinkApiResponseIF {
-    ThinkId: string
-    NickName: string
-    IconImage: string
-    OwnerUserUid: string
-    UserIconImagePath: string
-    FavoriteCount: number
-    RepostCount: number
-    CreatedAt: string
-    ParentThinkId: string
-    Sentence: string
-    CuriosTags: string
-    MentionList: string
-    ImagePathList: string
+    thinkId: string
+    thinkUserName: string
+    ownerUserUid: string
+    userIconImagePath: string
+    createdAt: string
+    sentence: string
+    imagePathList: string
+    curiosTags: string
+    favoriteCount: number
+    rethinkCount: number
+    parentThinkId: string
+    mentionList: string
 }
