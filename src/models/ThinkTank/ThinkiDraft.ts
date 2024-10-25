@@ -10,7 +10,7 @@ export interface ThinkDraftIF {
     sentence: string
     thinkUserName: string
     thinkId: string
-    hashTagList: hashTagString[]
+    curiosTags: string[]
     imagePathList: ImagePath[]
     mentionList: Mention[]
     createdAt: string
@@ -34,7 +34,7 @@ export class ThinkDraft {
     public createdAt: string
     public parentThinkId: string
     public sentence: string
-    public hashTagList: hashTagString[]
+    public curiosTags: string[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
     public isPublished: boolean
@@ -53,7 +53,7 @@ export class ThinkDraft {
         this.createdAt = argument.createdAt;
         this.parentThinkId = argument.parentThinkId;
         this.sentence = argument.sentence;
-        this.hashTagList = argument.hashTagList;
+        this.curiosTags = argument.curiosTags;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList;
         this.isPublished = argument.isPublished;
@@ -67,8 +67,8 @@ export class ThinkDraft {
     public static createThinkDraftInstance(argument: ThinkDraftIF
     ): ThinkDraft {
 
-        if (argument.hashTagList === null) {
-            argument.hashTagList = [];
+        if (argument.curiosTags === null) {
+            argument.curiosTags = [];
         }
 
         if (argument.imagePathList === null) {
@@ -94,7 +94,7 @@ export class ThinkDraft {
             sentence: "",
             thinkUserName: "",
             thinkId: "",
-            hashTagList: ["#a,#b"],
+            curiosTags: [],
             imagePathList: [ImagePath.create({alt: "", path: ""})],
             mentionList: [Mention.create({idValue: "", idCategory: ""})],
             parentThinkId: "",
@@ -121,7 +121,7 @@ export class ThinkDraft {
             userIconImagePath: this.userIconImagePath,
             parentThinkId: this.parentThinkId,
             sentence: this.sentence,
-            hashTagList: JSON.stringify(this.hashTagList),
+            curiosTags: JSON.stringify(this.curiosTags),
             mentionList: JSON.stringify(this.mentionList),
             imagePathList: JSON.stringify(this.imagePathList),
             isPublished: this.isPublished,

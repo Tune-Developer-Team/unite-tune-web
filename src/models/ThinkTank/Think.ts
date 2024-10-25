@@ -1,13 +1,12 @@
 import ImagePath from "../data/ImagePath";
 import Mention from "../data/Mention";
-import {hashTagString} from "../data/types";
 
 export interface ThinkIF {
     sentence: string
     thinkUserName: string
     ownerUserUid: string
     thinkId: string
-    hashTagList: hashTagString[]
+    curiosTags: string[]
     imagePathList: ImagePath[]
     mentionList: Mention[]
     createdAt: string
@@ -30,7 +29,7 @@ export class Think {
     public createdAt: Date
     public parentThinkId: string
     public sentence: string
-    public hashTagList: hashTagString[]
+    public curiosTags: string[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
 
@@ -51,7 +50,7 @@ export class Think {
         this.createdAt = createdAt;
         this.parentThinkId = argument.parentThinkId
         this.sentence = argument.sentence;
-        this.hashTagList = argument.hashTagList;
+        this.curiosTags = argument.curiosTags;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList
     }
@@ -62,8 +61,8 @@ export class Think {
     public static createThinkInstance(argument: ThinkIF
     ): Think {
 
-        if (argument.hashTagList === null) {
-            argument.hashTagList = [];
+        if (argument.curiosTags === null) {
+            argument.curiosTags = [];
         }
 
         if (argument.imagePathList === null) {

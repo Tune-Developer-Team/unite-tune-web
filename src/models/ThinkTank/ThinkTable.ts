@@ -74,6 +74,19 @@ export class ThinkTable {
                 ownerUserIconImagePath.path = ownerUserIconJson.path;
             }
 
+            // キュリオスタグ TODO:API改修後にコメント外す
+            let curiosTags:string[] = [];
+            // if (thinkListItem.CuriosTags !== "") {
+            //     curiosTags = Array.from(
+            //         new Set(
+            //             thinkListItem.CuriosTags
+            //                 .split(',')
+            //                 .map(tag => tag.trim()) // 空白を取り除く
+            //                 .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
+            //         )
+            //     );
+            // }
+
             const thinkArgument: ThinkIF = {
                 sentence: thinkListItem.Sentence,
                 thinkUserName: thinkListItem.NickName,
@@ -82,8 +95,8 @@ export class ThinkTable {
                 // imagePathList: thinkListItem.ImagePathList,
                 imagePathList: [ImagePath.create({alt: "", path: ""})],
                 thinkId: thinkListItem.ThinkId,
-                // hashTagList: thinkListItem.HashTagList,
-                hashTagList: ['#tag1', '#tag2', '#tag3'],
+                // curiosTags: curiosTags,TODO:API改修後にコメント外す
+                curiosTags: ["aa","bbb"],
                 // mentionList: thinkListItem.MentionList,
                 mentionList: [Mention.create({idValue: "", idCategory: ""})],
                 createdAt: thinkListItem.CreatedAt,
@@ -112,7 +125,7 @@ export interface ThinkApiResponseIF {
     CreatedAt: string
     ParentThinkId: string
     Sentence: string
-    HashTagList: string
+    CuriosTags: string
     MentionList: string
     ImagePathList: string
 }

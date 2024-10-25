@@ -11,7 +11,6 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 import ReplyIcon from '@mui/icons-material/Reply';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RepeatIcon from '@mui/icons-material/Repeat';
-import IconButton from "@mui/material/IconButton";
 import {Think} from "../../models/ThinkTank/Think";
 import {TimeLineViewModel} from "./TimeLineViewModel";
 import {ThinkDraft, ThinkDraftIF} from "../../models/ThinkTank/ThinkiDraft";
@@ -22,18 +21,25 @@ import AddIcon from '@mui/icons-material/Add';
 import CustomTabs from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import {useNavigate} from "react-router-dom";
+import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 
 const timeLineViewModel = new TimeLineViewModel();
 
 const TimeLineView = () => {
+    // グローバル
     const [profile] = useRecoilState(profileState);
     const [authState] = useRecoilState(authenticationState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
+
+    // UI
     const [viewModel] = useState<TimeLineViewModel>(timeLineViewModel);
     const [thinkList, setThinkList] = useState<Think[]>([]);
+
+    // フォーム
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft | null>(null);
     const [thinkId, setThinkId] = useState<string>("")
     const [isPublished, setIsPublished] = useState<boolean>(false)
+    const [newTags, setNewTags] = useState<string[]>([]);
     const navigate = useNavigate();
 
     /**
@@ -89,7 +95,7 @@ const TimeLineView = () => {
             thinkUserName: "",
             userIconImagePath: "",
             sentence: sentence,
-            hashTagList: ['#abc', '#efg', '#hij'],
+            curiosTags: [],
             mentionList: mentionList,
             parentThinkId: '',
             isPublished: isPublished,
@@ -110,9 +116,16 @@ const TimeLineView = () => {
             return
         }
 
+        thinkDraft.curiosTags = newTags
+
         console.log(thinkDraft);
 
         const response = await viewModel.saveThink(thinkDraft).then((response) => {
+
+            if (response === undefined) {
+                throw Error
+            }
+
             console.log('成功', response);
 
             // フォームを空にする
@@ -262,13 +275,18 @@ const TimeLineView = () => {
                     </Box>
                 </Box>
                 <Box sx={styleOfOnlyDisplaySmartPhone}>
-                    <Box sx={{position: "relative"}}>
-                        <Fab sx={{position:"fixed", bottom: 100, right: 40}} color="primary" aria-label="add" onClick={() => openAddThinkModalHandler()}>
-                            <AddIcon/>
+                    <Box sx={{ position: "relative" }}>
+                        <Fab
+                            sx={{ position: "fixed", bottom: 100, right: 40 }}
+                            color="primary"
+                            aria-label="add"
+                            onClick={() => openAddThinkModalHandler()}
+                        >
+                            <AddIcon />
                         </Fab>
                     </Box>
                     <Drawer
-                        anchor="bottom"
+                        anchor="bottom" // 下から出現するようにする
                         open={isDrawerOpen}
                         onClose={() => toggleDrawer(false)}
                         sx={{
@@ -276,51 +294,73 @@ const TimeLineView = () => {
                                 padding: 2,
                                 borderTopLeftRadius: 20,
                                 borderTopRightRadius: 20,
-                                backgroundColor: "#000000"
+                                backgroundColor: "#000000",
+                                animation: 'slideUp 0.3s ease-in-out', // 下から出現するアニメーション
+                                height: '98vh', // デフォルトの高さを設定
+                                maxHeight: '98vh',
+                                overflowY: 'auto'
+                            },
+                            '@keyframes slideUp': { // 下から上にスライドするアニメーション定義
+                                '0%': {
+                                    transform: 'translateY(100%)',
+                                },
+                                '100%': {
+                                    transform: 'translateY(0)',
+                                },
                             }
                         }}
                     >
-                        <Box sx={{width: 'auto', padding: 2}}>
-                            <Box display={"flex"}>
+                        <Box sx={{ width: 'auto', padding: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <Box display={"flex"} position="sticky" top={0} zIndex={10}>
                                 <Box width={"100%"}>
-                                    <Typography color={"#ffffff"} onClick={() => {
-                                        toggleDrawer(false)
-                                    }}
-                                                sx={{float: 'start', font: 'bold'}}>
+                                    <Typography
+                                        color={"#ffffff"}
+                                        onClick={() => toggleDrawer(false)}
+                                        sx={{ float: 'start', font: 'bold' }}
+                                    >
                                         キャンセル
                                     </Typography>
                                 </Box>
                                 <Box width={"100%"}>
-                                    <Typography color={"#496cff"} sx={{float: 'right', font: 'bold'}}
-                                                onClick={() => {
-                                                    addThinkButtonHandler();
-                                                    setIsDrawerOpen(false);
-                                                }}
+                                    <Typography
+                                        color={"#496cff"}
+                                        sx={{ float: 'right', font: 'bold' }}
+                                        onClick={() => {
+                                            addThinkButtonHandler();
+                                            setIsDrawerOpen(false);
+                                        }}
                                     >
                                         つぶやく
                                     </Typography>
                                 </Box>
                             </Box>
-                            <Box paddingTop={4}>
-                                <Typography variant="body1" component="div">
-                                    <TextField
-                                        onChange={(e) => thinkDraftHandler(e)}
-                                        id="add-think-text-field"
-                                        multiline
-                                        rows={20}
-                                        value={thinkDraft?.sentence ?? ""}
-                                        placeholder="いまの気持ちをつぶやいてみよう！"
-                                        variant="outlined"
-                                        fullWidth
-                                        InputLabelProps={{
-                                            shrink: false,
-                                        }}
-                                    />
-                                </Typography>
+                            {/* TextFieldを含むボックスを余白なしで表示させる */}
+                            <Box sx={{ paddingTop: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                                <TextField
+                                    onChange={(e) => thinkDraftHandler(e)}
+                                    id="add-think-text-field"
+                                    multiline
+                                    value={thinkDraft?.sentence ?? ""}
+                                    placeholder="いまの気持ちをつぶやいてみよう！"
+                                    variant="outlined"
+                                    fullWidth
+                                    minRows={15}
+                                    maxRows={40}
+                                    InputLabelProps={{
+                                        shrink: false,
+                                    }}
+                                    sx={{
+                                        flexGrow: 1, // 親のボックス全体に広がるようにする
+                                        resize: 'vertical', // ユーザーが高さを変更できるようにする
+                                        overflow: 'auto',
+                                    }}
+                                />
+                                <CuriosTagInput tags={newTags} setTags={setNewTags} />
                             </Box>
                         </Box>
                     </Drawer>
                 </Box>
+
                 <Box sx={{textAlign: "center"}}>
                     {thinkList.map((think: Think, index) => (
                         <Box key={index} sx={{paddingBottom: 0.2}}>
@@ -352,22 +392,23 @@ const TimeLineView = () => {
                                             </Box>
                                         </Box>
                                     </CardMedia>
-                                    <Box onClick={() => {
+                                    <Box paddingTop={2} onClick={() => {
                                         window.location.href = `/think/${think.thinkId}`
                                     }}>
-                                        <Typography variant="body1" component="div">
-                                            <Box sx={{paddingLeft: 2, paddingTop: 2, textAlign: "start"}}>
+                                        <Typography variant="body1" color="text.primary" textAlign={"start"}>
                                                 {think.sentence}
-                                            </Box>
                                         </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            <Box sx={{paddingRight: 2, textAlign: "end"}}>
-                                                <span style={{fontSize: "0.8rem", color:"#ababab"}}>ハッシュタグ開発中</span>
-                                                {think.hashTagList}
-                                            </Box>
+                                        <Typography variant="body2" color="text.secondary" textAlign={"start"}>
+                                            {think.curiosTags.map((tag, index) => {
+                                                return (
+                                                    <Typography display={"inline-flex"}>
+                                                        {tag}
+                                                    </Typography>
+                                                )
+                                            })
+                                            }
                                         </Typography>
                                     </Box>
-                                    <span style={{fontSize: "0.8rem", color:"#ababab"}}>各種ボタン開発中</span>
                                     <Box sx={{width: "100%", display: "flex"}} padding={0}>
                                         <ReplyIcon sx={{color: "white", width:18, marginRight:3}} onClick={() => {
                                             console.log('レッツクソリプ！')
