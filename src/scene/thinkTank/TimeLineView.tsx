@@ -339,7 +339,7 @@ const TimeLineView = () => {
                                 borderTopRightRadius: 20,
                                 backgroundColor: "#000000",
                                 animation: 'slideUp 0.3s ease-in-out', // 下から出現するアニメーション
-                                height: '98vh', // デフォルトの高さを設定
+                                height: `90vh`, // デフォルトの高さを設定
                                 maxHeight: '98vh',
                                 overflowY: 'auto'
                             },
@@ -354,7 +354,7 @@ const TimeLineView = () => {
                         }}
                     >
                         <Box sx={{ width: 'auto', padding: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                            <Box display={"flex"} position="sticky" top={0} zIndex={10}>
+                            <Box display={"flex"} position="sticky" top={10} zIndex={10}>
                                 <Box width={"100%"}>
                                     <Typography
                                         color={"#ffffff"}
@@ -387,7 +387,7 @@ const TimeLineView = () => {
                                         <span>{parentThink.curiosTags.map((tag, index) => {
                                             return (
                                                 <Typography color="text.secondary" display={"inline-flex"}>
-                                                    {tag}
+                                                    &nbsp;{tag}
                                                 </Typography>
                                             )
                                         })
@@ -450,12 +450,12 @@ const TimeLineView = () => {
                                         }}>
                                             <Box sx={{display: "flex"}}>
                                                 <Avatar src={think.userIconImagePath.path} alt={'user_icon_image'}/>
-                                                <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={12}>
+                                                <Typography sx={{alignContent: "center", paddingLeft: 1}} fontSize={14}>
                                                     {think.thinkUserName}
                                                 </Typography>
                                                 <Typography sx={{alignContent: "center", paddingLeft: 2}} color={"gray"}
                                                             fontSize={10}>
-                                                    {think.createdAt.toDateString()}
+                                                    {think.getTimeFormattedStamp()}
                                                 </Typography>
                                             </Box>
                                         </Box>

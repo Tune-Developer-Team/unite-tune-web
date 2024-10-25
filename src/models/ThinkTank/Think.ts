@@ -1,6 +1,7 @@
 import ImagePath from "../data/ImagePath";
 import Mention from "../data/Mention";
 import {convertNewlinesToBreaks, convertTextToLinks} from "../../util/htmlTools";
+import {format} from "util";
 
 export interface ThinkIF {
     sentence: string
@@ -40,7 +41,10 @@ export class Think {
      */
     constructor(argument: ThinkIF) {
 
-        const createdAt = new Date(argument.createdAt)
+        console.log('===============================')
+        console.log(argument.createdAt)
+        console.log('===============================')
+        const createdAt = new Date(argument.createdAt);
 
         this.thinkId = argument.thinkId;
         this.thinkUserName = argument.thinkUserName;
@@ -64,6 +68,14 @@ export class Think {
         let sentence = convertTextToLinks(this.sentence);
         sentence = convertNewlinesToBreaks(sentence);
         return sentence
+    }
+
+    /**
+     *
+     */
+    public getTimeFormattedStamp(){
+        const dateTime = new Date(this.createdAt);
+        return format(dateTime, 'yyyy-MM-dd HH:mm').replace('GMT+0900 (日本標準時) \'yyyy-MM-dd HH:mm\'', '');
     }
 
     /**

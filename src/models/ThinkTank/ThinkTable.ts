@@ -60,12 +60,6 @@ export class ThinkTable {
         const apiResponse:ThinkApiResponseIF[] = response.data.data
 
         return apiResponse.map((thinkListItem: ThinkApiResponseIF) => {
-            // const dateTime = new Date(thinkList[i].createdAt);
-            // const createdAtString = format(dateTime, 'yyyy-MM-dd HH:mm:ss') as dateTimeString;
-            const dateTime = new Date();
-            const createdAtString = format(dateTime, 'yyyy-MM-dd HH:mm:ss') as dateTimeString;
-            console.log(createdAtString);
-
             // オーナーユーザーのアイコン
             let ownerUserIconImagePath = ImagePath.create({path: "", alt: ""});
             if (thinkListItem.userIconImagePath !== "") {
