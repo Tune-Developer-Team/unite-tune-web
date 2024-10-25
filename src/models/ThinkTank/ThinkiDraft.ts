@@ -136,4 +136,21 @@ export class ThinkDraft {
 
         return await api.post({endPoint: endPoint.THINK, body: body})
     }
+
+    /**
+     *
+     * @param curiosTags
+     */
+    setCuriosTags(curiosTags: string[]): void {
+        this.curiosTags = curiosTags;
+        console.log(curiosTags)
+    }
+
+    /**
+     *
+     * @param text
+     */
+    setSentence(text: string): void {
+        this.sentence = text;
+    }
 }

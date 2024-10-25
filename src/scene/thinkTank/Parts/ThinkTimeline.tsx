@@ -27,17 +27,21 @@ const ThinkTimeline: React.FC<ThinkTimelineProps> = ({ thinkList, onClickReplyHa
                                     <Avatar src={think.userIconImagePath.path} alt="user_icon_image" />
                                     <Typography sx={{ alignContent: "center", paddingLeft: 1 }} fontSize={14}>{think.thinkUserName}</Typography>
                                 </Box>
-                                <Typography color="gray" fontSize={10} sx={{ paddingLeft: 6 }}>{think.getTimeFormattedStamp()}</Typography>
                             </CardMedia>
                             <Box paddingTop={2}>
                                 <Typography variant="body1" color="text.primary" textAlign="start" dangerouslySetInnerHTML={{ __html: think.getSentenceWithHtml() }} />
                                 <Typography variant="body2" color="text.secondary" textAlign="start">{think.curiosTags.join(', ')}</Typography>
                             </Box>
-                            <Box sx={{ display: "flex" }}>
+                            <Box sx={{ display: "flex" }} paddingTop={1}>
                                 <ReplyIcon sx={{ color: "white", width: 18, marginRight: 3 }} onClick={() => onClickReplyHandler(think)} />
                                 <FavoriteIcon sx={{ width: 18, marginRight: 3 }} onClick={() => onClickFavoriteHandler(think)} />
                                 <RepeatIcon sx={{ width: 18, marginRight: 3 }} onClick={() => onClickRethinkHandler(think)} />
                                 <IosShareIcon sx={{ width: 18, marginRight: 3 }} onClick={() => onClickShareHandler(think)} />
+                                <Box textAlign={"end"} width={"100%"}>
+                                    <Typography color="gray" fontSize={10}>
+                                        {think.getTimeFormattedStamp()}
+                                    </Typography>
+                                </Box>
                             </Box>
                         </CardContent>
                     </Card>

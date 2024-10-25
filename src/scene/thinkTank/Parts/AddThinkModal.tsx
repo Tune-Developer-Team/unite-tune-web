@@ -49,10 +49,17 @@ const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit
         setSentence(newSentence);
 
         //　モデルのデータ更新
-        thinkDraft.curiosTags = curiosTags;
-        thinkDraft.sentence = newSentence;
+        thinkDraft.setSentence(newSentence);
         onDraftChange(e, thinkDraft);
     }
+
+    /**
+     * 他コンポーネン経由のデータの更新
+     */
+    useEffect(() => {
+        thinkDraft.setCuriosTags(curiosTags);
+    }, [curiosTags]);
+
 
     return (
         <Drawer

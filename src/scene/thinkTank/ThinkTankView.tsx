@@ -2,24 +2,22 @@ import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
-import {profileState} from "../../atoms/ProfileState";
 import {Think} from "../../models/ThinkTank/Think";
-import {TimeLineViewModel} from "./TimeLineViewModel";
+import {ThinkTankViewModel} from "./ThinkTankViewModel";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import CustomTabs from "../../ui/layout/CustomTabs";
-import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import {v4 as uuidv4} from 'uuid';
 import ThinkTimeline from "./Parts/ThinkTimeline";
 import AddThinkModal from "./Parts/AddThinkModal";
 import AddThinkButton from "./Parts/AddThinkButton";
 import Authentication from "../../models/Authentication/Authentication";
 
-const TimeLineView = () => {
+const ThinkTankView = () => {
     // グローバル
     const [authState] = useRecoilState(authenticationState);
 
     // UI
-    const [viewModel] = useState<TimeLineViewModel>(new TimeLineViewModel(authState));
+    const [viewModel] = useState<ThinkTankViewModel>(new ThinkTankViewModel(authState));
     const [thinkList, setThinkList] = useState<Think[]>([]);
 
     // フォーム
@@ -29,10 +27,10 @@ const TimeLineView = () => {
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
 
-    const generatePlaceholder = (): string => {
-        const to = parentThink?.thinkUserName ?? "";
-        return isReply ? `${to}さんへ返信しよう` : "いまの気持ちをつぶやいてみよう！";
-    }
+    // const generatePlaceholder = (): string => {
+    //     const to = parentThink?.thinkUserName ?? "";
+    //     return isReply ? `${to}さんへ返信しよう` : "いまの気持ちをつぶやいてみよう！";
+    // }
 
     /**
      * 返信処理
@@ -75,14 +73,6 @@ const TimeLineView = () => {
         window.alert("ごめんまだ開発中");
     }
 
-    // /**
-    //  * ThinkIdをリセットする
-    //  */
-    // const initThinkId = () => {
-    //     const newThinkId = uuidv4();
-    //     setThinkId(newThinkId)
-    // }
-
     /**
      * タイムラインの読み込み
      */
@@ -102,6 +92,7 @@ const TimeLineView = () => {
         setThinkDraft(ThinkDraft.initThinkDraft());
         setParentThink(null);
         setIsReply(false);
+        setIsDrawerOpen(false);
 
         // タイムラインの更新
         void loadTimeLine();
@@ -151,6 +142,7 @@ const TimeLineView = () => {
         // TODO:APIの構造化
         try {
             console.log('[try]');
+            console.log(thinkDraft.curiosTags)
             const response = await thinkDraft.saveThink(Authentication.fromState(authState))
             if (response === undefined) {
                 throw Error
@@ -216,8 +208,11 @@ const TimeLineView = () => {
 
     return (
         <Grid container spacing={2} padding={0}>
+            {/*トップタブ*/}
             <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/>
-            <AddThinkButton onClick={openAddThinkModalHandler} />
+            {/*フローティングアクションボタン*/}
+            <AddThinkButton onClick={openAddThinkModalHandler}/>
+            {/*モーダル*/}
             <AddThinkModal
                 isOpen={isDrawerOpen}
                 onClose={closeDrawerHandler}
@@ -225,6 +220,7 @@ const TimeLineView = () => {
                 thinkDraft={thinkDraft}
                 onDraftChange={onChangeDraftHandler}
             />
+            {/*タイムライン*/}
             <ThinkTimeline
                 thinkList={thinkList}
                 onClickReplyHandler={onClickHandleReply}
@@ -236,4 +232,4 @@ const TimeLineView = () => {
     );
 };
 
-export default TimeLineView;
+export default ThinkTankView;

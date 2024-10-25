@@ -15,7 +15,7 @@ import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
 import AISecretary from "./scene/crappy/AISecretary";
 import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
-import TimeLineView from "./scene/thinkTank/TimeLineView";
+import ThinkTankView from "./scene/thinkTank/ThinkTankView";
 import QuestView from "./scene/Quest/QuestView";
 import QuestListView from "./scene/questList/QuestListView";
 
@@ -57,8 +57,8 @@ function App() {
                             <Route path='/home' element={<HomeView />} />
                             <Route path='/quests/:questId/edit' element={<QuestView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
-                            <Route path='/timeline' element={<TimeLineView />} />
-                            <Route path='/timeline/:thinkId' element={<TimeLineView />} />
+                            <Route path='/timeline' element={<ThinkTankView />} />
+                            <Route path='/timeline/:thinkId' element={<ThinkTankView />} />
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
                             <Route path='/user/:uid/portfolio' element={<Portfolio />} />

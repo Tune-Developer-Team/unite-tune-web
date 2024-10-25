@@ -1,10 +1,9 @@
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import {TimeLineViewModelIF} from "./TimeLineViewModelIF";
 import {TabItem} from "../../ui/layout/CustomTabs";
 
-export class TimeLineViewModel implements TimeLineViewModelIF {
+export class ThinkTankViewModel {
     public thinkTable: ThinkTable = ThinkTable.initThinkTable();
     public thinkDraft: ThinkDraft = ThinkDraft.initThinkDraft();
     public tabItems: TabItem[] = [
@@ -33,7 +32,7 @@ export class TimeLineViewModel implements TimeLineViewModelIF {
      * クリーンアップ処理
      */
     cleanUp():void {
-        console.log('TimeLineViewModel');
+        console.log('ThinkTankViewModel');
         console.log('cleanUp');
     }
 
