@@ -12,6 +12,7 @@ import AddThinkModal from "./Parts/AddThinkModal";
 import AddThinkButton from "./Parts/AddThinkButton";
 import Authentication from "../../models/Authentication/Authentication";
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
+import ReplyThinkModal from "./Parts/ReplyThinkMmodal";
 
 export interface ThinkTankViewModelIF {
     isTopView: boolean;
@@ -37,20 +38,25 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
 
-    // const generatePlaceholder = (): string => {
-    //     const to = parentThink?.thinkUserName ?? "";
-    //     return isReply ? `${to}さんへ返信しよう` : "いまの気持ちをつぶやいてみよう！";
-    // }
-
     /**
      * 返信処理
      * - サービス処理
      * @param parentThink
      */
     const onClickHandleReply = async (parentThink: Think) => {
+        console.log('[click]onClickHandleReply');
+        // 返信フラグ立てる
         setIsReply(true);
+        //　返信先をセット
         setParentThink(parentThink);
-        await addThinkButtonHandler()
+
+        // 下書きをセット
+        const replyThinkDraft = ThinkDraft.initThinkDraft()
+        replyThinkDraft.parentThinkId = parentThink.thinkId;
+        setThinkDraft(ThinkDraft.initThinkDraft());
+
+        // ドロワーオープン
+        setIsReplyDrawerOpen(true);
     }
 
     /**
@@ -122,8 +128,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         if (thinkDraft === null) {
             // TODO:実装
             window.alert("入力なしなのでダメ");
-            //　状態の初期化
-            setUp();
             return
         }
 
@@ -131,8 +135,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         if (thinkDraft.sentence == "") {
             // TODO:実装
             window.alert("本文なしなのでダメ");
-            //　状態の初期化
-            setUp();
             return
         }
 
@@ -143,8 +145,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
 
             // TODO:実装
             window.alert("ごめんまだ開発中");
-            //　状態の初期化
-            setUp();
             return
         }
 
@@ -174,6 +174,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     }
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isReplyDrawerOpen, setIsReplyDrawerOpen] = useState(false);
 
     const openAddThinkModalHandler = () => {
         console.log('[click]openAddThinkModalHandler')
@@ -185,12 +186,16 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
 
     const closeDrawerHandler = () => {
         console.log('[click]closeDrawerHandler')
+        // 状態の初期化
         setParentThink(null);
-        setIsReply(false);
         setThinkDraft(ThinkDraft.initThinkDraft());
+        // 返信用
+        setIsReply(false);
+        setParentThink(null);
 
         // ドロワークローズ
         setIsDrawerOpen(false);
+        setIsReplyDrawerOpen(false);
     }
 
     const onChangeDraftHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, thinkDraft: ThinkDraft): ThinkDraft => {
@@ -219,7 +224,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
             {viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}
             {/*フローティングアクションボタン*/}
             <AddThinkButton onClick={openAddThinkModalHandler}/>
-            {/*モーダル*/}
+            {/*シンク投稿モーダル*/}
             <AddThinkModal
                 isOpen={isDrawerOpen}
                 onClose={closeDrawerHandler}
@@ -227,6 +232,16 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                 thinkDraft={thinkDraft}
                 onDraftChange={onChangeDraftHandler}
             />
+            {/*リシンク投稿モーダル*/}
+            {parentThink !== null ?
+                <ReplyThinkModal
+                    isOpen={isReplyDrawerOpen}
+                    onClose={closeDrawerHandler}
+                    onSubmit={addThinkButtonHandler}
+                    parentThink={parentThink}
+                    thinkDraft={thinkDraft}
+                    onDraftChange={onChangeDraftHandler}
+                /> : ""}
             {/*タイムライン*/}
             <ThinkTimeline
                 thinkList={thinkList}

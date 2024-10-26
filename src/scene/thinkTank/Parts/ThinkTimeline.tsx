@@ -6,6 +6,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import {Think} from "../../../models/ThinkTank/Think";
+import {useNavigate} from "react-router-dom";
 
 interface ThinkTimelineProps {
     thinkList: any[];
@@ -16,6 +17,7 @@ interface ThinkTimelineProps {
 }
 
 const ThinkTimeline: React.FC<ThinkTimelineProps> = ({ thinkList, onClickReplyHandler, onClickFavoriteHandler, onClickRethinkHandler, onClickShareHandler }) => {
+    const navigate = useNavigate();
     return (
         <Box sx={{ height: "85vh", overflow: "auto" }}>
             {thinkList.map((think, index) => (
@@ -23,7 +25,7 @@ const ThinkTimeline: React.FC<ThinkTimelineProps> = ({ thinkList, onClickReplyHa
                     <Card sx={{ padding: 0, transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': { boxShadow: 6, cursor: 'pointer' } }}>
                         <CardContent sx={{ paddingTop: 2 }}>
                             <CardMedia sx={{ textAlign: "start" }}>
-                                <Box sx={{ display: "flex" }}>
+                                <Box sx={{display: "flex"}} onClick={() => navigate(`/user/${think.ownerUserUid}`)}>
                                     <Avatar src={think.userIconImagePath.path} alt="user_icon_image" />
                                     <Typography sx={{ alignContent: "center", paddingLeft: 1 }} fontSize={14}>{think.thinkUserName}</Typography>
                                 </Box>

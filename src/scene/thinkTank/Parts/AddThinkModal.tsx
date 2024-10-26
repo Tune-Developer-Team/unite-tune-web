@@ -92,7 +92,7 @@ const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit
                     onChange={onChangeHandler}
                     multiline
                     value={sentence}
-                    placeholder="思いついたことをここに書きます..."
+                    placeholder="ここは自由な場所です。思ったことはなんでも気軽に書こう。"
                     variant="outlined"
                     fullWidth
                     minRows={15}
