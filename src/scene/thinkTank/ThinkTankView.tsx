@@ -1,23 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import {useRecoilState} from "recoil";
-import {authenticationState} from "../../atoms/AuthenticationState";
+import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
 import {Think} from "../../models/ThinkTank/Think";
 import {ThinkTankViewModel} from "./ThinkTankViewModel";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
-import CustomTabs from "../../ui/layout/CustomTabs";
+import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {v4 as uuidv4} from 'uuid';
 import ThinkTimeline from "./Parts/ThinkTimeline";
 import AddThinkModal from "./Parts/AddThinkModal";
 import AddThinkButton from "./Parts/AddThinkButton";
 import Authentication from "../../models/Authentication/Authentication";
+import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
 
-const ThinkTankView = () => {
+export interface ThinkTankViewModelIF {
+    isTopView: boolean;
+    thinkTable: ThinkTable;
+    thinkDraft: ThinkDraft;
+    tabItems: TabItem[];
+    loadTimeLine(): Promise<ThinkTable>;
+    viewInit(authState: AuthenticationStateIF): ThinkTankViewModelIF;
+}
+
+const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     // グローバル
     const [authState] = useRecoilState(authenticationState);
 
     // UI
-    const [viewModel] = useState<ThinkTankViewModel>(new ThinkTankViewModel(authState));
+    const [viewModel] = useState<ThinkTankViewModelIF>(props.viewModel.viewInit(authState));
     const [thinkList, setThinkList] = useState<Think[]>([]);
 
     // フォーム
@@ -77,11 +87,16 @@ const ThinkTankView = () => {
      * タイムラインの読み込み
      */
     const loadTimeLine = async (): Promise<void> => {
-        await viewModel.loadTimeLine().then((newThinkTable) => {
+        try {
+            const newThinkTable = await viewModel.loadTimeLine()
+            console.log('[try]')
             setThinkList(newThinkTable.thinkList.reverse());
-        }).catch((error) => {
+        } catch (error) {
+            console.log('[catch]')
             console.log(error);
-        });
+        } finally {
+            console.log('[finally]')
+        }
     }
 
     /**
@@ -188,14 +203,6 @@ const ThinkTankView = () => {
     // 開発環境においてStrictModeの2回目を無視するフラグ
     let strictModeIgnore = false;
     useEffect(() => {
-        viewModel.setUp({
-            authentication: {
-                accessToken: authState.accessToken,
-                uid: authState.uid,
-                email: authState.email
-            }
-        });
-
         if (!strictModeIgnore) {
             // タイムラインの初期化
             void loadTimeLine();
@@ -209,7 +216,7 @@ const ThinkTankView = () => {
     return (
         <Grid container spacing={2} padding={0}>
             {/*トップタブ*/}
-            <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/>
+            {viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}
             {/*フローティングアクションボタン*/}
             <AddThinkButton onClick={openAddThinkModalHandler}/>
             {/*モーダル*/}

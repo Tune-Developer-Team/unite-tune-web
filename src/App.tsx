@@ -4,7 +4,7 @@ import './App.css';
 
 import SignIn from "./scene/signIn/SignInView";
 import {createTheme, ThemeProvider} from "@mui/material";
-import {RecoilRoot} from "recoil";
+import {RecoilRoot, useRecoilState} from "recoil";
 import Profile from "./scene/profile/ProfileView";
 import Portfolio from "./scene/portfolio";
 import HomeView from "./scene/home/HomeView";
@@ -18,6 +18,8 @@ import Layout from "./ui/layout/Layout";
 import ThinkTankView from "./scene/thinkTank/ThinkTankView";
 import QuestView from "./scene/Quest/QuestView";
 import QuestListView from "./scene/questList/QuestListView";
+import {authenticationState} from "./atoms/AuthenticationState";
+import {ThinkTankViewModel} from "./scene/thinkTank/ThinkTankViewModel";
 
 function App() {
     const [darkMode] = useState(true);
@@ -43,7 +45,6 @@ function App() {
     });
 
     console.log("loading-react-app");
-
     return (
         <RecoilRoot>
             <ThemeProvider theme={theme}>
@@ -57,8 +58,8 @@ function App() {
                             <Route path='/home' element={<HomeView />} />
                             <Route path='/quests/:questId/edit' element={<QuestView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
-                            <Route path='/timeline' element={<ThinkTankView />} />
-                            <Route path='/timeline/:thinkId' element={<ThinkTankView />} />
+                            <Route path='/timeline' element={<ThinkTankView viewModel={ThinkTankViewModel.appInit()}/>}/>
+                            {/*<Route path='/timeline/:thinkId' element={<ThinkTankView />} />*/}
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
                             <Route path='/user/:uid/portfolio' element={<Portfolio />} />

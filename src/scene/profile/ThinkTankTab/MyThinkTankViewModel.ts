@@ -1,39 +1,34 @@
-import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
-import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
-import Authentication from "../../models/Authentication/Authentication";
-import {TabItem} from "../../ui/layout/CustomTabs";
-import {ThinkTankViewModelIF} from "./ThinkTankView";
-import {AuthenticationStateIF} from "../../atoms/AuthenticationState";
+import {TabItem} from "../../../ui/layout/CustomTabs";
+import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
+import Authentication, {AuthenticationArgumentIF} from "../../../models/Authentication/Authentication";
+import {ThinkTankViewModelIF} from "../../thinkTank/ThinkTankView";
+import {ThinkTable} from "../../../models/ThinkTank/ThinkTable";
+import {AuthenticationStateIF} from "../../../atoms/AuthenticationState";
 
-export class ThinkTankViewModel implements ThinkTankViewModelIF {
-    public isTopView: boolean = true;
+export class MyThinkTankViewModel implements ThinkTankViewModelIF {
+    public isTopView: boolean = false;
+    public tabItems: TabItem[] = [];
     public thinkTable: ThinkTable = ThinkTable.initThinkTable();
     public thinkDraft: ThinkDraft = ThinkDraft.initThinkDraft();
-    public tabItems: TabItem[] = [
-        {label: 'All'},
-        {label: 'Curios'},
-        {label: 'Tech'},
-        {label: 'General'}
-    ];
     private readonly authState: Authentication;
+
     private constructor(state: AuthenticationStateIF) {
         this.authState = Authentication.fromState(state);
     }
 
     static appInit(): ThinkTankViewModelIF {
         const emptyState: AuthenticationStateIF = {accessToken: "", email: "", uid: ""};
-        return new ThinkTankViewModel(emptyState);
+        return new MyThinkTankViewModel(emptyState);
     }
 
     viewInit(authState: AuthenticationStateIF): ThinkTankViewModelIF {
-        return new ThinkTankViewModel(authState);
+        return new MyThinkTankViewModel(authState);
     }
-
     /**
      * タイムラインを読み込む
      */
     async loadTimeLine(): Promise<ThinkTable> {
-        console.log('loadTimeLine');
+        // TODO: 自分のシンクのみのソートをかける
         return await this.thinkTable.fetchThinkList({
             accessToken: this.authState.accessToken,
             uid: this.authState.getUid()

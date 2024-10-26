@@ -25,6 +25,7 @@ import threeDModel from "../crappy/crappy.png";
 import generateCuriosTagChips from "../../ui/curiosTag/CuriosTagChips";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 import {ImageUploadForm} from "./ImageUploadForm";
+import MyThinkTank from "./ThinkTankTab/MyThinkTank";
 
 const ProfileView = () => {
     // グローバルオブジェクト
@@ -134,16 +135,18 @@ const ProfileView = () => {
                                 }}
                             />
                         </Box>
-                        <Box textAlign={"end"} width={"100%"} display={uid === authState.uid ? "block" : "none"}>
-                            <RoundedButton onClick={() => toggleDrawer(true)}>
-                                Edit
-                            </RoundedButton>
+                        <Box width={"100%"}>
+                            <Typography variant="h6" component="div" sx={{textAlign: "start"}} paddingLeft={3}>
+                                {viewModel.profile.nickName}&nbsp;&nbsp;
+                                {/*<Chip label={profile.curiosDirection} size="small" />*/}
+                            </Typography>
+                            <Box textAlign={"end"} width={"100%"} display={uid === authState.uid ? "block" : "none"}>
+                                <RoundedButton onClick={() => toggleDrawer(true)}>
+                                    Edit
+                                </RoundedButton>
+                            </Box>
                         </Box>
                     </Box>
-                    <Typography variant="h6" component="div" sx={{textAlign: "start"}}>
-                        {viewModel.profile.nickName}&nbsp;&nbsp;
-                        {/*<Chip label={profile.curiosDirection} size="small" />*/}
-                    </Typography>
                 </Grid>
             </Grid>
 
@@ -177,12 +180,7 @@ const ProfileView = () => {
 
             {/*ThinkTank*/}
             <Grid container sx={{display: topTab.Profile.selected.label === 'ThinkTank' ? "block" : "none"}} spacing={2} className={"ThinkTank"}>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"addThinkModal"}>
-                    つぶやきの追加モーダル🚧開発中🚧
-                </Grid>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"timeLine"}>
-                    自分のタイムライン🚧開発中🚧
-                </Grid>
+                <MyThinkTank/>
             </Grid>
 
             {/*AIS*/}
