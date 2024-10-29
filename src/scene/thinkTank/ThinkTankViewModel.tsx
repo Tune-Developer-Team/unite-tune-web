@@ -34,10 +34,18 @@ export class ThinkTankViewModel implements ThinkTankViewModelIF {
      */
     async loadTimeLine(): Promise<ThinkTable> {
         console.log('loadTimeLine');
+        // 検索条件
+        const search = {
+            limit: 20,
+            excludeReplies: "true",
+            parentThinkId:"",
+            ownerUserUid: ""
+        }
+
         return await this.thinkTable.fetchThinkList({
             accessToken: this.authState.accessToken,
             uid: this.authState.getUid()
-        });
+        }, search);
     }
 
 }

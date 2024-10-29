@@ -3,7 +3,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import {useRecoilState} from "recoil";
 import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
 import {Think} from "../../models/ThinkTank/Think";
-import {ThinkTankViewModel} from "./ThinkTankViewModel";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {v4 as uuidv4} from 'uuid';
@@ -93,6 +92,12 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
      * タイムラインの読み込み
      */
     const loadTimeLine = async (): Promise<void> => {
+        // 検索条件
+        const search = {
+            limit: 20,
+            excludeReplies: "true"
+        }
+
         try {
             const newThinkTable = await viewModel.loadTimeLine()
             console.log('[try]')
@@ -142,10 +147,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         if (parentThink !== null) {
             // 返信先を指定
             thinkDraft.parentThinkId = parentThink.thinkId
-
-            // TODO:実装
-            window.alert("ごめんまだ開発中");
-            return
         }
 
         // シンクIDのセット

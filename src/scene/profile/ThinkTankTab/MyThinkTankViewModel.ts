@@ -2,7 +2,7 @@ import {TabItem} from "../../../ui/layout/CustomTabs";
 import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
 import Authentication, {AuthenticationArgumentIF} from "../../../models/Authentication/Authentication";
 import {ThinkTankViewModelIF} from "../../thinkTank/ThinkTankView";
-import {ThinkTable} from "../../../models/ThinkTank/ThinkTable";
+import {FetchTimeLineSearchIF, ThinkTable} from "../../../models/ThinkTank/ThinkTable";
 import {AuthenticationStateIF} from "../../../atoms/AuthenticationState";
 
 export class MyThinkTankViewModel implements ThinkTankViewModelIF {
@@ -28,11 +28,19 @@ export class MyThinkTankViewModel implements ThinkTankViewModelIF {
      * タイムラインを読み込む
      */
     async loadTimeLine(): Promise<ThinkTable> {
-        // TODO: 自分のシンクのみのソートをかける
+
+        // 検索条件
+        const search: FetchTimeLineSearchIF = {
+            limit: 20,
+            excludeReplies: "false",
+            parentThinkId: "",
+            ownerUserUid: this.authState.getUid()
+        }
+
         return await this.thinkTable.fetchThinkList({
             accessToken: this.authState.accessToken,
             uid: this.authState.getUid()
-        });
+        },search);
     }
 
 }

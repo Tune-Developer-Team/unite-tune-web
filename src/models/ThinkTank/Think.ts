@@ -16,6 +16,7 @@ export interface ThinkIF {
     userIconImagePath: ImagePath
     favoriteCount: number
     repostCount: number
+    hasReply: boolean
 }
 
 /**
@@ -34,6 +35,7 @@ export class Think {
     public curiosTags: string[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
+    public hasReply: boolean
 
     /**
      * コンストラクタ
@@ -58,6 +60,7 @@ export class Think {
         this.curiosTags = argument.curiosTags;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList
+        this.hasReply = argument.hasReply
     }
 
 

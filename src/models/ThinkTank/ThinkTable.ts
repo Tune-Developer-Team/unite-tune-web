@@ -31,8 +31,9 @@ export class ThinkTable {
     /**
      * Thinkリストを取得する
      * @param props
+     * @param search
      */
-    public async fetchThinkList(props: { accessToken: string, uid: string }): Promise<ThinkTable> {
+    public async fetchThinkList(props: { accessToken: string, uid: string }, search: FetchTimeLineSearchIF): Promise<ThinkTable> {
         // シンクを取得する
         const accessToken = props.accessToken as string;
         const axiosInstance = axios.create({
@@ -42,7 +43,7 @@ export class ThinkTable {
         });
 
         try {
-            const response = await axiosInstance.get(`${endPoint.THINK_TIMELINE}?chunk=20`);
+            const response = await axiosInstance.get(`${endPoint.THINK_TIMELINE}?limit=${search.limit}&excludeReplies=${search.excludeReplies}&parentThinkId=${search.parentThinkId}`);
             console.log(response.data);
             const thinkList = this.createdThinkListByAPIResponse(response);
             return new ThinkTable(thinkList);
@@ -97,6 +98,7 @@ export class ThinkTable {
                 parentThinkId: thinkListItem.parentThinkId,
                 favoriteCount: 0,
                 repostCount: thinkListItem.rethinkCount,
+                hasReply: thinkListItem.hasReply,
             }
 
             return Think.createThinkInstance(thinkArgument);
@@ -106,6 +108,13 @@ export class ThinkTable {
     public getThinkList(): Think[] {
         return this.thinkList;
     }
+}
+
+export interface FetchTimeLineSearchIF {
+    limit: number
+    excludeReplies: string
+    parentThinkId: string
+    ownerUserUid: string
 }
 
 export interface ThinkApiResponseIF {
@@ -121,4 +130,5 @@ export interface ThinkApiResponseIF {
     rethinkCount: number
     parentThinkId: string
     mentionList: string
+    hasReply: boolean
 }
