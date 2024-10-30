@@ -38,7 +38,6 @@ const ThinkTimeline: React.FC<ThinkTimelineProps> = ({}) => {
                             <Box paddingTop={2} onClick={()=>{
                                 setTargetThink(think);
                             }}>
-
                                 <Typography variant="body1" color="text.primary" textAlign="start">
                                     <MarkdownRenderer content={sanitizeMarkdown(think.sentence)}/>
                                 </Typography>

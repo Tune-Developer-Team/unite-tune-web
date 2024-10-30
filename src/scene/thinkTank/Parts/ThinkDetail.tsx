@@ -6,6 +6,8 @@ import {useNavigate, useOutletContext, useParams} from "react-router-dom";
 import {FetchTimeLineSearchIF, ThinkTable} from "../../../models/ThinkTank/ThinkTable";
 import { useRecoilState } from "recoil";
 import { authenticationState, AuthenticationStateIF } from "../../../atoms/AuthenticationState";
+import MarkdownRenderer from "../../../util/MarkdownRenderer";
+import {sanitizeMarkdown} from "../../../util/sanitizeMarkdown";
 
 const ThinkDetail: React.FC = () => {
     const { setParentThink } = useOutletContext<{
@@ -83,7 +85,9 @@ const ThinkDetail: React.FC = () => {
                         </Box>
                     </CardMedia>
                     <Box paddingTop={2}>
-                        <Typography variant="body1" color="text.primary" textAlign="start" dangerouslySetInnerHTML={{ __html: think.getSentenceWithHtml() }} />
+                        <Typography variant="body1" color="text.primary" textAlign="start">
+                            <MarkdownRenderer content={sanitizeMarkdown(think.sentence)}/>
+                        </Typography>
                         <Typography variant="body2" color="text.secondary" textAlign="start">{think.curiosTags.join(', ')}</Typography>
                     </Box>
                     <Box sx={{ display: "flex" }} paddingTop={1}>
@@ -117,7 +121,9 @@ const ThinkDetail: React.FC = () => {
 
                                     </CardMedia>
                                     <Box paddingTop={2}>
-                                        <Typography variant="body1" color="text.primary" textAlign="start" dangerouslySetInnerHTML={{ __html: reply.getSentenceWithHtml() }} />
+                                        <Typography variant="body1" color="text.primary" textAlign="start">
+                                            <MarkdownRenderer content={sanitizeMarkdown(reply.sentence)}/>
+                                        </Typography>
                                         <Typography variant="body2" color="text.secondary" textAlign="start">{reply.curiosTags.join(', ')}</Typography>
                                     </Box>
                                     <Box sx={{ display: "flex" }} paddingTop={1}>
