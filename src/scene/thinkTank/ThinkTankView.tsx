@@ -101,7 +101,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         try {
             const newThinkTable = await viewModel.loadTimeLine()
             console.log('[try]')
-            setThinkList(newThinkTable.thinkList.reverse());
+            setThinkList(newThinkTable.thinkList);
         } catch (error) {
             console.log('[catch]')
             console.log(error);
