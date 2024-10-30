@@ -215,7 +215,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     }
 
     return (
-        <Grid container spacing={2} padding={0}>
+        <Grid sx={{paddingTop: {md: 6, lg: 6, xl: 6}}} container spacing={2} padding={0}>
             {/*トップタブ*/}
             {viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}
             {/*フローティングアクションボタン*/}
