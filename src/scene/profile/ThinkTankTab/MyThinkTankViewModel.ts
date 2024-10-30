@@ -32,6 +32,7 @@ export class MyThinkTankViewModel implements ThinkTankViewModelIF {
         // 検索条件
         const search: FetchTimeLineSearchIF = {
             limit: 20,
+            offset: 0,
             excludeReplies: "false",
             parentThinkId: "",
             ownerUserUid: this.authState.getUid()

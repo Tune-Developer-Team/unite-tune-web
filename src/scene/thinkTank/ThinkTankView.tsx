@@ -28,7 +28,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
 
     // UI
     const [viewModel] = useState<ThinkTankViewModelIF>(props.viewModel.viewInit(authState));
-    const [thinkList, setThinkList] = useState<Think[]>([]);
+    // const [thinkList, setThinkList] = useState<Think[]>([]);
 
     // フォーム
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft>(ThinkDraft.initThinkDraft);
@@ -104,27 +104,22 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         window.alert("ごめんまだ開発中");
     }
 
-    /**
-     * タイムラインの読み込み
-     */
-    const loadTimeLine = async (): Promise<void> => {
-        // 検索条件
-        const search = {
-            limit: 20,
-            excludeReplies: "true"
-        }
-
-        try {
-            const newThinkTable = await viewModel.loadTimeLine()
-            console.log('[try]')
-            setThinkList(newThinkTable.thinkList);
-        } catch (error) {
-            console.log('[catch]')
-            console.log(error);
-        } finally {
-            console.log('[finally]')
-        }
-    }
+    // /**
+    //  * タイムラインの読み込み
+    //  */
+    // const loadTimeLine = async (): Promise<ThinkTable | undefined> => {
+    //     try {
+    //         const newThinkTable = await viewModel.loadTimeLine()
+    //         console.log('[try]')
+    //         setThinkList(newThinkTable.thinkList);
+    //         return newThinkTable;
+    //     } catch (error) {
+    //         console.log('[catch]')
+    //         console.log(error);
+    //     } finally {
+    //         console.log('[finally]')
+    //     }
+    // }
 
     /**
      * 状態の初期化
@@ -135,9 +130,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         setParentThink(null);
         setIsReply(false);
         setIsDrawerOpen(false);
-
-        // タイムラインの更新
-        void loadTimeLine();
     }
 
     /**
@@ -222,19 +214,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         return thinkDraft;
     }
 
-    // 開発環境においてStrictModeの2回目を無視するフラグ
-    let strictModeIgnore = false;
-    useEffect(() => {
-        if (!strictModeIgnore) {
-            // タイムラインの初期化
-            void loadTimeLine();
-        }
-
-        return () => {
-            strictModeIgnore = true;
-        };
-    }, []);
-
     return (
         <Grid container spacing={2} padding={0}>
             {/*トップタブ*/}
@@ -260,7 +239,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                     onDraftChange={onChangeDraftHandler}
                 /> : ""}
             {/* タイムライン,詳細 */}
-            <Outlet context={{ thinkList, targetThink, setTargetThink,setParentThink }} />
+            <Outlet context={{targetThink, setTargetThink, setParentThink}}/>
         </Grid>
     );
 };

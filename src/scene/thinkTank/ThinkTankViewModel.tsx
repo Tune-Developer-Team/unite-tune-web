@@ -37,6 +37,7 @@ export class ThinkTankViewModel implements ThinkTankViewModelIF {
         // 検索条件
         const search = {
             limit: 20,
+            offset:0,
             excludeReplies: "true",
             parentThinkId:"",
             ownerUserUid: ""

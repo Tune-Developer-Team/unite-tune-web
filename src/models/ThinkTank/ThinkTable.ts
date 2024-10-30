@@ -43,7 +43,7 @@ export class ThinkTable {
         });
 
         try {
-            const response = await axiosInstance.get(`${endPoint.THINK_TIMELINE}?limit=${search.limit}&excludeReplies=${search.excludeReplies}&parentThinkId=${search.parentThinkId}`);
+            const response = await axiosInstance.get(`${endPoint.THINK_TIMELINE}?limit=${search.limit}&offset=${search.offset}&excludeReplies=${search.excludeReplies}&parentThinkId=${search.parentThinkId}`);
             console.log(response.data);
             const thinkList = this.createdThinkListByAPIResponse(response);
             return new ThinkTable(thinkList);
@@ -112,6 +112,7 @@ export class ThinkTable {
 
 export interface FetchTimeLineSearchIF {
     limit: number
+    offset: number
     excludeReplies: string
     parentThinkId: string
     ownerUserUid: string

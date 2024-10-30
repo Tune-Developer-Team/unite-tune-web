@@ -50,6 +50,7 @@ const ThinkDetail: React.FC = () => {
             // 検索条件
             const search: FetchTimeLineSearchIF = {
                 limit: 20,
+                offset:0,
                 excludeReplies: "false",
                 parentThinkId: parentThinkId,
                 ownerUserUid: ""
