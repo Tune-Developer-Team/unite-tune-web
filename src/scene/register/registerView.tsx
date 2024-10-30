@@ -23,9 +23,6 @@ const RegisterView: React.FunctionComponent = () => {
     const [profile, setProfile] = useRecoilState(profileState);
     const [googleOneTimeCode, setGoogleOneTimeCode] = useState(code);
 
-    console.log("========================================");
-    console.log(code);
-
     /**
      * サインアップを実行する
      */

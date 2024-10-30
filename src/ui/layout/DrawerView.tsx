@@ -131,7 +131,7 @@ export default function DrawerView() {
             // クリーンアップ
             viewModel.cleanUp();
         };
-    }, []);
+    }, [customUrlList]);
 
     // ログイン前の場合は遷移する
     const isLogin: boolean = authentication.uid.length > 0;
@@ -155,7 +155,7 @@ export default function DrawerView() {
                         {label: 'home', icon: <HomeIcon/>, linkPath: "/"},
                         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
                         // {label: 'MakeQuest', icon: <CreateIcon/>, linkPath: '/quests/' + viewModel.generateSeedId()},
-                        {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: '/timeline'},
+                        {label: 'ThinkTank', icon: <img src={tsubuyakiIcon}/>, linkPath: 'think-tank'},
                     ].map((item, index) => (
                         <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={()=>{
                             navigate(item.linkPath);

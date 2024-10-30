@@ -17,6 +17,7 @@ export const endPoint = {
     UPLOAD_SEED_IMAGE: `${baseUrl}/upload/quests`,
     // THINK
     THINK_TIMELINE: `${baseUrl}/thinks-timeline`,
+    THINK_DETAIL: `${baseUrl}/thinks-detail`,
     THINK: `${baseUrl}/thinks`,
     UPLOAD_THINK_IMAGE: `${baseUrl}/upload/think`,
 

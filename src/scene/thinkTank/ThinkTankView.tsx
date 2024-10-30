@@ -6,12 +6,12 @@ import {Think} from "../../models/ThinkTank/Think";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {v4 as uuidv4} from 'uuid';
-import ThinkTimeline from "./Parts/ThinkTimeline";
 import AddThinkModal from "./Parts/AddThinkModal";
 import AddThinkButton from "./Parts/AddThinkButton";
 import Authentication from "../../models/Authentication/Authentication";
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
 import ReplyThinkModal from "./Parts/ReplyThinkMmodal";
+import {Outlet, useNavigate} from "react-router-dom";
 
 export interface ThinkTankViewModelIF {
     isTopView: boolean;
@@ -34,29 +34,45 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft>(ThinkDraft.initThinkDraft);
     const [parentThink, setParentThink] = useState<Think | null>(null);
 
+    const [targetThink, setTargetThink] = useState<Think|null>(null)
+
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
+    const navigate = useNavigate();
+
+    /**
+     * 詳細を表示
+     */
+    useEffect(()=>{
+        if (targetThink == null){
+            return
+        }
+        navigate(`/think-tank/${targetThink.thinkId}`)
+    },[targetThink]);
 
     /**
      * 返信処理
      * - サービス処理
      * @param parentThink
      */
-    const onClickHandleReply = async (parentThink: Think) => {
-        console.log('[click]onClickHandleReply');
+    useEffect(()=>{
+        console.log("リプライ")
+        console.log(parentThink?.thinkId);
+        if (parentThink == null){
+            return
+        }
+
         // 返信フラグ立てる
         setIsReply(true);
-        //　返信先をセット
-        setParentThink(parentThink);
 
         // 下書きをセット
-        const replyThinkDraft = ThinkDraft.initThinkDraft()
+        const replyThinkDraft = ThinkDraft.initThinkDraft();
         replyThinkDraft.parentThinkId = parentThink.thinkId;
         setThinkDraft(ThinkDraft.initThinkDraft());
 
         // ドロワーオープン
         setIsReplyDrawerOpen(true);
-    }
+    },[parentThink]);
 
     /**
      * いいね処理
@@ -233,7 +249,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                 thinkDraft={thinkDraft}
                 onDraftChange={onChangeDraftHandler}
             />
-            {/*リシンク投稿モーダル*/}
+            {/*リプライ投稿モーダル*/}
             {parentThink !== null ?
                 <ReplyThinkModal
                     isOpen={isReplyDrawerOpen}
@@ -243,14 +259,8 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                     thinkDraft={thinkDraft}
                     onDraftChange={onChangeDraftHandler}
                 /> : ""}
-            {/*タイムライン*/}
-            <ThinkTimeline
-                thinkList={thinkList}
-                onClickReplyHandler={onClickHandleReply}
-                onClickFavoriteHandler={onClickHandleFavorite}
-                onClickRethinkHandler={onClickHandleRethink}
-                onClickShareHandler={onClickHandleShare}
-            />
+            {/* タイムライン,詳細 */}
+            <Outlet context={{ thinkList, targetThink, setTargetThink,setParentThink }} />
         </Grid>
     );
 };

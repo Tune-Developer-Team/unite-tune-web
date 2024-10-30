@@ -88,7 +88,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({tabItems, bottomTab}) => {
                 break;
         }
 
-    });
+    }, [activeTab]);
 
     let isNotSelectedTab = true;
 

@@ -22,9 +22,6 @@ const TuneCardView: React.FunctionComponent = () => {
     const urlParams = useParams<{ cardSerial: string }>()
     const cardSerial: string = urlParams.cardSerial ?? '';
 
-    console.log('====================');
-    console.log(cardSerial);
-    console.log('====================');
     // serialIdが空の場合ホームへ遷移する
     if (cardSerial === '') {
         window.location.href = '/';

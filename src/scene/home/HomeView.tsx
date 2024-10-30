@@ -106,7 +106,6 @@ const HomeView = () => {
 
     useEffect(() => {
         setNavigation({isHidden: false, isEnableRedirect: true});
-        console.log("================セットアップ================")
         // セットアップ
         viewModel.setUp({
             authentication: {

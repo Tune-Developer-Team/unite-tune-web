@@ -80,7 +80,7 @@ const FooterMenu = () => {
             }}>
                 {[
                     { label: 'Home', icon: <HomeIcon />, linkPath: "/home" },
-                    { label: 'ThinkTank', icon: <img src={tsubuyakiIcon} alt="ThinkTank Icon" />, linkPath: `/timeLine/` },
+                    { label: 'ThinkTank', icon: <img src={tsubuyakiIcon} alt="ThinkTank Icon" />, linkPath: `think-tank/` },
                     { label: 'AIS', icon: <img src={aiIcon} alt="AIS Icon" />, linkPath: `/user/${authentication.uid}/ais` }
                 ].map((item) => (
                     <ListItem key={item.label} disablePadding sx={{ justifyContent: "center" }} onClick={() => {

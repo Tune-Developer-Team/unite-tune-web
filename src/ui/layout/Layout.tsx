@@ -109,13 +109,13 @@ export default function Layout() {
     const authState = useRecoilValue(authenticationState);
     const authInstance = Authentication.fromState(authState);
 
-    useEffect(() => {
-        try {
-            console.log(authInstance.getUid());
-        } catch (error) {
-            console.error(error);
-        }
-    }, [authInstance]);
+    // useEffect(() => {
+    //     try {
+    //         console.log(authInstance.getUid());
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }, [authInstance]);
 
     // useEffect(() => {
     //     // セットアップ
@@ -170,7 +170,7 @@ export default function Layout() {
                             //     icon: <CreateIcon/>,
                             //     linkPath: 'quests/' + viewModel.generateSeedId()
                             // },
-                            {label: 'ThinkTank', icon: <img src={tsubuyakiIcon} alt={""}/>, linkPath: `/timeline`},
+                            {label: 'ThinkTank', icon: <img src={tsubuyakiIcon} alt={""}/>, linkPath: `think-tank`},
                         ].map((item, index) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'block'}} onClick={() => {
                                 navigate(item.linkPath);

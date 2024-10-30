@@ -20,6 +20,8 @@ import QuestView from "./scene/Quest/QuestView";
 import QuestListView from "./scene/questList/QuestListView";
 import {authenticationState} from "./atoms/AuthenticationState";
 import {ThinkTankViewModel} from "./scene/thinkTank/ThinkTankViewModel";
+import ThinkTimeline from "./scene/thinkTank/Parts/ThinkTimeline";
+import ThinkDetail from "./scene/thinkTank/Parts/ThinkDetail";
 
 function App() {
     const [darkMode] = useState(true);
@@ -58,8 +60,11 @@ function App() {
                             <Route path='/home' element={<HomeView />} />
                             <Route path='/quests/:questId/edit' element={<QuestView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
-                            <Route path='/timeline' element={<ThinkTankView viewModel={ThinkTankViewModel.appInit()}/>}/>
-                            {/*<Route path='/timeline/:thinkId' element={<ThinkTankView />} />*/}
+                            {/*ThinkTank*/}
+                            <Route path="think-tank" element={<ThinkTankView viewModel={ThinkTankViewModel.appInit()}/>}>
+                                <Route index element={<ThinkTimeline />} /> {/* タイムラインのコンポーネント */}
+                                <Route path=":thinkId" element={<ThinkDetail />} /> {/* 詳細画面 */}
+                            </Route>
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
                             <Route path='/user/:uid/portfolio' element={<Portfolio />} />
