@@ -22,7 +22,7 @@ const ThinkTimeline: React.FC<ThinkTimelineProps> = ({}) => {
     }
 
     return (
-        <Box sx={{ height: "85vh", overflow: "auto" }}>
+        <Box sx={{ height: "85vh", overflow: "auto" , width: "100%"}}>
             {thinkList.map((think, index) => (
                 <Box key={index} sx={{ paddingBottom: 0.2 }}>
                     <Card sx={{ padding: 0, transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': { boxShadow: 6, cursor: 'pointer' } }}>
