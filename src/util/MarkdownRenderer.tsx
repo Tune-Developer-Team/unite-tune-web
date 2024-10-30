@@ -50,16 +50,33 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
                         code({ node, inline, className = '', children, ...props }: any) {
                             const match = /language-(\w+)/.exec(className);
                             const codeString = String(children).replace(/\n$/, '');
+                            const language = match ? match[1] : 'plain'; // 言語を取得
 
                             return !inline && match ? (
-                                <div style={{ position: 'relative' }}>
+                                <div style={{ position: 'relative', marginBottom: '1em' }}>
+                                    <Typography
+                                        variant="caption"
+                                        color="text.secondary"
+                                        sx={{
+                                            position: 'absolute',
+                                            top: -14,
+                                            left: 0,
+                                            zIndex: 1,
+                                            backgroundColor: 'rgba(82,82,82,0.8)', // 半透明背景
+                                            borderRadius: '4px',
+                                            padding: '2px 4px',
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        {language} {/* 言語を表示 */}
+                                    </Typography>
                                     <IconButton
                                         onClick={(event) => handleCopy(event, codeString)} // コピー処理
                                         size="small"
                                         sx={{
                                             position: 'absolute',
-                                            top: '8px',
-                                            right: '8px',
+                                            top: 0,
+                                            right: 10,
                                             zIndex: 1,
                                             backgroundColor: 'rgba(52,52,52,0.7)', // 半透明背景
                                             borderRadius: '4px',
@@ -72,7 +89,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
                                     </IconButton>
                                     <SyntaxHighlighter
                                         style={vscDarkPlus}
-                                        language={match[1]}
+                                        language={language}
                                         PreTag="div"
                                         customStyle={{
                                             padding: '1em',
