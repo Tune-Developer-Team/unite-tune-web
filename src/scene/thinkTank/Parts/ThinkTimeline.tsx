@@ -3,6 +3,8 @@ import { Box, Card, CardContent, CardMedia, Typography, Avatar } from '@mui/mate
 import ReplyIcon from '@mui/icons-material/Reply';
 import { Think } from "../../../models/ThinkTank/Think";
 import {useNavigate, useOutletContext} from "react-router-dom";
+import MarkdownRenderer from "../../../util/MarkdownRenderer";
+import {sanitizeMarkdown} from "../../../util/sanitizeMarkdown";
 
 interface ThinkTimelineProps {}
 
@@ -36,7 +38,10 @@ const ThinkTimeline: React.FC<ThinkTimelineProps> = ({}) => {
                             <Box paddingTop={2} onClick={()=>{
                                 setTargetThink(think);
                             }}>
-                                <Typography variant="body1" color="text.primary" textAlign="start" dangerouslySetInnerHTML={{ __html: think.getSentenceWithHtml() }} />
+
+                                <Typography variant="body1" color="text.primary" textAlign="start">
+                                    <MarkdownRenderer content={sanitizeMarkdown(think.sentence)}/>
+                                </Typography>
                                 <Typography variant="body2" color="text.secondary" textAlign="start">{think.curiosTags.join(', ')}</Typography>
                             </Box>
                             <Box sx={{ display: "flex" }} paddingTop={1}>

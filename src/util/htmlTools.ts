@@ -9,3 +9,9 @@ export function convertTextToLinks(text: string): string {
 export function convertNewlinesToBreaks(text: string): string {
     return text.replace(/(\r\n|\n|\r)/g, '<br />');
 }
+
+export function getSentenceWithHtml(text: string): string {
+    let sentence = convertTextToLinks(text);
+    sentence = convertNewlinesToBreaks(sentence);
+    return sentence
+}
