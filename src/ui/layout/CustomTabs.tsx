@@ -69,7 +69,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({tabItems, bottomTab}) => {
     };
 
     useEffect(() => {
-        setBottomTab(bottomTab);
+        // setBottomTab(bottomTab);
 
         switch (bottomTab) {
             case 'Home':
@@ -88,7 +88,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({tabItems, bottomTab}) => {
                 break;
         }
 
-    }, [activeTab]);
+    }, [bottomTab]);
 
     let isNotSelectedTab = true;
 

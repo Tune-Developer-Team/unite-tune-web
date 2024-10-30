@@ -109,38 +109,6 @@ export default function Layout() {
     const authState = useRecoilValue(authenticationState);
     const authInstance = Authentication.fromState(authState);
 
-    // useEffect(() => {
-    //     try {
-    //         console.log(authInstance.getUid());
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }, [authInstance]);
-
-    // useEffect(() => {
-    //     // セットアップ
-    //     viewModel.setUp({
-    //         authentication: {
-    //             accessToken: authentication.accessToken,
-    //             uid: authentication.uid,
-    //             email: authentication.email
-    //         },
-    //         profile: profile
-    //     });
-    //
-    //     void viewModel.fetchCustomUrl().then((response) => {
-    //         console.log(response);
-    //         setCustomUrlList(response.data.customUrlList)
-    //     }).catch((error: AxiosResponse) => {
-    //         console.log(error);
-    //     });
-    //
-    //     return () => {
-    //         // クリーンアップ
-    //         viewModel.cleanUp();
-    //     };
-    // }, []);
-
     // ログイン前の場合は遷移する
     const isLogin: boolean = authentication.uid.length > 0;
     const pathname = useLocation().pathname;
