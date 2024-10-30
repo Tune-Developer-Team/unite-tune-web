@@ -75,11 +75,11 @@ const ThinkDetail: React.FC = () => {
     return (
         <Box sx={{ paddingBottom: 0.2 }} width={"100%"}>
             <Card sx={{padding: 0, transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': {boxShadow: 6, cursor: 'pointer'}}}>
-                <CardContent sx={{ paddingTop: 2 }}>
+                <CardContent sx={{ paddingTop: 2}}>
                     <CardMedia sx={{ textAlign: "start" }}>
                         <Box sx={{display: "flex"}} onClick={() => navigate(`/user/${think.ownerUserUid}`)}>
                             <Avatar src={think.userIconImagePath.path} alt="user_icon_image" />
-                            <Typography sx={{ alignContent: "center", paddingLeft: 1 }} fontSize={14}>{think.thinkUserName}</Typography>
+                            <Typography sx={{ alignContent: "center", paddingLeft: 1, width: "100%"}} fontSize={14}>{think.thinkUserName}</Typography>
                         </Box>
                     </CardMedia>
                     <Box paddingTop={2}>
@@ -106,16 +106,13 @@ const ThinkDetail: React.FC = () => {
                     {replies[think.thinkId].map((reply, idx) => (
                         <Box key={idx}>
                             <Card sx={{padding: 0, transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': {boxShadow: 6, cursor: 'pointer'}}}>
-                                <CardContent sx={{paddingTop:0}}>
+                                <CardContent sx={{paddingTop:0, width: "100%"}}>
                                     <CardMedia sx={{ textAlign: "start"}}>
                                         <Box sx={{ display: "flex"}}>
-                                            <Typography textAlign={"center"}>
-                                                Reply by
-                                            </Typography>
                                             <Box display={"inline-flex"} height={30} width={30}>
                                                 <Avatar src={reply.userIconImagePath.path} alt={'user_icon_image'} style={{ height: "100%", width: "100%" }}/>
-                                                <Typography sx={{ alignContent: "center", paddingLeft: 1 }} fontSize={14}>{reply.thinkUserName}</Typography>
                                             </Box>
+                                            <Typography sx={{ alignContent: "center", paddingLeft: 1, width: "100%"}} fontSize={14}>{reply.thinkUserName}</Typography>
                                         </Box>
 
                                     </CardMedia>

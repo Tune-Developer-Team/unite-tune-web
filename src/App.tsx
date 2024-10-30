@@ -68,10 +68,7 @@ function App() {
                             <Route path='/user/:uid' element={<Profile />} />
                             <Route path='/user/:uid/ais' element={<AISecretary />} />
                             <Route path='/user/:uid/portfolio' element={<Portfolio />} />
-                            {/*Seedの機能実装は延期する*/}
-                            {/*<Route path='/quest/:seedId/edit' element={<SeedEditView />} />*/}
-                            {/*<Route path='/quest/:seedId' element={<SeedDetailView />} />*/}
-                            {/*<Route path='/seeds' element={<SeedListView />} />*/}
+
                             <Route path='/quests' element={<QuestListView />} />
                             <Route path='/blogposts' element={<BlogPostTileList />} />
                         </Route>
