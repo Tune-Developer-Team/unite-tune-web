@@ -24,7 +24,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LinkIcon from '@mui/icons-material/Link';
 import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
-import ButtomMenu from "./ButtomMenu";
+import BottomMenu from "./ButtomMenu";
 import HeaderUserIconMenu from "./HeaderUserIconMenu";
 import Profile from "../../models/Profile/Profile";
 import {profileState} from "../../atoms/ProfileState";
@@ -83,7 +83,7 @@ export interface ParentItem {
     children?: Array<{ label: string; linkPath: string }>;
 }
 
-export default function DrawerView() {
+const DrawerView = () => {
     const navigate = useNavigate();
     const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
     const [profile] = useRecoilState(profileState);
@@ -175,7 +175,7 @@ export default function DrawerView() {
             {isMobile ? (
                 <Box sx={{flexGrow: 1, padding: 1, width: "100%"}}>
                     <HeaderUserIconMenu/>
-                    <ButtomMenu menuItems={parentItems.slice(0, 3)}/>
+                    <BottomMenu menuItems={parentItems.slice(0, 3)}/>
                 </Box>
             ) : (
                 <Drawer variant="permanent" open={open}>
@@ -231,3 +231,5 @@ export default function DrawerView() {
         </Box>
     );
 }
+
+export default DrawerView

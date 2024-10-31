@@ -15,7 +15,8 @@ import DrawerView, {ParentItem} from "./DrawerView";
 import CustomTabs from "./CustomTabs";
 import {useMediaQuery} from "@mui/material";
 
-export default function Layout() {
+const Layout = () => {
+// export default function Layout() {
     const navigate = useNavigate();
     const [authentication] = useRecoilState(authenticationState);
     const [authState] = useRecoilState(authenticationState);
@@ -113,3 +114,5 @@ export default function Layout() {
         </>
     );
 }
+
+export default Layout;
