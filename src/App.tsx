@@ -56,8 +56,9 @@ function App() {
                         <Route path='/register' element={<RegisterView />} />
                         <Route path='/signin' element={<SignIn />} />
                         <Route path='/' element={<Layout />} >
-                            <Route path='/preference' element={<PreferenceView />} />
+                            <Route index element={<HomeView />} ></Route>
                             <Route path='/home' element={<HomeView />} />
+                            <Route path='/preference' element={<PreferenceView />} />
                             <Route path='/quests/:questId/edit' element={<QuestView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
                             {/*ThinkTank*/}
