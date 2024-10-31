@@ -29,7 +29,7 @@ import Profile from "../../models/Profile/Profile";
 const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
 // Inside your component
-const HeaderMenu = () => {
+const HeaderUserIconMenu = () => {
     //　グローバルオブジェクト
     const [authentication] = useRecoilState(authenticationState);
     const [profile] = useRecoilState<Profile>(profileState);
@@ -70,11 +70,6 @@ const HeaderMenu = () => {
 
     const menuItems = [
         {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
-        // {
-        //     label: 'MakeQuest',
-        //     icon: <CreateIcon/>,
-        //     linkPath: 'quests/' + viewModel.generateSeedId()
-        // },
         {
             label: 'Preference',
             icon: <SettingsIcon/>,
@@ -90,6 +85,21 @@ const HeaderMenu = () => {
                 padding: '0 16px',
                 overflowX: 'auto',
             }}>
+                <Avatar
+                    sx={{
+                        display: "flex",
+                        position: 'fixed', // Changed to fixed
+                        top: 10,
+                        right: 10,
+                        zIndex: 10, // Ensure it stays above other elements
+                    }}
+                    alt="userIcon"
+                    sizes={"ss"}
+                    src={profile.iconImage.path??""}
+                    onMouseEnter={handleAvatarMouseEnter}
+                    onMouseLeave={handleAvatarMouseLeave}
+                    onClick={open ? handleDrawerClose : handleDrawerOpen}
+                />
             <Box display={open ? "block" : "none"}>
                 <Drawer variant="permanent" open={open} anchor={"left"}>
                     <List sx={{
@@ -143,36 +153,6 @@ const HeaderMenu = () => {
                     </List>
                 </Drawer>
             </Box>
-            <Box
-                sx={{
-                    display: "flex",
-                    position: 'fixed', // Changed to fixed
-                    top: 0,
-                    right: 0,
-                    paddingBottom: 6,
-                    zIndex: 1000, // Ensure it stays above other elements
-                    backgroundColor:"#000000",
-                    width: "100%"
-                }}
-                padding={1}
-            >
-                <Box width={"100%"}/>
-                <Avatar
-                    sx={{
-                        display: "flex",
-                        position: 'fixed', // Changed to fixed
-                        top: 10,
-                        right: 10,
-                        zIndex: 10, // Ensure it stays above other elements
-                    }}
-                    alt="userIcon"
-                    sizes={"ss"}
-                    src={profile.iconImage.path??""}
-                    onMouseEnter={handleAvatarMouseEnter}
-                    onMouseLeave={handleAvatarMouseLeave}
-                    onClick={open ? handleDrawerClose : handleDrawerOpen}
-                />
-            </Box>
 
             {/* Modal for adding a custom URL */}
             <Modal open={isOpenModal} onClose={() => setIsOpenModal(false)}>
@@ -221,4 +201,4 @@ const HeaderMenu = () => {
     );
 };
 
-export default HeaderMenu;
+export default HeaderUserIconMenu;

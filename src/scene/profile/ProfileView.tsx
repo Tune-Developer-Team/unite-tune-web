@@ -108,7 +108,6 @@ const ProfileView = () => {
 
     return (
         <Box className="Profile" paddingLeft={1}>
-            <CustomTabs tabItems={viewModel.tabItems} bottomTab={'Profile'}/>
             <Loader/>
             <Grid container spacing={2} className={"header"}>
                 <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12}>

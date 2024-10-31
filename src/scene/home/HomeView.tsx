@@ -13,7 +13,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
 import QuestTileBanner from "../../ui/quest/QuestTileBanner";
-import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import BlogPostTileSixColumn from "../../ui/blogPostSixColumn/BlogPostTileSixColumn";
 import AllTabView from "./AllTabView/AllTabView";
@@ -57,12 +56,12 @@ const HomeView = () => {
     const [imagePathList, setImagePathList] = useState<ImagePath[]>([]);
     const [newTags, setNewTags] = useState<string[]>([]);
 
-    const tabItems: TabItem[] = [
-        {label: 'All'},
-        {label: 'Quest'},
-        {label: 'Blog'},
-        {label: 'Goods'}
-    ];
+    // const tabItems: TabItem[] = [
+    //     {label: 'All'},
+    //     {label: 'Quest'},
+    //     {label: 'Blog'},
+    //     {label: 'Goods'}
+    // ];
 
     /**
      * questリストの読み込み
@@ -179,7 +178,6 @@ const HomeView = () => {
     console.log(topTab.Home.selected.label);
     return (
         <div className="Home">
-            <CustomTabs tabItems={tabItems} bottomTab={'Home'}/>
             {/* All */}
             <Box sx={{display: topTab.Home.selected.label === 'All' ? "block" : "none"}}>
             <AllTabView viewModel={viewModel}/>

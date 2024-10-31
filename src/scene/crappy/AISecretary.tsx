@@ -6,7 +6,6 @@ import CrappyIcon from "./CrappyIcon.png";
 import SendIcon from '@mui/icons-material/Send';
 import AttendanceManagement from "../../ui/AttendanceManagement";
 import IconButton from "@mui/material/IconButton";
-import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import {useRecoilState} from "recoil";
 
@@ -155,16 +154,16 @@ const AISecretary = () => {
     };
 
     const [isShowModelView, setIsShowModelView] = useState(true);
-    const tabItems: TabItem[] = [
-        {label: '勤怠'},
-        {label: '雑談'},
-        {label: '分析'},
-        {label: '戦略'}
-    ];
+    // const tabItems: TabItem[] = [
+    //     {label: '勤怠'},
+    //     {label: '雑談'},
+    //     {label: '分析'},
+    //     {label: '戦略'}
+    // ];
 
     return (
         <Box className="Crappy" paddingLeft={1}>
-            <CustomTabs tabItems={tabItems} bottomTab={'AIS'}/>
+            {/*<CustomTabs tabItems={tabItems} bottomTab={'AIS'}/>*/}
             <Box className={"threeDView"}>
                 <span
                     style={{

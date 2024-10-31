@@ -12,7 +12,6 @@ import {TextField} from "@mui/material";
 import ImagePath from "../../models/data/ImagePath";
 import {loaderState} from "../../atoms/LoaderState";
 import Loader from "../../ui/loading/Loader";
-import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
 import {QuestDetail} from "../../models/Quest/Quest";
 import ScrollContainer from "../../ui/container/ScrollContainer";
@@ -42,12 +41,12 @@ const QuestView = () => {
     const questId = params.questId as string;
     const [viewModel, setViewModel] = useState<QuestViewModel>(new QuestViewModel(authState));
 
-    // タブメニュー
-    const tabItems: TabItem[] = [
-        {label: '概要'},
-        {label: '条件'},
-        {label: '報酬'}
-    ];
+    // // タブメニュー
+    // const tabItems: TabItem[] = [
+    //     {label: '概要'},
+    //     {label: '条件'},
+    //     {label: '報酬'}
+    // ];
 
     // UI
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -164,7 +163,6 @@ const QuestView = () => {
 
     return (
         <Box className="QuestDetail" paddingLeft={1}>
-            <CustomTabs tabItems={tabItems} bottomTab={'QuestDetail'}/>
             <Loader/>
             {/*CoverImage*/}
             <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>

@@ -4,7 +4,6 @@ import {useRecoilState} from "recoil";
 import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
 import {Think} from "../../models/ThinkTank/Think";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
-import CustomTabs, {TabItem} from "../../ui/layout/CustomTabs";
 import {v4 as uuidv4} from 'uuid';
 import AddThinkModal from "./Parts/AddThinkModal";
 import AddThinkButton from "./Parts/AddThinkButton";
@@ -21,7 +20,6 @@ export interface ThinkTankViewModelIF {
     isTopView: boolean;
     thinkTable: ThinkTable;
     thinkDraft: ThinkDraft;
-    tabItems: TabItem[];
     loadTimeLine(): Promise<ThinkTable>;
     viewInit(authState: AuthenticationStateIF): ThinkTankViewModelIF;
 }
@@ -228,7 +226,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     return (
         <Grid sx={{paddingTop: {md: 6, lg: 6, xl: 6}}} container spacing={2} padding={0}>
             {/*トップタブ*/}
-            {viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}
+            {/*{viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}*/}
             {/*シンク投稿モーダル*/}
             <AddThinkModal
                 isOpen={isDrawerOpen}

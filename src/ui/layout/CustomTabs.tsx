@@ -1,103 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import { Box, Typography } from '@mui/material';
+import React, {useState} from 'react';
+import { Tabs, Tab, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import ButtonFrame from './button-frame.svg';
-import {useRecoilState} from "recoil";
-import Profile from "../../models/Profile/Profile";
-import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
+import Typography from "@mui/material/Typography";
 
-// タブアイテムの型を定義
-export interface TabItem {
+interface TabItem {
     label: string;
+    linkPath: string; // Only linkPath needed, content is removed
 }
 
 interface CustomTabsProps {
-    tabItems: TabItem[];
-    bottomTab: string
+    items: TabItem[];
 }
 
-const CustomTabs: React.FC<CustomTabsProps> = ({tabItems, bottomTab}) => {
-    const [topTab, setTopTab] = useRecoilState(selectedTabState);
+const CustomTabs: React.FC<CustomTabsProps> = ({ items }) => {
+    const [activeTab, setActiveTab] = useState<TabItem>({label: '', linkPath: ''});
 
-    const [bottom, setBottomTab] = useState<string>("Home");
-    const [activeTab, setActiveTab] = useState<TabItem>({label: ""});
-
-    const handleTabClick = (label: string) => {
-        let newSelectedTab:SelectedTabIF = {
-            Home: {
-                selected:{
-                    label: topTab.Home.selected.label,
-                }
-            },
-            ThinkTank: {
-                selected:{
-                    label: topTab.ThinkTank.selected.label,
-                }
-            },
-            AIS: {
-                selected:{
-                    label: topTab.AIS.selected.label,
-                }
-            },
-            Profile: {
-                selected:{
-                    label: topTab.Profile.selected.label,
-                }
-            }
-        };
-
-        switch (bottomTab) {
-            case 'Home':
-                newSelectedTab.Home.selected.label = label;
-                break;
-            case 'ThinkTank' :
-                newSelectedTab.ThinkTank.selected.label = label;
-                break;
-            case 'AIS' :
-                newSelectedTab.AIS.selected.label = label;
-                console.log(newSelectedTab.AIS.selected.label)
-                break;
-            case 'Profile' :
-                newSelectedTab.Profile.selected.label = label;
-                break;
-            default:
-                break;
-        }
-
-        console.log(topTab)
-        console.log("更新")
-        setTopTab(newSelectedTab);
-    };
-
-    useEffect(() => {
-        // setBottomTab(bottomTab);
-
-        switch (bottomTab) {
-            case 'Home':
-                setActiveTab(topTab.Home.selected);
-                break;
-            case 'ThinkTank' :
-                setActiveTab(topTab.ThinkTank.selected);
-                break;
-            case 'AIS' :
-                setActiveTab(topTab.AIS.selected);
-                break;
-            case 'Profile' :
-                setActiveTab(topTab.Profile.selected);
-                break;
-            default:
-                break;
-        }
-
-    }, [bottomTab]);
-
-    let isNotSelectedTab = true;
-
-    tabItems.map((item) => {
-        if (item.label == activeTab.label) {
-            isNotSelectedTab = false;
-        }
-        return item
-    });
+    const handleTabClick = (item: TabItem) => {
+        setActiveTab(item);
+    }
 
     return (
         <Box
@@ -115,10 +36,10 @@ const CustomTabs: React.FC<CustomTabsProps> = ({tabItems, bottomTab}) => {
                 },
             }}
         >
-            {tabItems.map((item: TabItem) => (
+            {items.map((item: TabItem) => (
                 <Box
                     key={item.label}
-                    onClick={() => handleTabClick(item.label)}
+                    onClick={() => handleTabClick(item)}
                     sx={{
                         position: 'relative',
                         cursor: 'pointer',
