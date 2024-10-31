@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Card, CardContent, CardMedia, Typography, Avatar, Button} from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Think } from "../../../models/ThinkTank/Think";
 import {useNavigate, useOutletContext, useParams} from "react-router-dom";
 import {FetchTimeLineSearchIF, ThinkTable} from "../../../models/ThinkTank/ThinkTable";
@@ -10,7 +11,8 @@ import MarkdownRenderer from "../../../util/MarkdownRenderer";
 import {sanitizeMarkdown} from "../../../util/sanitizeMarkdown";
 
 const ThinkDetail: React.FC = () => {
-    const { setParentThink } = useOutletContext<{
+    const { setParentThink,refreshTimeline } = useOutletContext<{
+        refreshTimeline: number; // refreshTimelineの型を確認
         setParentThink: React.Dispatch<React.SetStateAction<Think>>
     }>();
     const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
@@ -23,23 +25,6 @@ const ThinkDetail: React.FC = () => {
     const initThink = Think.initThink();
     initThink.thinkId = thinkId;
     const [think, setThink] = useState<Think>(initThink);
-
-    // フェッチを画面の読み込み時に実行する
-    useEffect(() => {
-        fetchDetail();
-    }, [thinkId]);
-
-    const fetchDetail = async () => {
-        try {
-            console.log("フェッチ");
-            const newThink = await think.fetchThinkDetail(authState);
-            console.log(newThink.thinkId);
-            setThink(newThink);
-        }
-        catch (e){
-            console.log(e);
-        }
-    }
 
     const toggleReplyVisibility = async (parentThinkId: string) => {
         if (showReplies[parentThinkId]) {
@@ -71,12 +56,43 @@ const ThinkDetail: React.FC = () => {
         }
     };
 
+    const fetchDetail = async () => {
+        try {
+            console.log("フェッチ");
+            const newThink = await think.fetchThinkDetail(authState);
+            console.log(newThink.thinkId);
+            setThink(newThink);
+        }
+        catch (e){
+            console.log(e);
+        }
+    }
+
+    // フェッチを画面の読み込み時に実行する
+    useEffect(() => {
+        fetchDetail();
+        toggleReplyVisibility(thinkId);
+    }, [thinkId]);
+
+    // 強制的に再読み込み
+    useEffect(() => {
+        // refreshTimeline が変化したときにタイムラインをリフレッシュするロジック
+        fetchDetail()
+    }, [refreshTimeline]); // refreshTimeline の変化を監視
+
     function onClickReplyHandler(think: Think) {
         setParentThink(think);
     }
 
     return (
         <Box sx={{ paddingBottom: 0.2 }} width={"100%"}>
+            <Button
+                startIcon={<ArrowBackIcon />}
+                onClick={() => navigate(-1)} // Go back to the previous screen
+                sx={{ marginBottom: 2 }}
+            >
+                TimeLine
+            </Button>
             <Card sx={{padding: 0, transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': {boxShadow: 6, cursor: 'pointer'}}}>
                 <CardContent sx={{ paddingTop: 2}}>
                     <CardMedia sx={{ textAlign: "start" }}>

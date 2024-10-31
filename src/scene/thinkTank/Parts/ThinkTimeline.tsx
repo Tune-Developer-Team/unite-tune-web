@@ -1,33 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Avatar } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Typography, Avatar, Button } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { Think } from "../../../models/ThinkTank/Think";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import MarkdownRenderer from "../../../util/MarkdownRenderer";
 import { sanitizeMarkdown } from "../../../util/sanitizeMarkdown";
 import { FetchTimeLineSearchIF, ThinkTable } from "../../../models/ThinkTank/ThinkTable";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { authenticationState, AuthenticationStateIF } from "../../../atoms/AuthenticationState";
+import {offsetState, scrollPositionState, thinkListState} from "../../../atoms/ThinkTimelineState";
+
 
 const ThinkTimeline: React.FC = () => {
-    const { setTargetThink, setParentThink } = useOutletContext<{
+    const { setTargetThink, setParentThink, refreshTimeline } = useOutletContext<{
         setTargetThink: React.Dispatch<React.SetStateAction<Think>>;
         setParentThink: React.Dispatch<React.SetStateAction<Think>>;
+        refreshTimeline: number
     }>();
 
     const thinkTable = ThinkTable.initThinkTable();
     const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
-    const [thinkList, setThinkList] = useState<Think[]>([]);
+    const [thinkList, setThinkList] = useRecoilState(thinkListState);
+    const [offset, setOffset] = useRecoilState(offsetState);
+    const [scrollPosition, setScrollPosition] = useRecoilState(scrollPositionState);
+    const setScrollPositionOnly = useSetRecoilState(scrollPositionState);
     const [isLoading, setIsLoading] = useState(false);
-    const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+
     const limit = 10;
+    const navigate = useNavigate();
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     const fetchMoreThinks = async (currentOffset: number) => {
         if (isLoading || !hasMore) return;
         setIsLoading(true);
 
-        console.log('[fetchMoreThinks]');
         const search: FetchTimeLineSearchIF = {
             limit: limit,
             offset: currentOffset,
@@ -42,47 +49,64 @@ const ThinkTimeline: React.FC = () => {
         }, search);
 
         const newThinkList = newThinkTable.thinkList;
+        setIsLoading(false);
 
         if (newThinkList.length === 0) {
-            console.log("No more data available.");
             setHasMore(false);
         } else {
             setThinkList(prevThinkList => {
-                console.log("Updating list");
                 const existingIds = new Set(prevThinkList.map(think => think.thinkId));
                 return [...prevThinkList, ...newThinkList.filter(think => !existingIds.has(think.thinkId))];
             });
         }
-
-        setIsLoading(false);
     };
-
-    const navigate = useNavigate();
-    const containerRef = useRef<HTMLDivElement | null>(null);
 
     const handleScroll = () => {
         if (containerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-            console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
-            if (scrollTop + clientHeight >= scrollHeight - 10) { // Allow a little buffer to trigger early
-                console.log("Scrolled to the bottom");
+            setScrollPositionOnly(scrollTop);
+
+            // 最上部に到達した際に更新を実行
+            if (scrollTop === 0) {
+                handleRefresh();
+            }
+
+            if (scrollTop + clientHeight >= scrollHeight - 10) {
                 setOffset(prevOffset => {
                     const newOffset = prevOffset + limit;
-                    fetchMoreThinks(newOffset); // 新しいオフセットを渡す
-                    return newOffset; // 更新したオフセットを返す
+                    fetchMoreThinks(newOffset);
+                    return newOffset;
                 });
             }
         }
     };
 
+    const handleRefresh = () => {
+        setOffset(0);
+        setThinkList([]);
+        setHasMore(true);
+        fetchMoreThinks(0);
+    };
+
+    /**
+     * 他コンポーネントから強制的に再読み込みを行う
+     */
     useEffect(() => {
-        fetchMoreThinks(offset); // 最初のフェッチ時にオフセットを渡す
-    }, []); // 初回マウント時のみ呼び出す
+        handleRefresh()
+    }, [refreshTimeline]);
+
+
+    useEffect(() => {
+        if (thinkList.length === 0 && hasMore) {
+            fetchMoreThinks(offset);
+        }
+    }, [thinkList, offset, hasMore]);
 
     useEffect(() => {
         const currentContainer = containerRef.current;
         if (currentContainer) {
             currentContainer.addEventListener('scroll', handleScroll);
+            currentContainer.scrollTop = scrollPosition;
         }
 
         return () => {
@@ -90,7 +114,7 @@ const ThinkTimeline: React.FC = () => {
                 currentContainer.removeEventListener('scroll', handleScroll);
             }
         };
-    }, []);
+    }, [scrollPosition]);
 
     function onClickReplyHandler(think: Think) {
         setParentThink(think);

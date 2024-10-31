@@ -38,6 +38,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
 
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
+    const [refreshTimeline, setRefreshTimeline] = useState<number>(0);
     const navigate = useNavigate();
 
     /**
@@ -130,6 +131,8 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         setParentThink(null);
         setIsReply(false);
         setIsDrawerOpen(false);
+        // 状態の更新を行い、ThinkTimelineの再レンダリングをトリガー
+        setRefreshTimeline(prev => prev + 1);
     }
 
     /**
@@ -239,7 +242,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                     onDraftChange={onChangeDraftHandler}
                 /> : ""}
             {/* タイムライン,詳細 */}
-            <Outlet context={{targetThink, setTargetThink, setParentThink}}/>
+            <Outlet context={{targetThink, setTargetThink, setParentThink, refreshTimeline}}/>
         </Grid>
     );
 };
