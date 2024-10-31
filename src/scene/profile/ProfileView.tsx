@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import {useRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import Button from "@mui/material/Button";
-import {useNavigate, useParams} from "react-router-dom";
+import {Outlet, useNavigate, useParams} from "react-router-dom";
 import {ProfileViewModel} from "./ProfileViewModel";
 import Profile from "../../models/Profile/Profile";
 import RoundedButton from "../../ui/button/RoundedButton";
@@ -150,64 +150,8 @@ const ProfileView = () => {
                 </Grid>
             </Grid>
 
-            {/*Main*/}
-            <Grid container sx={{display: topTab.Profile.selected.label === 'Main' ? "block" : "none"}} spacing={2} className={"Main"}>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"description"}>
-                    <div dangerouslySetInnerHTML={{__html: viewModel.profile.description.replace(/\n/g, '<br />')}}/>
-                </Grid>
+            <Outlet context={{viewModel, setViewModel}}/>
 
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                    MyCurios
-                    <Box>
-                        {generateCuriosTagChips(viewModel.profile.curios)}
-                    </Box>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} sx={{display: viewModel.profile.isShowMbti ? "block" : "none"}}>
-                    <Box>
-                        性格タイプ：&nbsp;&nbsp;{viewModel.profile.mbti}
-                    </Box>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12}
-                      sx={{display: viewModel.profile.isShowPortfolio ? "block" : "none"}}>
-                    <Box>
-                        <Button onClick={() => {
-                            navigate(`/user/${uid}/portfolio`)
-                        }}
-                        >Please See Portfolio</Button>
-                    </Box>
-                </Grid>
-            </Grid>
-
-            {/*ThinkTank*/}
-            <Grid container sx={{display: topTab.Profile.selected.label === 'ThinkTank' ? "block" : "none"}} spacing={2} className={"ThinkTank"}>
-                <MyThinkTank/>
-            </Grid>
-
-            {/*AIS*/}
-            <Grid container sx={{display: topTab.Profile.selected.label === 'AIS' ? "block" : "none"}} spacing={2} className={"AIS"}>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"threeDView"}>
-                    <Box className={"threeDView"}>
-                        <Grid xs={12} sm={12} md={12} lg={12} sx={{padding: 0}}>
-                            <img src={threeDModel} alt={"crappy-image"} width={"100%"}/>
-                        </Grid>
-                    </Box>
-                </Grid>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"description"}>
-                    model: Crappy<br/>
-                    LearningLevel: 29<br/>
-                    🚧開発中🚧
-                </Grid>
-            </Grid>
-
-            {/*Goods*/}
-            <Grid container sx={{display: topTab.Profile.selected.label === 'Goods' ? "block" : "none"}} spacing={2} className={"Goods"}>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"tab"}>
-                forRent / forSell 🚧開発中🚧
-                </Grid>
-                <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"table"}>
-                自分の読んだ本とかのテーブル🚧開発中🚧
-                </Grid>
-            </Grid>
             <Drawer
                 anchor="bottom"
                 open={isDrawerOpen}

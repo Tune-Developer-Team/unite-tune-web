@@ -1,16 +1,24 @@
 import React, {useState} from "react";
-import ThinkTankView, {ThinkTankViewModelIF} from "../../thinkTank/ThinkTankView";
-import {MyThinkTankViewModel} from "./MyThinkTankViewModel";
 import {useRecoilState} from "recoil";
-import {authenticationState} from "../../../atoms/AuthenticationState";
+import {authenticationState, AuthenticationStateIF} from "../../../atoms/AuthenticationState";
 import Box from "@mui/material/Box";
+import {Outlet} from "react-router-dom";
+import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
+import {Think} from "../../../models/ThinkTank/Think";
+import {refreshTimelineState} from "../../../atoms/ThinkTimelineState";
 
 const MyThinkTank = () => {
-    const [authState] = useRecoilState(authenticationState);
-    const viewModel = MyThinkTankViewModel.appInit();
+    const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
+    const [refreshTimeline, setRefreshTimeline] = useRecoilState(refreshTimelineState);
+
+    // フォーム
+    const [thinkDraft, setThinkDraft] = useState<ThinkDraft>(ThinkDraft.initThinkDraft);
+    const [parentThink, setParentThink] = useState<Think | null>(null);
+    const [targetThink, setTargetThink] = useState<Think|null>(null)
+
     return (
         <Box>
-            <ThinkTankView viewModel={viewModel.viewInit(authState)}/>
+            <Outlet context={{targetThink, setTargetThink, setParentThink, refreshTimeline}}/>
         </Box>
     );
 }
