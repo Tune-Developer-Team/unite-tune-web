@@ -12,6 +12,10 @@ import Authentication from "../../models/Authentication/Authentication";
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
 import ReplyThinkModal from "./Parts/ReplyThinkMmodal";
 import {Outlet, useNavigate} from "react-router-dom";
+import AddThinkFormForPC from "./Parts/AddThinkFormForPC";
+import {useMediaQuery, useTheme} from "@mui/material";
+import Box from "@mui/material/Box";
+import {refreshTimelineState} from "../../atoms/ThinkTimelineState";
 
 export interface ThinkTankViewModelIF {
     isTopView: boolean;
@@ -25,20 +29,22 @@ export interface ThinkTankViewModelIF {
 const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     // グローバル
     const [authState] = useRecoilState(authenticationState);
+    const [refreshTimeline, setRefreshTimeline] = useRecoilState(refreshTimelineState); // Use Recoil state
 
     // UI
     const [viewModel] = useState<ThinkTankViewModelIF>(props.viewModel.viewInit(authState));
     // const [thinkList, setThinkList] = useState<Think[]>([]);
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md')); // Determines if on desktop
 
     // フォーム
     const [thinkDraft, setThinkDraft] = useState<ThinkDraft>(ThinkDraft.initThinkDraft);
     const [parentThink, setParentThink] = useState<Think | null>(null);
-
     const [targetThink, setTargetThink] = useState<Think|null>(null)
 
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
-    const [refreshTimeline, setRefreshTimeline] = useState<number>(0);
+    // const [refreshTimeline, setRefreshTimeline] = useState<number>(0);
     const navigate = useNavigate();
 
     /**
@@ -122,6 +128,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     //     }
     // }
 
+
     /**
      * 状態の初期化
      */
@@ -131,8 +138,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         setParentThink(null);
         setIsReply(false);
         setIsDrawerOpen(false);
-        // 状態の更新を行い、ThinkTimelineの再レンダリングをトリガー
-        setRefreshTimeline(prev => prev + 1);
     }
 
     /**
@@ -177,6 +182,9 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
             console.log('成功', response);
             //　状態の初期化
             setUp();
+
+            // 状態の更新を行い、子コンポーネントの再レンダリングをトリガー
+            setRefreshTimeline(true);
         } catch (e) {
             console.log('[catch]');
             console.log('失敗', e);
@@ -221,8 +229,6 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         <Grid sx={{paddingTop: {md: 6, lg: 6, xl: 6}}} container spacing={2} padding={0}>
             {/*トップタブ*/}
             {viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}
-            {/*フローティングアクションボタン*/}
-            <AddThinkButton onClick={openAddThinkModalHandler}/>
             {/*シンク投稿モーダル*/}
             <AddThinkModal
                 isOpen={isDrawerOpen}
@@ -241,8 +247,26 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                     thinkDraft={thinkDraft}
                     onDraftChange={onChangeDraftHandler}
                 /> : ""}
-            {/* タイムライン,詳細 */}
-            <Outlet context={{targetThink, setTargetThink, setParentThink, refreshTimeline}}/>
+            {/*スマホ用UI*/}
+            {!isDesktop && (
+                <>
+                    {/* タイムライン,詳細 */}
+                    <Outlet context={{targetThink, setTargetThink, setParentThink, refreshTimeline}}/>
+                    <AddThinkButton onClick={openAddThinkModalHandler}/>
+                </>
+            )}
+            {/*PC用UI*/}
+            {isDesktop && (
+                <Box display={"flex"} width={"100%"}>
+                    <AddThinkFormForPC
+                        onSubmit={addThinkButtonHandler}
+                        thinkDraft={thinkDraft}
+                        onDraftChange={onChangeDraftHandler}
+                    />
+                        {/* タイムライン,詳細 */}
+                        <Outlet context={{targetThink, setTargetThink, setParentThink}}/>
+                </Box>
+            )}
         </Grid>
     );
 };

@@ -16,3 +16,8 @@ export const scrollPositionState = atom<number>({
     key: 'scrollPositionState',
     default: 0,
 });
+
+export const refreshTimelineState = atom<boolean>({
+    key: 'refreshTimelineState',
+    default: false,
+});

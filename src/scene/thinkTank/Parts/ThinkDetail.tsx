@@ -11,8 +11,7 @@ import MarkdownRenderer from "../../../util/MarkdownRenderer";
 import {sanitizeMarkdown} from "../../../util/sanitizeMarkdown";
 
 const ThinkDetail: React.FC = () => {
-    const { setParentThink,refreshTimeline } = useOutletContext<{
-        refreshTimeline: number; // refreshTimelineの型を確認
+    const { setParentThink} = useOutletContext<{
         setParentThink: React.Dispatch<React.SetStateAction<Think>>
     }>();
     const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
@@ -74,11 +73,11 @@ const ThinkDetail: React.FC = () => {
         toggleReplyVisibility(thinkId);
     }, [thinkId]);
 
-    // 強制的に再読み込み
-    useEffect(() => {
-        // refreshTimeline が変化したときにタイムラインをリフレッシュするロジック
-        fetchDetail()
-    }, [refreshTimeline]); // refreshTimeline の変化を監視
+    // // 強制的に再読み込み
+    // useEffect(() => {
+    //     // refreshTimeline が変化したときにタイムラインをリフレッシュするロジック
+    //     fetchDetail()
+    // }, [refreshTimeline]); // refreshTimeline の変化を監視
 
     function onClickReplyHandler(think: Think) {
         setParentThink(think);
@@ -89,7 +88,13 @@ const ThinkDetail: React.FC = () => {
             <Button
                 startIcon={<ArrowBackIcon />}
                 onClick={() => navigate(-1)} // Go back to the previous screen
-                sx={{ marginBottom: 2 }}
+                sx={{
+                    marginBottom: 2,
+                    color: 'white', // ボタンのテキストカラーを白に設定
+                    '&:hover': {
+                        color: 'rgba(220,220,220,0.68)', // ボタンのテキストカラーを白に設定
+                    },
+                }}
             >
                 TimeLine
             </Button>

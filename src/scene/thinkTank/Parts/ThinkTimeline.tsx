@@ -8,24 +8,30 @@ import { sanitizeMarkdown } from "../../../util/sanitizeMarkdown";
 import { FetchTimeLineSearchIF, ThinkTable } from "../../../models/ThinkTank/ThinkTable";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { authenticationState, AuthenticationStateIF } from "../../../atoms/AuthenticationState";
-import {offsetState, scrollPositionState, thinkListState} from "../../../atoms/ThinkTimelineState";
+import {
+    offsetState,
+    refreshTimelineState,
+    scrollPositionState,
+    thinkListState
+} from "../../../atoms/ThinkTimelineState";
 
 
 const ThinkTimeline: React.FC = () => {
-    const { setTargetThink, setParentThink, refreshTimeline } = useOutletContext<{
+    const { setTargetThink, setParentThink } = useOutletContext<{
         setTargetThink: React.Dispatch<React.SetStateAction<Think>>;
         setParentThink: React.Dispatch<React.SetStateAction<Think>>;
-        refreshTimeline: number
     }>();
 
-    const thinkTable = ThinkTable.initThinkTable();
     const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
+    const [refreshTimeline, setRefreshTimeline] = useRecoilState(refreshTimelineState);
     const [thinkList, setThinkList] = useRecoilState(thinkListState);
     const [offset, setOffset] = useRecoilState(offsetState);
     const [scrollPosition, setScrollPosition] = useRecoilState(scrollPositionState);
     const setScrollPositionOnly = useSetRecoilState(scrollPositionState);
+
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const thinkTable = ThinkTable.initThinkTable();
 
     const limit = 10;
     const navigate = useNavigate();
@@ -59,6 +65,9 @@ const ThinkTimeline: React.FC = () => {
                 return [...prevThinkList, ...newThinkList.filter(think => !existingIds.has(think.thinkId))];
             });
         }
+
+        // 再レンダリングフラグ
+        setRefreshTimeline(false);
     };
 
     const handleScroll = () => {
@@ -88,11 +97,12 @@ const ThinkTimeline: React.FC = () => {
         fetchMoreThinks(0);
     };
 
-    /**
-     * 他コンポーネントから強制的に再読み込みを行う
-     */
     useEffect(() => {
-        handleRefresh()
+        // 他コンポーネントから強制的に再読み込みを行う
+        if (refreshTimeline) {
+            console.log("他コンポーネントから強制的に再読み込みを行う");
+            handleRefresh()
+        }
     }, [refreshTimeline]);
 
 
