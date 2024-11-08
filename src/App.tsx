@@ -25,6 +25,11 @@ import MyThinkTank from "./scene/profile/ThinkTankTab/MyThinkTank";
 import MainTab from "./scene/profile/MainTab/MainTab";
 import AISTab from "./scene/profile/AISTab/AISTab";
 import LibraryTab from "./scene/profile/LibraryTab/LibraryTab";
+import UniteLandingPage from "./scene/signIn/UniteLandingPage/UniteLandingPage";
+import LPCurios from "./scene/signIn/UniteLandingPage/LPCurios";
+import LPThinkTank from "./scene/signIn/UniteLandingPage/LPThinkTank";
+import LPAis from "./scene/signIn/UniteLandingPage/LPAis";
+import UniteLandingPageHeader from "./scene/signIn/UniteLandingPage/UniteLandingPageHeader";
 
 function App() {
     const [darkMode] = useState(true);
@@ -50,6 +55,7 @@ function App() {
     });
 
     console.log("loading-react-app");
+
     return (
         <RecoilRoot>
             <ThemeProvider theme={theme}>
@@ -57,6 +63,14 @@ function App() {
                     <Routes>
                         {/*Before Login Content*/}
                         <Route path='/register' element={<RegisterView />} />
+
+                        <Route path='/lp' element={<UniteLandingPageHeader/>}>
+                            <Route index element={<UniteLandingPage/>}/>
+                            <Route path='/lp/curios' element={<LPCurios/>}/>
+                            <Route path='/lp/think-tank' element={<LPThinkTank/>}/>
+                            <Route path='/lp/ais' element={<LPAis/>}/>
+                        </Route>
+
                         <Route path='/signin' element={<SignIn />} />
                         {/*Card*/}
                         <Route path='/card/:cardSerial' element={<TuneCardView />} />
