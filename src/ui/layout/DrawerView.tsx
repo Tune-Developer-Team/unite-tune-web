@@ -1,33 +1,17 @@
-import React, {useState} from 'react';
-import {styled, Theme, CSSObject} from '@mui/material/styles';
+import React, { useState } from 'react';
 import {
-    Box,
-    Drawer as MuiDrawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Divider,
-    Button,
-    useMediaQuery
+    Box, Drawer as MuiDrawer, List, ListItem, ListItemButton,
+    ListItemIcon, ListItemText, Divider, Button, useMediaQuery
 } from '@mui/material';
-import {useNavigate} from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { useRecoilState } from 'recoil';
+import { parentItemsState, ParentItem } from "../../atoms/ParentItemState";
 import logo from '../../uniteLogo.svg';
-import {useRecoilState} from "recoil";
-import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
-import aiIcon from "../../assets/ais.svg";
-import SettingsIcon from '@mui/icons-material/Settings';
-import LinkIcon from '@mui/icons-material/Link';
-import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
-import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
-import BottomMenu from "./ButtomMenu";
 import HeaderUserIconMenu from "./HeaderUserIconMenu";
-import Profile from "../../models/Profile/Profile";
-import {profileState} from "../../atoms/ProfileState";
+import BottomMenu from "./ButtomMenu";
+import { CustomUrl } from "../../models/CustomUrl/CustomUrl";
 
 const drawerWidth = 240;
 
@@ -52,15 +36,15 @@ const closedMixin = (theme: Theme): CSSObject => ({
     },
 });
 
-const DrawerHeader = styled('div')(({theme}) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 0),
 }));
 
-const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
-    ({theme, open}) => ({
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
@@ -76,119 +60,38 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-export interface ParentItem {
-    label: string;
-    icon: React.ReactNode;
-    linkPath: string;
-    children?: Array<{ label: string; linkPath: string }>;
-}
-
-const DrawerView = () => {
+export default function DrawerView() {
     const navigate = useNavigate();
-    const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
-    const [profile] = useRecoilState(profileState);
-
+    const [parentItems] = useRecoilState<ParentItem[]>(parentItemsState);
     const [open, setOpen] = useState(false);
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
+    const [customUrlList] = useState<CustomUrl[]>([]);
+    const isMobile = useMediaQuery('(max-width:600px)');
 
-    const parentItems: ParentItem[] = [
-        {
-            label: 'Home',
-            icon: <HomeIcon/>,
-            linkPath: "/",
-            children: [
-                {label: 'Overview', linkPath: "/home/overview"},
-            ],
-        },
-        {
-            label: 'Think Tank',
-            icon: <img src={tsubuyakiIcon} alt={""}/>,
-            linkPath: "/think-tank",
-            children: [
-                {label: 'All', linkPath: "/"},
-                {label: 'General', linkPath: "/"},
-                {label: 'Tech', linkPath: "/"},
-            ]
-        },
-        {
-            label: 'AIS',
-            icon: <img src={aiIcon} alt={""}/>,
-            linkPath: `/ais/${authState.uid}`,
-            children: [
-                {label: '勤怠', linkPath: '/'}
-            ]
-        },
-        {
-            label: 'Quests',
-            icon: <AssignmentIndIcon/>,
-            linkPath: "/quests",
-            children: [
-                {label: 'All', linkPath: "/"},
-                {label: '募集中', linkPath: "/"},
-                {label: '終了済み', linkPath: "/"},
-            ]
-        },
-        {
-            label: 'Blog',
-            icon: <AssignmentIndIcon/>,
-            linkPath: "/blogposts",
-            children: [
-                {label: 'Blog Posts', linkPath: `/`}
-            ]
-        },
-        {
-            label: 'Preference',
-            icon: <SettingsIcon/>,
-            linkPath: "/preference",
-            children: [
-                {label: 'Settings', linkPath: '/preference/'}
-            ]
-        },
-        {
-            label: 'Profile',
-            icon: <AssignmentIndIcon/>,
-            linkPath: `/user/${authState.uid}`,
-            children: [
-                {label: 'Main', linkPath: `/user/${authState.uid}`},
-                {label: 'Think Tank', linkPath: `/user/${authState.uid}/think-tank`},
-                {label: 'Library', linkPath: `/user/${authState.uid}/library`},
-                {label: 'AIS', linkPath: `/user/${authState.uid}/ais`},
-                {label: 'Portfolio', linkPath: `/user/${authState.uid}/portfolio`},
-            ],
-        },
-    ];
-
-    // カスタムURL
-    const [selectedParent, setSelectedParent] = useState<ParentItem>(parentItems[0]);
-    const [customUrlList, setCustomUrlList] = useState<CustomUrl[]>([]);
-
-    const handleParentClick = (item: ParentItem) => {
-        setSelectedParent(item);
+    const handleItemClick = (item: ParentItem) => {
         navigate(item.linkPath);
     };
 
-    const isMobile = useMediaQuery('(max-width:600px)');
-
     return (
-        <Box sx={{display: 'flex'}}>
+        <Box sx={{ display: 'flex' }}>
             {isMobile ? (
-                <Box sx={{flexGrow: 1, padding: 1, width: "100%"}}>
-                    <HeaderUserIconMenu/>
-                    <BottomMenu menuItems={parentItems.slice(0, 3)}/>
+                <Box sx={{ flexGrow: 1, padding: 1, width: "100%" }}>
+                    <HeaderUserIconMenu />
+                    <BottomMenu />
                 </Box>
             ) : (
                 <Drawer variant="permanent" open={open}>
-                    <HeaderUserIconMenu/>
+                    <HeaderUserIconMenu />
                     <DrawerHeader>
                         <Button onClick={open ? handleDrawerClose : handleDrawerOpen}>
-                            {open ? <ChevronLeftIcon/> : <img src={logo} width={20}/>}
+                            {open ? <ChevronLeftIcon /> : <img src={logo} width={20} />}
                         </Button>
                     </DrawerHeader>
-                    <Divider/>
+                    <Divider />
                     <List>
                         {parentItems.map((item, index) => (
-                            <ListItem key={index} disablePadding onClick={() => handleParentClick(item)}>
+                            <ListItem key={index} disablePadding onClick={() => handleItemClick(item)}>
                                 <ListItemButton
                                     sx={{minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5}}>
                                     <ListItemIcon sx={{minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center'}}>
@@ -199,29 +102,17 @@ const DrawerView = () => {
                             </ListItem>
                         ))}
                     </List>
-                    <Divider/>
+                    <Divider />
                     <List>
-                        {customUrlList.map((item, index) => (
-                            <ListItem key={item.customUrlId} disablePadding sx={{display: 'block'}}>
-                                <a href={item.urlString} style={{textDecoration: "none", color: "white"}}>
-                                    <ListItemButton
-                                        sx={{
-                                            minHeight: 48,
-                                            justifyContent: open ? 'initial' : 'center',
-                                            px: 2.5,
-                                        }}
-                                    >
-                                        <ListItemIcon
-                                            sx={{
-                                                minWidth: 0,
-                                                mr: open ? 3 : 'auto',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <LinkIcon/>
-                                        </ListItemIcon>
-                                        <ListItemText primary={item.textString} sx={{opacity: open ? 1 : 0}}/>
-                                    </ListItemButton>
+                        {customUrlList.map((item) => (
+                            <ListItem key={item.customUrlId} disablePadding sx={{ display: 'block' }}>
+                                <a href={item.urlString} style={{ textDecoration: "none", color: "white" }}>
+                                    {/*<ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>*/}
+                                    {/*    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>*/}
+                                    {/*        <LinkIcon />*/}
+                                    {/*    </ListItemIcon>*/}
+                                    {/*    <ListItemText primary={item.displayName} sx={{ opacity: open ? 1 : 0 }} />*/}
+                                    {/*</ListItemButton>*/}
                                 </a>
                             </ListItem>
                         ))}
@@ -231,5 +122,3 @@ const DrawerView = () => {
         </Box>
     );
 }
-
-export default DrawerView

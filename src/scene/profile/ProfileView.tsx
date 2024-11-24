@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import Button from "@mui/material/Button";
 import {Outlet, useNavigate, useParams} from "react-router-dom";
@@ -25,7 +25,6 @@ import threeDModel from "../crappy/crappy.png";
 import generateCuriosTagChips from "../../ui/curiosTag/CuriosTagChips";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 import {ImageUploadForm} from "./ImageUploadForm";
-import MyThinkTank from "./ThinkTankTab/MyThinkTank";
 
 const ProfileView = () => {
     // グローバルオブジェクト
