@@ -10,11 +10,12 @@ import AddThinkButton from "./Parts/AddThinkButton";
 import Authentication from "../../models/Authentication/Authentication";
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
 import ReplyThinkModal from "./Parts/ReplyThinkMmodal";
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import AddThinkFormForPC from "./Parts/AddThinkFormForPC";
 import {useMediaQuery, useTheme} from "@mui/material";
 import Box from "@mui/material/Box";
 import {refreshTimelineState} from "../../atoms/ThinkTimelineState";
+import {parentItemsState} from "../../atoms/ParentItemState";
 
 export interface ThinkTankViewModelIF {
     isTopView: boolean;
@@ -151,7 +152,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         }
 
         // ガード節
-        if (thinkDraft.sentence == "") {
+        if (thinkDraft.sentence === "") {
             // TODO:実装
             window.alert("本文なしなのでダメ");
             return

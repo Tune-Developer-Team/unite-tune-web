@@ -12,19 +12,18 @@ import {
     Grid,
     TextField, Drawer
 } from '@mui/material';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import {DrawerViewModel} from "./DarawerViewModel";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {profileState} from "../../atoms/ProfileState";
-import SettingsIcon from '@mui/icons-material/Settings';
 import {authenticationState} from "../../atoms/AuthenticationState";
 import AddIcon from "@mui/icons-material/Add";
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Profile from "../../models/Profile/Profile";
+import {parentItemsState} from "../../atoms/ParentItemState";
 
 const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
@@ -32,6 +31,7 @@ const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 const HeaderUserIconMenu = () => {
     //　グローバルオブジェクト
     const [authentication] = useRecoilState(authenticationState);
+    const parentItems = useRecoilValue(parentItemsState);
     const [profile] = useRecoilState<Profile>(profileState);
 
     // ビューモデル
@@ -68,13 +68,17 @@ const HeaderUserIconMenu = () => {
         setIsAvatarHovered(false); // Reset hover state
     };
 
-    const menuItems = [
-        {label: 'Profile', icon: <AssignmentIndIcon/>, linkPath: `/user/${authentication.uid}`},
-        {
-            label: 'Preference',
-            icon: <SettingsIcon/>,
-            linkPath: "/preference"
-        }];
+    // const menuItems= [
+    //     {
+    //         label: 'Profile',
+    //         icon: <AssignmentIndIcon/>,
+    //         linkPath: `/user/${authentication.uid}`
+    //     },
+    //     {
+    //         label: 'Preference',
+    //         icon: <SettingsIcon/>,
+    //         linkPath: "/preference"
+    //     }];
 
     return (
         <Box
@@ -107,7 +111,7 @@ const HeaderUserIconMenu = () => {
                         overflowX: 'auto',
                         flexWrap: 'flex-wrap',
                     }}>
-                        {menuItems.map((item, index) => (
+                        {parentItems.slice(3, 6).map((item, index) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'flex'}} onClick={() => {
                                 handleDrawerClose()
                                 if (item.linkPath === TSUBUYAKI_ORIGIN) {

@@ -6,25 +6,17 @@ import {
     Typography
 } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { authenticationState } from "../../atoms/AuthenticationState";
+import {useRecoilValue} from "recoil";
+import {parentItemsState} from "../../atoms/ParentItemState";
 
-interface MenuItem {
-    label: string;
-    icon: React.ReactNode;
-    linkPath: string;
-}
-
-interface FooterMenuProps {
-    menuItems: MenuItem[];
-}
-
-const BottomMenu: React.FC<FooterMenuProps> = ({ menuItems }) => {
+const BottomMenu: React.FC = () => {
     const navigate = useNavigate();
 
     const [viewportHeight, setViewportHeight] = useState<number>(window.innerHeight);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [lastScrollY, setLastScrollY] = useState<number>(0);
+
+    const parentItems = useRecoilValue(parentItemsState);
 
     useEffect(() => {
         const handleResize = () => {
@@ -80,7 +72,7 @@ const BottomMenu: React.FC<FooterMenuProps> = ({ menuItems }) => {
                 overflowX: 'auto',
                 width: "100%"
             }}>
-                {menuItems.map((item) => (
+                {parentItems.slice(0, 3).map((item) => (
                     <ListItem key={item.label} disablePadding sx={{ justifyContent: "center" }} onClick={() => {
                         navigate(item.linkPath);
                     }}>

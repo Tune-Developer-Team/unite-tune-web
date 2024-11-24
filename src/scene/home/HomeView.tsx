@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import {authenticationState} from "../../atoms/AuthenticationState";
 import {profileState} from "../../atoms/ProfileState";
 import {HomeViewModel} from "./HomeViewModel";
@@ -14,7 +14,6 @@ import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";
 import QuestTileBanner from "../../ui/quest/QuestTileBanner";
 import {SelectedTabIF, selectedTabState} from "../../atoms/SelectedTabState";
-import BlogPostTileSixColumn from "../../ui/blogPostSixColumn/BlogPostTileSixColumn";
 import AllTabView from "./AllTabView/AllTabView";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -28,21 +27,21 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import RoundedButton from "../../ui/button/RoundedButton";
 import {QuestDetail} from "../../models/Quest/Quest";
-import {Api} from "../../models/Api/Api";
 import {SaveQuestParamIF} from "../Quest/QuestViewModel";
 import {FileUploadForm} from "../Quest/FileUploadForm";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
+import {ParentItem, parentItemsState} from "../../atoms/ParentItemState";
 
 const HomeView = () => {
     const navigate = useNavigate();
 
     // グローバル
-    const [navigation, setNavigation] = useRecoilState(navigationState);
-    const [authState, setAuthentication] = useRecoilState(authenticationState);
-    const [profile, setProfile] = useRecoilState(profileState);
+    const setNavigation = useSetRecoilState(navigationState);
+    const [authState] = useRecoilState(authenticationState);
+    // const [profile, setProfile] = useRecoilState(profileState);
     const [topTab] = useRecoilState<SelectedTabIF>(selectedTabState);
+    const [parentItems] = useRecoilState(parentItemsState);
 
     // UI
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -55,13 +54,6 @@ const HomeView = () => {
     const [isShowDetailSetting, setIsShowDetailSetting] = useState<boolean>(false);
     const [imagePathList, setImagePathList] = useState<ImagePath[]>([]);
     const [newTags, setNewTags] = useState<string[]>([]);
-
-    // const tabItems: TabItem[] = [
-    //     {label: 'All'},
-    //     {label: 'Quest'},
-    //     {label: 'Blog'},
-    //     {label: 'Goods'}
-    // ];
 
     /**
      * questリストの読み込み
@@ -103,7 +95,16 @@ const HomeView = () => {
         }
     }
 
+    function findParentItemByLabel(parentItems: ParentItem[], label: string): ParentItem | undefined {
+        return parentItems.find(item => item.label === label);
+    }
+
     useEffect(() => {
+        const parentPage = findParentItemByLabel(parentItems, "Home");
+        if (parentPage != undefined){
+            console.log("aaaaaaaaaaa");
+        }
+
         setNavigation({isHidden: false, isEnableRedirect: true});
         // セットアップ
         viewModel.setUp({
