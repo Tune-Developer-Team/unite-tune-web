@@ -4,13 +4,13 @@ import parse from "html-react-parser";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import postCardBackground from "../../scene/library/Parts/dBlog/BlogPostTileBackground.svg";
-import {FeedItem} from "../../scene/library/Parts/dBlog/BlogPostTileBanner";
-import blogIcon from "../../assets/dBlog111Icon.png";
+import postCardBackground from "./BlogPostTileBackground.svg";
+import {FeedItem} from "./BlogPostTileBanner";
+import blogIcon from "../../../../assets/dBlog111Icon.png";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
-    width: 60, // Fixed width for square tiles
-    height: 60, // Fixed height for square tiles
+    width: 180, // Fixed width for square tiles
+    height: 180, // Fixed height for square tiles
     flexShrink: 0,
     color: "#232323",
     position: "relative",  // 子要素の絶対位置を指定可能に
@@ -25,25 +25,19 @@ const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
 }));
 
 const Title = styled(Typography)({
-    fontWeight: "thin",
+    fontWeight: "bold",
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "break-word",
-    color: "#ffffff",
-    paddingTop: 6,
-    paddingLeft:4,
-    paddingRight:2,
-    fontSize:13,
+    color: "#181818"
 });
 
 const AvatarIcon = styled(Avatar)({
     position: "absolute",
-    top: 20,
-    left: 20,
+    bottom: 0,
+    right: 0,
     margin: 8, // タイルの右下から少し内側に配置
     zIndex: 1, // 背景画像の前に表示されるように調整
-    width:30,
-    height:30,
     transition: "transform 0.2s ease-in-out",
     pointerEvents: "auto", // クリックイベントを受け取る
     "&:hover": {
@@ -76,28 +70,38 @@ interface SeedTileProps {
     item:  FeedItem; // 親コンポーネントから渡されるフィード
 }
 
-const BlogPostSixColumnTile: React.FC<SeedTileProps> = ({ item }) => {
+const BlogPostTile: React.FC<SeedTileProps> = ({ item }) => {
     return (
-        <Box sx={{display: "flex", backgroundColor: "rgba(63,63,63,0.76)", borderRadius: 1}} margin={1}>
+        <Box>
             <Tile
                 image={blogIcon}
-                onClick={() => {
+                onClick={()=>{
                     window.open(item.link, "_blank");
                 }}
             >
                 {/* 重ねる画像を表示 */}
                 <BackGroundImage src={blogIcon} alt="BackGround"/>
                 <OverlayImage src={postCardBackground} alt="Overlay"/>
+
+                <Title variant="h6" gutterBottom>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {parse(item.title.substring(0, 38).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
+                </Title>
                 <Box height={"100%"}>
-                    <AvatarIcon alt="userIcon" sizes={"ss"} src={blogIcon} onClick={() => {
+                    <AvatarIcon alt="userIcon" sizes={"ss"} src={blogIcon} onClick={()=>{
                         window.open(item.link, "_blank");
                     }}/>
                 </Box>
             </Tile>
-            <Title variant="body2">
-                {parse(item.title.substring(0, 14).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
-            </Title>
+
+            <Box display={"flex"} paddingTop={1}>
+                <span style={{fontSize:12}}>{parse(item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
+                    <span style={{color:"#fff"}} onClick={() => {
+                        window.open(item.link, "_blank");
+                    }}>...続きをみる</span>
+                </span>
+            </Box>
         </Box>
     );
 }
-export default BlogPostSixColumnTile;
+export default BlogPostTile;

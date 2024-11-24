@@ -1,18 +1,16 @@
 // AddContentModal.tsx
 import React, {useEffect, useState} from 'react';
-import { Drawer, Box, Typography, TextField, Avatar } from '@mui/material';
-import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
-import CuriosTagInput from "../../../ui/curiosTag/CuriosTagInput";
+import {Drawer, Box, Typography, TextField, Avatar, Button} from '@mui/material';
+import {ThinkDraft} from "../../../../models/ThinkTank/ThinkiDraft";
+import CuriosTagInput from "../../../../ui/curiosTag/CuriosTagInput";
 
-interface AddThinkModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+interface AddThinkFormForPCProps {
     onSubmit: () => void;
     thinkDraft: ThinkDraft;
     onDraftChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, thinkDraft: ThinkDraft) => ThinkDraft;
 }
 
-const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit, thinkDraft, onDraftChange }) => {
+const AddContentFormForPC: React.FC<AddThinkFormForPCProps> = ({ onSubmit, thinkDraft, onDraftChange }) => {
     const [sentence, setSentence] = useState<string>("");
     const [curiosTags, setCuriosTags] = useState<string[]>([]);
 
@@ -62,32 +60,7 @@ const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit
 
 
     return (
-        <Drawer
-            anchor="bottom"
-            open={isOpen}
-            onClose={onClose}
-            sx={{
-                '& .MuiDrawer-paper': {
-                    padding: 2,
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
-                    backgroundColor: "#000000",
-                    animation: 'slideUp 0.3s ease-in-out',
-                    height: '90vh',
-                    maxHeight: '98vh',
-                    overflowY: 'auto'
-                },
-                '@keyframes slideUp': {
-                    '0%': { transform: 'translateY(100%)' },
-                    '100%': { transform: 'translateY(0)' },
-                }
-            }}
-        >
-            <Box sx={{ padding: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <Box display="flex" position="sticky" top={10} zIndex={10}>
-                    <Typography color="#ffffff" onClick={onClose} sx={{ font: 'bold' }}>キャンセル</Typography>
-                    <Typography color="#496cff" onClick={onSubmit} sx={{ font: 'bold', marginLeft: 'auto' }}>つぶやく</Typography>
-                </Box>
+            <Box sx={{ paddingTop: 0, padding: 2, display: 'flex', flexDirection: 'column', width: '100%' }}>
                 <TextField
                     onChange={onChangeHandler}
                     multiline
@@ -95,14 +68,27 @@ const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit
                     placeholder="ここは自由な場所です。思ったことはなんでも気軽に書こう。"
                     variant="outlined"
                     fullWidth
-                    minRows={15}
+                    minRows={3}
                     maxRows={40}
                     sx={{ flexGrow: 1, resize: 'vertical', overflow: 'auto', paddingTop: 4 }}
                 />
                 <CuriosTagInput tags={curiosTags} setTags={setCuriosTags} />
+                <Box display="flex" position="sticky" top={10} zIndex={10}>
+                    <Button onClick={onSubmit} sx={{
+                        font: 'bold', marginLeft: 'auto',
+                        color: 'white', // ボタンのテキストカラーを白に設定
+                        backgroundColor: '#1c3cda',
+                        '&:hover': {
+                            backgroundColor: '#6174da' // ホバー時の背景色を少し変える
+                        },
+                    }}
+                    >
+                        つぶやく
+                    </Button>
+                    {/*<Typography color="#496cff" ></Typography>*/}
+                </Box>
             </Box>
-        </Drawer>
     );
 };
 
-export default AddThinkModal;
+export default AddContentFormForPC;

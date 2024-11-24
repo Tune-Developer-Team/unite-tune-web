@@ -37,7 +37,7 @@ const Layout = () => {
             children: [
                 { label: 'All', linkPath: "/home" },
                 { label: 'quest', linkPath: "/quests" },
-                { label: 'dBlog', linkPath: "https://dblog111.hatenablog.jp/archive" },
+                { label: 'dBlog', linkPath: "/library/d-blog-list" },
                 { label: 'Library', linkPath: "/library" },
             ],
             isActive: false
@@ -65,11 +65,11 @@ const Layout = () => {
             icon: <AssignmentIndIcon />,
             linkPath: "/library",
             children: [
-                { label: 'AllMedia', linkPath: "/library" },
-                { label: 'dBog', linkPath: "/library?category=dBog" },
-                { label: 'clips', linkPath: "/library?category=clip" },
-                { label: 'Book', linkPath: "/library?category=book" },
-                { label: 'Document', linkPath: "/library?category=document" },
+                { label: 'All', linkPath: "/library" },
+                { label: 'DBog', linkPath: "/library/d-blog-list" },
+                { label: 'Clips', linkPath: "/library/clip-list" },
+                { label: 'Book', linkPath: "/library/book-list" },
+                { label: 'Document', linkPath: "/library/document-list" },
             ],
             isActive: pathname.startsWith("/library")
         },

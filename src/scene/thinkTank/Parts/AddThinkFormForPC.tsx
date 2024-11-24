@@ -1,4 +1,4 @@
-// AddThinkModal.tsx
+// AddContentModal.tsx
 import React, {useEffect, useState} from 'react';
 import {Drawer, Box, Typography, TextField, Avatar, Button} from '@mui/material';
 import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
@@ -18,7 +18,7 @@ const AddThinkFormForPC: React.FC<AddThinkFormForPCProps> = ({ onSubmit, thinkDr
      * セットアップ処理
      */
     useEffect(() => {
-        console.log('[set-up]AddThinkModal')
+        console.log('[set-up]AddContentModal')
         initForm();
     }, [thinkDraft])
 

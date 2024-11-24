@@ -5,33 +5,32 @@ import {authenticationState, AuthenticationStateIF} from "../../atoms/Authentica
 import {Think} from "../../models/ThinkTank/Think";
 import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
 import {v4 as uuidv4} from 'uuid';
-import AddThinkModal from "./Parts/AddThinkModal";
-import AddThinkButton from "./Parts/AddThinkButton";
+import AddContentModal from "./Parts/common/AddContentModal";
+import AddContent from "./Parts/common/AddContent";
 import Authentication from "../../models/Authentication/Authentication";
 import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
-import ReplyThinkModal from "./Parts/ReplyThinkMmodal";
+import ReplyThinkModal from "./Parts/common/CommentMmodal";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-import AddThinkFormForPC from "./Parts/AddThinkFormForPC";
+import AddContentFormForPC from "./Parts/common/AddContentFormForPC";
 import {useMediaQuery, useTheme} from "@mui/material";
 import Box from "@mui/material/Box";
 import {refreshTimelineState} from "../../atoms/ThinkTimelineState";
-import {parentItemsState} from "../../atoms/ParentItemState";
 
-export interface ThinkTankViewModelIF {
+export interface LibraryViewModelIF {
     isTopView: boolean;
     thinkTable: ThinkTable;
     thinkDraft: ThinkDraft;
     loadTimeLine(): Promise<ThinkTable>;
-    viewInit(authState: AuthenticationStateIF): ThinkTankViewModelIF;
+    viewInit(authState: AuthenticationStateIF): LibraryViewModelIF;
 }
 
-const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
+const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
     // グローバル
     const [authState] = useRecoilState(authenticationState);
     const [refreshTimeline, setRefreshTimeline] = useRecoilState(refreshTimelineState); // Use Recoil state
 
     // UI
-    const [viewModel] = useState<ThinkTankViewModelIF>(props.viewModel.viewInit(authState));
+    const [viewModel] = useState<LibraryViewModelIF>(props.viewModel.viewInit(authState));
     // const [thinkList, setThinkList] = useState<UniteContent[]>([]);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md')); // Determines if on desktop
@@ -227,9 +226,9 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
     return (
         <Grid sx={{paddingTop: {md: 6, lg: 6, xl: 6}}} container spacing={2} padding={0}>
             {/*トップタブ*/}
-            {/*{viewModel.isTopView ? <CustomTabs tabItems={viewModel.tabItems} bottomTab={'ThinkTank'}/> : ""}*/}
+            <h3>Library</h3>
             {/*シンク投稿モーダル*/}
-            <AddThinkModal
+            <AddContentModal
                 isOpen={isDrawerOpen}
                 onClose={closeDrawerHandler}
                 onSubmit={addThinkButtonHandler}
@@ -251,23 +250,23 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
                 <>
                     {/* タイムライン,詳細 */}
                     <Outlet context={{targetThink, setTargetThink, setParentThink, refreshTimeline}}/>
-                    <AddThinkButton onClick={openAddThinkModalHandler}/>
+                    {/*<AddContent onClick={openAddThinkModalHandler}/>*/}
                 </>
             )}
             {/*PC用UI*/}
             {isDesktop && (
                 <Box display={"flex"} width={"100%"}>
-                    <AddThinkFormForPC
+                    <AddContentFormForPC
                         onSubmit={addThinkButtonHandler}
                         thinkDraft={thinkDraft}
                         onDraftChange={onChangeDraftHandler}
                     />
-                        {/* タイムライン,詳細 */}
-                        <Outlet context={{targetThink, setTargetThink, setParentThink}}/>
+                    {/* タイムライン,詳細 */}
+                    <Outlet context={{targetThink, setTargetThink, setParentThink}}/>
                 </Box>
             )}
         </Grid>
     );
 };
 
-export default ThinkTankView;
+export default LibraryView;

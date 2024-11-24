@@ -4,9 +4,10 @@ import parse from "html-react-parser";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import postCardBackground from "./BlogPostTileBackground.svg";
-import {FeedItem} from "./BlogPostTileBanner";
-import blogIcon from "../../assets/dBlog111Icon.png";
+import postCardBackground from "./ClipPostTileBackground.svg";
+import {FeedItem} from "./ClipPostTileBanner";
+import blogIcon from "../../../../assets/dBlog111Icon.png";
+import {useNavigate} from "react-router-dom";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
     width: 180, // Fixed width for square tiles
@@ -70,13 +71,14 @@ interface SeedTileProps {
     item:  FeedItem; // 親コンポーネントから渡されるフィード
 }
 
-const BlogPostTile: React.FC<SeedTileProps> = ({ item }) => {
+const ClipPostTile: React.FC<SeedTileProps> = ({ item }) => {
+    const navigate = useNavigate();
     return (
         <Box>
             <Tile
                 image={blogIcon}
                 onClick={()=>{
-                    window.open(item.link, "_blank");
+                    navigate(item.link);
                 }}
             >
                 {/* 重ねる画像を表示 */}
@@ -104,4 +106,4 @@ const BlogPostTile: React.FC<SeedTileProps> = ({ item }) => {
         </Box>
     );
 }
-export default BlogPostTile;
+export default ClipPostTile;

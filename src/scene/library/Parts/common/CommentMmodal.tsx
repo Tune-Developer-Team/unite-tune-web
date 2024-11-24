@@ -1,12 +1,12 @@
 // AddContentModal.tsx
 import React, {useEffect, useState} from 'react';
 import { Drawer, Box, Typography, TextField, Avatar } from '@mui/material';
-import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
-import CuriosTagInput from "../../../ui/curiosTag/CuriosTagInput";
-import {Think} from "../../../models/ThinkTank/Think";
-import replyBar from './replyBar.svg'
+import {ThinkDraft} from "../../../../models/ThinkTank/ThinkiDraft";
+import CuriosTagInput from "../../../../ui/curiosTag/CuriosTagInput";
+import {Think} from "../../../../models/ThinkTank/Think";
+import replyBar from './CommentBar.svg'
 import {useRecoilState} from "recoil";
-import {profileState} from "../../../atoms/ProfileState";
+import {profileState} from "../../../../atoms/ProfileState";
 import {red} from "@mui/material/colors";
 
 interface ReplyThinkModalProps {
@@ -90,7 +90,7 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
 
     const generatePlaceholder = (): string => {
         const to = parentThink?.thinkUserName ?? "";
-        return `${to}さんへ返信しよう.まだ開発中だけど好きに触ってみて！`;
+        return `${to}さんへ非公開で質問や感想などを投稿しよう！`;
     }
 
     return (

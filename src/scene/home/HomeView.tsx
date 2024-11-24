@@ -8,7 +8,7 @@ import {profileState} from "../../atoms/ProfileState";
 import {HomeViewModel} from "./HomeViewModel";
 import {QuestListItem} from "./HomeViewModelIF";
 import {navigationState} from "../../atoms/NavigationState";
-import BlogPostTileBanner from "../../ui/blogPost/BlogPostTileBanner";
+import BlogPostTileBanner from "../library/Parts/dBlog/BlogPostTileBanner";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {useNavigate} from "react-router-dom";

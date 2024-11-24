@@ -11,7 +11,7 @@ import HomeView from "./scene/home/HomeView";
 import TuneCardView from "./scene/tuneCard/tuneCardView";
 import PreferenceView from "./scene/preference/PreferenceView";
 import RegisterView from "./scene/register/registerView";
-import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
+import BlogPostTileList from "./scene/library/Parts/dBlog/BlogPostTileList";
 import AISecretary from "./scene/crappy/AISecretary";
 import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
@@ -30,6 +30,11 @@ import LPCurios from "./scene/signIn/UniteLandingPage/LPCurios";
 import LPThinkTank from "./scene/signIn/UniteLandingPage/LPThinkTank";
 import LPAis from "./scene/signIn/UniteLandingPage/LPAis";
 import UniteLandingPageHeader from "./scene/signIn/UniteLandingPage/UniteLandingPageHeader";
+import LibraryView from "./scene/library/LibraryView";
+import {LibraryViewModel} from "./scene/library/LibraryViewModel";
+import CommentTimeline from "./scene/library/Parts/common/CommentTimeline";
+import ClipPostTileList from "./scene/library/Parts/clips/ClipPostTileList";
+import ContentDetail from "./scene/library/Parts/common/ContentDetail";
 
 function App() {
     const [darkMode] = useState(true);
@@ -97,12 +102,17 @@ function App() {
                             </Route>
                             {/*AIS*/}
                             <Route path='/ais/:uid' element={<AISecretary />} />
+                            {/*Library*/}
+                            <Route path="library" element={<LibraryView viewModel={LibraryViewModel.appInit()}/>}>
+                                <Route index element={<CommentTimeline />} />
+                                <Route path="d-blog-list" element={<BlogPostTileList />} />
+                                <Route path="clip-list" element={<ClipPostTileList />} />
+                                <Route path=":thinkId" element={<ContentDetail />} />
+                            </Route>
                             {/*quest*/}
                             <Route path='/quests' element={<QuestListView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
                             <Route path='/quests/:questId/edit' element={<QuestView />} />
-                            {/*Blog*/}
-                            <Route path='/blogposts' element={<BlogPostTileList />} />
                         </Route>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>

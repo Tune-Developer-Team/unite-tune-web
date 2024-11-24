@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import defaultServiceIcon from "../../assets/dBlog111Icon.png";
-import {Grid} from "@mui/material";
-import BlogPostSixColumnTile from "./BlogPostSixColumnTile";
+import { styled } from "@mui/system";
+import defaultServiceIcon from "../../../../assets/dBlog111Icon.png";
+import BlogPostTile from "./BlogPostTile";
 
 export interface FeedItem {
     title: string;
@@ -10,16 +11,27 @@ export interface FeedItem {
     description: string;
 }
 
-export const BlogService = {
+const service = {
     name: "DBlog111",
     icon: defaultServiceIcon,
     feed: process.env.REACT_APP_TARGET_BLOG_RSS as string
 }
 
 // 取得件数
-const MAX_FEED_COUNT = 6;
+const MAX_FEED_COUNT = 5;
 
-const BlogPostTileSixColumn: React.FC = () => {
+const ScrollContainer = styled(Box)({
+    display: "flex",
+    gap: 20, // Add spacing between tiles
+    overflowX: "auto",
+    padding: 0,
+    scrollBehavior: "smooth",
+    '&::-webkit-scrollbar': {
+        display: 'none', // Hide scrollbar for a cleaner look
+    },
+});
+
+const BlogPostTileBanner: React.FC = () => {
     const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -27,7 +39,7 @@ const BlogPostTileSixColumn: React.FC = () => {
         document.body.style.overflowY = '';
         const fetchRSSFeed = async () => {
             try {
-                const response = await fetch(BlogService.feed);
+                const response = await fetch(service.feed);
                 const text = await response.text();
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "application/xml");
@@ -49,19 +61,35 @@ const BlogPostTileSixColumn: React.FC = () => {
         fetchRSSFeed();
     }, []);
 
+    const handleMouseEnter = () => {
+        document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
+    };
+
+    const handleMouseLeave = () => {
+        document.body.style.overflowY = ''; // Re-enable vertical scrolling
+    };
+
+    const handleScroll = (e: React.WheelEvent) => {
+        if (window.innerWidth >= 1024) {
+            e.currentTarget.scrollLeft += e.deltaY;
+        }
+    };
+
     if (loading) {
         return <CircularProgress />;
     }
 
     return (
-        <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
+        <ScrollContainer
+            onWheel={handleScroll}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
             {feedItems.map((item, index) => (
-                <Grid xs={6} sm={6} md={6} lg={6} paddingLeft={1}>
-                    <BlogPostSixColumnTile item={item}/>
-                </Grid>
+                <BlogPostTile item={item}/>
             ))}
-        </Grid>
+        </ScrollContainer>
     );
 };
 
-export default BlogPostTileSixColumn;
+export default BlogPostTileBanner;

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
-import defaultServiceIcon from "../../assets/dBlog111Icon.png";
-import BlogPostTile from "./BlogPostTile";
+import defaultServiceIcon from "../../../../assets/dBlog111Icon.png";
+import ClipPostTile from "./ClipPostTile";
 
 export interface FeedItem {
     title: string;
@@ -31,7 +31,7 @@ const ScrollContainer = styled(Box)({
     },
 });
 
-const BlogPostTileBanner: React.FC = () => {
+const ClipPostTileBanner: React.FC = () => {
     const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -52,7 +52,7 @@ const BlogPostTileBanner: React.FC = () => {
 
                 setFeedItems(items);
             } catch (error) {
-                console.error("Error fetching RSS blogPost:", error);
+                console.error("Error fetching RSS dBlog:", error);
             } finally {
                 setLoading(false);
             }
@@ -86,10 +86,10 @@ const BlogPostTileBanner: React.FC = () => {
             onMouseLeave={handleMouseLeave}
         >
             {feedItems.map((item, index) => (
-                <BlogPostTile item={item}/>
+                <ClipPostTile item={item}/>
             ))}
         </ScrollContainer>
     );
 };
 
-export default BlogPostTileBanner;
+export default ClipPostTileBanner;

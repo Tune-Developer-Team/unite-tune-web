@@ -1,8 +1,8 @@
 // AddContentModal.tsx
 import React, {useEffect, useState} from 'react';
 import { Drawer, Box, Typography, TextField, Avatar } from '@mui/material';
-import {ThinkDraft} from "../../../models/ThinkTank/ThinkiDraft";
-import CuriosTagInput from "../../../ui/curiosTag/CuriosTagInput";
+import {ThinkDraft} from "../../../../models/ThinkTank/ThinkiDraft";
+import CuriosTagInput from "../../../../ui/curiosTag/CuriosTagInput";
 
 interface AddThinkModalProps {
     isOpen: boolean;
@@ -12,7 +12,7 @@ interface AddThinkModalProps {
     onDraftChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, thinkDraft: ThinkDraft) => ThinkDraft;
 }
 
-const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit, thinkDraft, onDraftChange }) => {
+const AddContentModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit, thinkDraft, onDraftChange }) => {
     const [sentence, setSentence] = useState<string>("");
     const [curiosTags, setCuriosTags] = useState<string[]>([]);
 
@@ -105,4 +105,4 @@ const AddThinkModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit
     );
 };
 
-export default AddThinkModal;
+export default AddContentModal;

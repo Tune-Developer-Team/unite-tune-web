@@ -42,7 +42,7 @@ const BlogPostTileList: React.FC = () => {
 
                 setFeedItems(items);
             } catch (error) {
-                console.error("Error fetching RSS blogPost:", error);
+                console.error("Error fetching RSS dBlog:", error);
             } finally {
                 setLoading(false);
             }
@@ -58,8 +58,7 @@ const BlogPostTileList: React.FC = () => {
     return (
         <div className="PostList" >
             <Typography variant="h5" component="div">
-                {/*他人の考えに触れる。アイデアに出会う。*/}
-                Meet other's INTERESTS. Tune my IDEA.
+                DBlog
             </Typography>
             <GridContainer>
                 {feedItems.map((item, index) => (

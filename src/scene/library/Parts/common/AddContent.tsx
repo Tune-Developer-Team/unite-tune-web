@@ -7,7 +7,7 @@ interface AddThinkButtonProps {
     onClick: () => void;
 }
 
-const AddThinkButton: React.FC<AddThinkButtonProps> = ({ onClick }) => {
+const AddContent: React.FC<AddThinkButtonProps> = ({ onClick }) => {
     return (
         <Fab
             sx={{ position: "fixed", bottom: 100, right: 40 }}
@@ -20,4 +20,4 @@ const AddThinkButton: React.FC<AddThinkButtonProps> = ({ onClick }) => {
     );
 };
 
-export default AddThinkButton;
+export default AddContent;
