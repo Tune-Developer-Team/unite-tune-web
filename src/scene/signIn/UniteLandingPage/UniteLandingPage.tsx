@@ -81,8 +81,8 @@ const UniteLandingPage = () => {
                     </Typography>
                     <Typography variant="body1" textAlign="center" maxWidth="600px">
                         "自分らしくいられる環境"をみんなで作る。<br/>
-                        一人一人が自分自身で生活の幸福度を高める。<br/>
-                        結果として強くなる組織に対して<br/>
+                        一人ひとりが自分自身で自分を幸せにする。<br/>
+                        "結果として強くなる組織"、"幸せを目指す全ての個人"に対して<br/>
                         UNITEは最大限の貢献をいたします。
                     </Typography>
                 </Box>
