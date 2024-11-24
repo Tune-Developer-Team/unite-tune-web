@@ -5,7 +5,7 @@ import {endPoint} from "../../consts/api";
 import ImagePath from "../../models/data/ImagePath";
 import dayjs from "dayjs";
 import {AxiosResponse} from "axios";
-import {SaveQuestParamIF} from "../Quest/QuestViewModel";
+import {SaveQuestParamIF} from "../quest/QuestViewModel";
 
 export class HomeViewModel implements HomeViewModelIF {
     public questList: QuestListItem[] = [];

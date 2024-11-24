@@ -487,7 +487,7 @@ const QuestView = () => {
                     <Grid xs={12} sm={12} md={12} lg={12} textAlign={"center"} paddingTop={10} paddingBottom={10}>
                         <RoundedButton onClick={() => {
                             if (window.confirm('この依頼を完全に削除しますか？')) {
-                                console.log("Delete Quest");
+                                console.log("Delete quest");
                             } else {
                                 // 何もしない
                             }

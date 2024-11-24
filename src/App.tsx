@@ -16,7 +16,7 @@ import AISecretary from "./scene/crappy/AISecretary";
 import NotFound from "./scene/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
 import ThinkTankView from "./scene/thinkTank/ThinkTankView";
-import QuestView from "./scene/Quest/QuestView";
+import QuestView from "./scene/quest/QuestView";
 import QuestListView from "./scene/questList/QuestListView";
 import {ThinkTankViewModel} from "./scene/thinkTank/ThinkTankViewModel";
 import ThinkTimeline from "./scene/thinkTank/Parts/ThinkTimeline";
@@ -97,7 +97,7 @@ function App() {
                             </Route>
                             {/*AIS*/}
                             <Route path='/ais/:uid' element={<AISecretary />} />
-                            {/*Quest*/}
+                            {/*quest*/}
                             <Route path='/quests' element={<QuestListView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
                             <Route path='/quests/:questId/edit' element={<QuestView />} />

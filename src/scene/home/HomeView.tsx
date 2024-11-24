@@ -28,8 +28,8 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {QuestDetail} from "../../models/Quest/Quest";
-import {SaveQuestParamIF} from "../Quest/QuestViewModel";
-import {FileUploadForm} from "../Quest/FileUploadForm";
+import {SaveQuestParamIF} from "../quest/QuestViewModel";
+import {FileUploadForm} from "../quest/FileUploadForm";
 import CuriosTagInput from "../../ui/curiosTag/CuriosTagInput";
 import {ParentItem, parentItemsState} from "../../atoms/ParentItemState";
 
@@ -202,9 +202,9 @@ const HomeView = () => {
                 </Grid>
             </Grid>
 
-            {/* Quest */}
-            <Grid container sx={{display: topTab.Home.selected.label === 'Quest' ? "block" : "none"}} spacing={2}
-                  className={"Quest"}>
+            {/* quest */}
+            <Grid container sx={{display: topTab.Home.selected.label === 'quest' ? "block" : "none"}} spacing={2}
+                  className={"quest"}>
                 <Box width={"100%"} display={"flex"} paddingRight={4}>
                     <Box width={"100%"} textAlign={"center"}>
                         <Typography>{isActiveOwnerMode ? "OwnerMode" : "WorkerMode"}</Typography>

@@ -36,8 +36,8 @@ const Layout = () => {
             linkPath: "/",
             children: [
                 { label: 'All', linkPath: "/home" },
-                { label: 'Quest', linkPath: "/quests" },
-                { label: 'Blog', linkPath: "/blog" },
+                { label: 'quest', linkPath: "/quests" },
+                { label: 'dBlog', linkPath: "https://dblog111.hatenablog.jp/archive" },
                 { label: 'Library', linkPath: "/library" },
             ],
             isActive: false
@@ -61,6 +61,19 @@ const Layout = () => {
             isActive: pathname.startsWith("/ais")
         },
         {
+            label: 'Library',
+            icon: <AssignmentIndIcon />,
+            linkPath: "/library",
+            children: [
+                { label: 'AllMedia', linkPath: "/library" },
+                { label: 'dBog', linkPath: "/library?category=dBog" },
+                { label: 'clips', linkPath: "/library?category=clip" },
+                { label: 'Book', linkPath: "/library?category=book" },
+                { label: 'Document', linkPath: "/library?category=document" },
+            ],
+            isActive: pathname.startsWith("/library")
+        },
+        {
             label: 'Quests',
             icon: <AssignmentIndIcon />,
             linkPath: "/quests",
@@ -79,7 +92,6 @@ const Layout = () => {
                 { label: 'Bio', linkPath: `/user/${authentication.uid}` },
                 { label: 'ThinkTank', linkPath: `/user/${authentication.uid}/think-tank` },
                 { label: 'Library', linkPath: `/user/${authentication.uid}/library` },
-                { label: 'Blog', linkPath: `/user/${authentication.uid}/blog` },
                 { label: 'Ais', linkPath: `/user/${authentication.uid}/ais` }
             ],
             isActive: pathname.startsWith(`/user/${authentication.uid}`)
