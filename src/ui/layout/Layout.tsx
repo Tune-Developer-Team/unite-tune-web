@@ -77,8 +77,9 @@ const Layout = () => {
             linkPath: `/user/${authentication.uid}`,
             children: [
                 { label: 'Bio', linkPath: `/user/${authentication.uid}` },
-                { label: 'Blog', linkPath: `/user/${authentication.uid}/blog` },
                 { label: 'ThinkTank', linkPath: `/user/${authentication.uid}/think-tank` },
+                { label: 'Library', linkPath: `/user/${authentication.uid}/library` },
+                { label: 'Blog', linkPath: `/user/${authentication.uid}/blog` },
                 { label: 'Ais', linkPath: `/user/${authentication.uid}/ais` }
             ],
             isActive: pathname.startsWith(`/user/${authentication.uid}`)
