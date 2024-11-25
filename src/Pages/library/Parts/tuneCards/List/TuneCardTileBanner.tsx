@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
-import defaultServiceIcon from "../../../../assets/dBlog111Icon.png";
-import ClipPostTile from "./ClipPostTile";
+import defaultServiceIcon from "../../../../../assets/dBlog111Icon.png";
+import TuneCardTile from "./TuneCardTile";
 
 export interface FeedItem {
     title: string;
@@ -31,7 +31,7 @@ const ScrollContainer = styled(Box)({
     },
 });
 
-const ClipPostTileBanner: React.FC = () => {
+const TuneCardTileBanner: React.FC = () => {
     const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -86,10 +86,10 @@ const ClipPostTileBanner: React.FC = () => {
             onMouseLeave={handleMouseLeave}
         >
             {feedItems.map((item, index) => (
-                <ClipPostTile item={item}/>
+                <TuneCardTile item={item}/>
             ))}
         </ScrollContainer>
     );
 };
 
-export default ClipPostTileBanner;
+export default TuneCardTileBanner;

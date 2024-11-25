@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
 
 import SignIn from "./Pages/signIn/SignInView";
-import {createTheme, ThemeProvider} from "@mui/material";
+import {Container, createTheme, ThemeProvider} from "@mui/material";
 import {RecoilRoot, useRecoilState} from "recoil";
 import Profile from "./Pages/profile/ProfileView";
 import Portfolio from "./Pages/portfolio";
@@ -33,9 +33,11 @@ import UniteLandingPageHeader from "./Pages/signIn/UniteLandingPage/UniteLanding
 import LibraryView from "./Pages/library/LibraryView";
 import {LibraryViewModel} from "./Pages/library/LibraryViewModel";
 import CommentTimeline from "./Pages/library/Parts/common/CommentTimeline";
-import ClipPostTileList from "./Pages/library/Parts/clips/ClipPostTileList";
+import ClipPostTileList from "./Pages/library/Parts/clips/List/ClipPostTileList";
 import ContentDetail from "./Pages/library/Parts/common/ContentDetail";
-import TuneCardTileList from "./Pages/library/Parts/tuneCards/TuneCardTileList";
+import TuneCardTileList from "./Pages/library/Parts/tuneCards/List/TuneCardTileList";
+import ClipPostDetail from "./Pages/library/Parts/clips/Detail/ClipPostDetail";
+import SelfBrandingView from "./Pages/library/Parts/tuneCards/Detail/SelfBrandingView";
 
 function App() {
     const [darkMode] = useState(true);
@@ -90,7 +92,8 @@ function App() {
                                 <Route path="clip-list" element={<ClipPostTileList />} />
                                 <Route path='quest-list' element={<QuestListView />} />
                                 <Route path='card-list' element={<TuneCardTileList />} />
-                                <Route path=":uniteContentId" element={<ContentDetail />} />
+                                <Route path='cards/:uid' element={<SelfBrandingView/>}/>
+                                <Route path=':uniteContentId' element={<ClipPostDetail/>}/>
                             </Route>
                             {/*Preference*/}
                             <Route path='/preference' element={<PreferenceView />} />

@@ -1,18 +1,18 @@
 // AddContentModal.tsx
 import React, {useEffect, useState} from 'react';
 import { Drawer, Box, Typography, TextField, Avatar } from '@mui/material';
-import {ThinkDraft} from "../../../../models/ThinkTank/ThinkiDraft";
 import CuriosTagInput from "../../../../ui/curiosTag/CuriosTagInput";
+import {UniteContentDraft} from "../../../../models/Library/UniteContentDraft";
 
-interface AddThinkModalProps {
+interface AddUniteContentModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: () => void;
-    thinkDraft: ThinkDraft;
-    onDraftChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, thinkDraft: ThinkDraft) => ThinkDraft;
+    uniteContentDraft: UniteContentDraft;
+    onDraftChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, uniteContentDraft: UniteContentDraft) => UniteContentDraft;
 }
 
-const AddContentModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubmit, thinkDraft, onDraftChange }) => {
+const AddContentModal: React.FC<AddUniteContentModalProps> = ({ isOpen, onClose, onSubmit, uniteContentDraft, onDraftChange }) => {
     const [sentence, setSentence] = useState<string>("");
     const [curiosTags, setCuriosTags] = useState<string[]>([]);
 
@@ -22,7 +22,7 @@ const AddContentModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubm
     useEffect(() => {
         console.log('[set-up]AddContentModal')
         initForm();
-    }, [thinkDraft])
+    }, [uniteContentDraft])
 
     /**
      * フォームの初期化
@@ -49,15 +49,15 @@ const AddContentModal: React.FC<AddThinkModalProps> = ({ isOpen, onClose, onSubm
         setSentence(newSentence);
 
         //　モデルのデータ更新
-        thinkDraft.setSentence(newSentence);
-        onDraftChange(e, thinkDraft);
+        uniteContentDraft.setSentence(newSentence);
+        onDraftChange(e, uniteContentDraft);
     }
 
     /**
      * 他コンポーネン経由のデータの更新
      */
     useEffect(() => {
-        thinkDraft.setCuriosTags(curiosTags);
+        uniteContentDraft.setCuriosTags(curiosTags);
     }, [curiosTags]);
 
 

@@ -2,25 +2,24 @@ import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import {useRecoilState} from "recoil";
 import {authenticationState, AuthenticationStateIF} from "../../atoms/AuthenticationState";
-import {Think} from "../../models/ThinkTank/Think";
-import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
-import {v4 as uuidv4} from 'uuid';
-import AddContentModal from "./Parts/common/AddContentModal";
-import AddContent from "./Parts/common/AddContent";
-import Authentication from "../../models/Authentication/Authentication";
-import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
-import ReplyThinkModal from "./Parts/common/CommentMmodal";
-import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import RoundedButton from "../../ui/button/RoundedButton";
 import AddContentFormForPC from "./Parts/common/AddContentFormForPC";
-import {useMediaQuery, useTheme} from "@mui/material";
-import Box from "@mui/material/Box";
+import {UniteContentTable} from "../../models/Library/UniteContentTable";
+import {UniteContentDraft} from "../../models/Library/UniteContentDraft";
+import {UniteContent} from "../../models/Library/UniteContent";
+import AddContentModal from "./Parts/common/AddContentModal";
+import {Box, Button, useMediaQuery, useTheme} from "@mui/material";
 import {refreshTimelineState} from "../../atoms/ThinkTimelineState";
+import Authentication from "../../models/Authentication/Authentication";
+import {Outlet, useNavigate} from "react-router-dom";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {v4 as uuidv4} from 'uuid';
 
 export interface LibraryViewModelIF {
     isTopView: boolean;
-    thinkTable: ThinkTable;
-    thinkDraft: ThinkDraft;
-    loadTimeLine(): Promise<ThinkTable>;
+    uniteContentTable: UniteContentTable;
+    uniteContentDraft: UniteContentDraft;
+    loadUniteContent(): Promise<UniteContentTable>;
     viewInit(authState: AuthenticationStateIF): LibraryViewModelIF;
 }
 
@@ -31,14 +30,14 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
 
     // UI
     const [viewModel] = useState<LibraryViewModelIF>(props.viewModel.viewInit(authState));
-    // const [thinkList, setThinkList] = useState<UniteContent[]>([]);
+    // const [uniteContentList, setUniteContentList] = useState<UniteContent[]>([]);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md')); // Determines if on desktop
 
     // フォーム
-    const [thinkDraft, setThinkDraft] = useState<ThinkDraft>(ThinkDraft.initThinkDraft);
-    const [parentThink, setParentThink] = useState<Think | null>(null);
-    const [targetThink, setTargetThink] = useState<Think|null>(null)
+    const [uniteContentDraft, setUniteContentDraft] = useState<UniteContentDraft>(UniteContentDraft.initUniteContentDraft);
+    const [parentUniteContent, setParentUniteContent] = useState<UniteContent | null>(null);
+    const [targetUniteContent, setTargetUniteContent] = useState<UniteContent|null>(null)
 
     // アクション
     const [isReply, setIsReply] = useState<boolean>(false);
@@ -49,21 +48,21 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
      * 詳細を表示
      */
     useEffect(()=>{
-        if (targetThink == null){
+        if (targetUniteContent == null){
             return
         }
-        navigate(`/think-tank/${targetThink.thinkId}`)
-    },[targetThink]);
+        navigate(`/uniteContent-tank/${targetUniteContent.uniteContentId}`)
+    },[targetUniteContent]);
 
     /**
      * 返信処理
      * - サービス処理
-     * @param parentThink
+     * @param parentUniteContent
      */
     useEffect(()=>{
         console.log("リプライ")
-        console.log(parentThink?.thinkId);
-        if (parentThink == null){
+        console.log(parentUniteContent?.uniteContentId);
+        if (parentUniteContent == null){
             return
         }
 
@@ -71,41 +70,41 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
         setIsReply(true);
 
         // 下書きをセット
-        const replyThinkDraft = ThinkDraft.initThinkDraft();
-        replyThinkDraft.parentThinkId = parentThink.thinkId;
-        setThinkDraft(ThinkDraft.initThinkDraft());
+        const replyUniteContentDraft = UniteContentDraft.initUniteContentDraft();
+        replyUniteContentDraft.parentUniteContentId = parentUniteContent.uniteContentId;
+        setUniteContentDraft(UniteContentDraft.initUniteContentDraft());
 
         // ドロワーオープン
         setIsReplyDrawerOpen(true);
-    },[parentThink]);
+    },[parentUniteContent]);
 
     /**
      * いいね処理
      * - サービス処理
-     * @param think
+     * @param uniteContent
      */
-    const onClickHandleFavorite = (think: Think) => {
-        console.log("API_Favorite", think);
+    const onClickHandleFavorite = (uniteContent: UniteContent) => {
+        console.log("API_Favorite", uniteContent);
         window.alert("ごめんまだ開発中");
     }
 
     /**
-     * リシンク処理
+     * ユナイトコンテンツ処理
      * - サービス処理
-     * @param think
+     * @param uniteContent
      */
-    const onClickHandleRethink = (think: Think) => {
-        console.log("API_Rethink", think);
+    const onClickHandleReuniteContent = (uniteContent: UniteContent) => {
+        console.log("API_ReuniteContent", uniteContent);
         window.alert("ごめんまだ開発中");
     }
 
     /**
      * シェア処理
      * - サービス処理
-     * @param think
+     * @param uniteContent
      */
-    const onClickHandleShare = (think: Think) => {
-        console.log("share", think);
+    const onClickHandleShare = (uniteContent: UniteContent) => {
+        console.log("share", uniteContent);
         window.alert("ごめんまだ開発中");
     }
 
@@ -114,10 +113,10 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
     //  */
     // const loadTimeLine = async (): Promise<UniteContentTable | undefined> => {
     //     try {
-    //         const newThinkTable = await viewModel.loadTimeLine()
+    //         const newUniteContentTable = await viewModel.loadTimeLine()
     //         console.log('[try]')
-    //         setThinkList(newThinkTable.thinkList);
-    //         return newThinkTable;
+    //         setUniteContentList(newUniteContentTable.uniteContentList);
+    //         return newUniteContentTable;
     //     } catch (error) {
     //         console.log('[catch]')
     //         console.log(error);
@@ -132,48 +131,48 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
      */
     const setUp = () => {
         // フォームを空にする
-        setThinkDraft(ThinkDraft.initThinkDraft());
-        setParentThink(null);
+        setUniteContentDraft(UniteContentDraft.initUniteContentDraft());
+        setParentUniteContent(null);
         setIsReply(false);
         setIsDrawerOpen(false);
     }
 
     /**
-     * シンクの投稿をおこなう
+     *  ユナイトコンテンツの投稿をおこなう
      */
-    const addThinkButtonHandler = async (): Promise<void> => {
-        console.log('[addThinkButtonHandler]');
+    const addUniteContentButtonHandler = async (): Promise<void> => {
+        console.log('[addUniteContentButtonHandler]');
         // ガード節
-        if (thinkDraft === null) {
+        if (uniteContentDraft === null) {
             // TODO:実装
             window.alert("入力なしなのでダメ");
             return
         }
 
         // ガード節
-        if (thinkDraft.sentence === "") {
+        if (uniteContentDraft.sentence === "") {
             // TODO:実装
             window.alert("本文なしなのでダメ");
             return
         }
 
         // 返信
-        if (parentThink !== null) {
+        if (parentUniteContent !== null) {
             // 返信先を指定
-            thinkDraft.parentThinkId = parentThink.thinkId
+            uniteContentDraft.parentUniteContentId = parentUniteContent.uniteContentId
         }
 
-        // シンクIDのセット
-        if (thinkDraft.thinkId === "") {
+        //  ユナイトコンテンツIDのセット
+        if (uniteContentDraft.uniteContentId === "") {
             //　新規発行
-            thinkDraft.thinkId = uuidv4();
+            uniteContentDraft.uniteContentId = uuidv4();
         }
 
         // TODO:APIの構造化
         try {
             console.log('[try]');
-            console.log(thinkDraft.curiosTags)
-            const response = await thinkDraft.saveThink(Authentication.fromState(authState))
+            console.log(uniteContentDraft.curiosTags)
+            const response = await uniteContentDraft.saveUniteContent(Authentication.fromState(authState))
             if (response === undefined) {
                 throw Error
             }
@@ -194,10 +193,10 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isReplyDrawerOpen, setIsReplyDrawerOpen] = useState(false);
 
-    const openAddThinkModalHandler = () => {
-        console.log('[click]openAddThinkModalHandler')
+    const openAddUniteContentModalHandler = () => {
+        console.log('[click]openAddUniteContentModalHandler')
 
-        setThinkDraft(ThinkDraft.initThinkDraft());
+        setUniteContentDraft(UniteContentDraft.initUniteContentDraft());
         // ドロワーオープン
         setIsDrawerOpen(true);
     }
@@ -205,64 +204,65 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
     const closeDrawerHandler = () => {
         console.log('[click]closeDrawerHandler')
         // 状態の初期化
-        setParentThink(null);
-        setThinkDraft(ThinkDraft.initThinkDraft());
+        setParentUniteContent(null);
+        setUniteContentDraft(UniteContentDraft.initUniteContentDraft());
         // 返信用
         setIsReply(false);
-        setParentThink(null);
+        setParentUniteContent(null);
 
         // ドロワークローズ
         setIsDrawerOpen(false);
         setIsReplyDrawerOpen(false);
     }
 
-    const onChangeDraftHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, thinkDraft: ThinkDraft): ThinkDraft => {
+    const onChangeDraftHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, uniteContentDraft: UniteContentDraft): UniteContentDraft => {
         console.log("こんにちは！こんにちは！こんにちは！こんにちは！こんにちは！こんにちは！");
-        // 必要に応じてthinkDraftを処理するロジックをここに追加してください
-        console.log(thinkDraft.sentence);
-        return thinkDraft;
+        // 必要に応じてuniteContentDraftを処理するロジックをここに追加してください
+        console.log(uniteContentDraft.sentence);
+        return uniteContentDraft;
     }
 
     return (
         <Grid sx={{paddingTop: {md: 6, lg: 6, xl: 6}}} container spacing={2} padding={0}>
-            {/*トップタブ*/}
-            <h3>Library</h3>
-            {/*シンク投稿モーダル*/}
+            {/* ユナイトコンテンツ投稿モーダル*/}
             <AddContentModal
                 isOpen={isDrawerOpen}
                 onClose={closeDrawerHandler}
-                onSubmit={addThinkButtonHandler}
-                thinkDraft={thinkDraft}
+                onSubmit={addUniteContentButtonHandler}
+                uniteContentDraft={uniteContentDraft}
                 onDraftChange={onChangeDraftHandler}
             />
-            {/*リプライ投稿モーダル*/}
-            {parentThink !== null ?
-                <ReplyThinkModal
-                    isOpen={isReplyDrawerOpen}
-                    onClose={closeDrawerHandler}
-                    onSubmit={addThinkButtonHandler}
-                    parentThink={parentThink}
-                    thinkDraft={thinkDraft}
-                    onDraftChange={onChangeDraftHandler}
-                /> : ""}
+            {/*詳細画面*/}
+                <Box>
+                    {/*{parentUniteContent !== null ?*/}
+                    {/*    <ReplyUniteContentModal*/}
+                    {/*        isOpen={isReplyDrawerOpen}*/}
+                    {/*        onClose={closeDrawerHandler}*/}
+                    {/*        onSubmit={addUniteContentButtonHandler}*/}
+                    {/*        parentUniteContent={parentUniteContent}*/}
+                    {/*        uniteContentDraft={uniteContentDraft}*/}
+                    {/*        onDraftChange={onChangeDraftHandler}*/}
+                    {/*    />*/}
+                    {/*    : ""}*/}
+                </Box>
             {/*スマホ用UI*/}
             {!isDesktop && (
                 <>
                     {/* タイムライン,詳細 */}
-                    <Outlet context={{targetThink, setTargetThink, setParentThink, refreshTimeline}}/>
-                    {/*<AddContent onClick={openAddThinkModalHandler}/>*/}
+                    <Outlet context={{targetUniteContent, setTargetUniteContent, setParentUniteContent, refreshTimeline}}/>
+                    {/*<AddContent onClick={openAddUniteContentModalHandler}/>*/}
                 </>
             )}
             {/*PC用UI*/}
             {isDesktop && (
                 <Box display={"flex"} width={"100%"}>
                     <AddContentFormForPC
-                        onSubmit={addThinkButtonHandler}
-                        thinkDraft={thinkDraft}
+                        onSubmit={addUniteContentButtonHandler}
+                        uniteContentDraft={uniteContentDraft}
                         onDraftChange={onChangeDraftHandler}
                     />
                     {/* タイムライン,詳細 */}
-                    <Outlet context={{targetThink, setTargetThink, setParentThink}}/>
+                    <Outlet context={{targetUniteContent, setTargetUniteContent, setParentUniteContent}}/>
                 </Box>
             )}
         </Grid>

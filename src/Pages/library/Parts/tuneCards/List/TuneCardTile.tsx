@@ -4,9 +4,9 @@ import parse from "html-react-parser";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import postCardBackground from "./ClipPostTileBackground.svg";
-import {FeedItem} from "./ClipPostTileBanner";
-import blogIcon from "../../../../assets/dBlog111Icon.png";
+import postCardBackground from "./TuneCardTileBackground.svg";
+import {FeedItem} from "./TuneCardTileBanner";
+import blogIcon from "../../../../../assets/dBlog111Icon.png";
 import {useNavigate} from "react-router-dom";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
@@ -71,7 +71,7 @@ interface SeedTileProps {
     item:  FeedItem; // 親コンポーネントから渡されるフィード
 }
 
-const ClipPostTile: React.FC<SeedTileProps> = ({ item }) => {
+const TuneCardTile: React.FC<SeedTileProps> = ({ item }) => {
     const navigate = useNavigate();
     return (
         <Box>
@@ -91,7 +91,7 @@ const ClipPostTile: React.FC<SeedTileProps> = ({ item }) => {
                 </Title>
                 <Box height={"100%"}>
                     <AvatarIcon alt="userIcon" sizes={"ss"} src={blogIcon} onClick={()=>{
-                        window.open(item.link, "_blank");
+                        navigate(item.link);
                     }}/>
                 </Box>
             </Tile>
@@ -106,4 +106,4 @@ const ClipPostTile: React.FC<SeedTileProps> = ({ item }) => {
         </Box>
     );
 }
-export default ClipPostTile;
+export default TuneCardTile;

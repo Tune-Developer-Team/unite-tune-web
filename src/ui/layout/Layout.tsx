@@ -6,7 +6,7 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import DrawerView from "./DrawerView";
 import CustomTabs from "./CustomTabs";
-import { useMediaQuery } from "@mui/material";
+import {Button, useMediaQuery} from "@mui/material";
 import { authenticationState } from "../../atoms/AuthenticationState";
 import {ParentItem, parentItemsState} from "../../atoms/ParentItemState";
 import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
@@ -14,6 +14,8 @@ import aiIcon from "../../assets/ais.svg";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {useEffect} from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const Layout = () => {
     const [authentication] = useRecoilState(authenticationState);
@@ -38,10 +40,10 @@ const Layout = () => {
                 { label: 'All', linkPath: "/library" },
                 { label: 'DBog', linkPath: "/library/d-blog-list" },
                 { label: 'Clips', linkPath: "/library/clip-list" },
+                { label: 'Cards', linkPath: "/library/card-list" },
+                { label: 'Quests', linkPath: "/library/quest-list" },
                 { label: 'Books', linkPath: "/library/book-list" },
                 { label: 'Documents', linkPath: "/library/document-list" },
-                { label: 'Quests', linkPath: "/library/quest-list" },
-                { label: 'Cards', linkPath: "/library/card-list" },
             ],
             isActive: false
         },
@@ -128,10 +130,36 @@ const Layout = () => {
             <CssBaseline />
             <DrawerView />
             <Box sx={{ padding: isMobile ? 2 : 12 }}>
-                <Box width={"100%"} sx={{ backgroundColor: "#ff0000" }}>
+                <Box width={"100%"}>
                     <CustomTabs/>
+                    <Box paddingTop={2}>
+                        <Button
+                            startIcon={<ArrowBackIcon/>}
+                            onClick={() => navigate(-1)} // Go back to the previous screen
+                            sx={{
+                                marginBottom: 2,
+                                color: 'white', // ボタンのテキストカラーを白に設定
+                                '&:hover': {
+                                    color: 'rgba(220,220,220,0.68)', // ボタンのテキストカラーを白に設定
+                                },
+                            }}
+                        >
+                        </Button>
+                        <Button
+                            startIcon={<ArrowForwardIcon/>}
+                            onClick={() => navigate(+1)} // Go back to the previous screen
+                            sx={{
+                                marginBottom: 2,
+                                color: 'white', // ボタンのテキストカラーを白に設定
+                                '&:hover': {
+                                    color: 'rgba(220,220,220,0.68)', // ボタンのテキストカラーを白に設定
+                                },
+                            }}
+                        >
+                        </Button>
+                    </Box>
                 </Box>
-                <Box sx={{ paddingTop: isMobile ? 3 : 0 }}>
+                <Box sx={{ paddingTop: isMobile ? 0 : 0 }}>
                     <Outlet />
                 </Box>
             </Box>

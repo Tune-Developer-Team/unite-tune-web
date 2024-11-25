@@ -1,13 +1,14 @@
-import {ThinkTable} from "../../models/ThinkTank/ThinkTable";
-import {ThinkDraft} from "../../models/ThinkTank/ThinkiDraft";
+
 import Authentication from "../../models/Authentication/Authentication";
 import {AuthenticationStateIF} from "../../atoms/AuthenticationState";
 import {LibraryViewModelIF} from "./LibraryView";
+import {UniteContentTable} from "../../models/Library/UniteContentTable";
+import {UniteContentDraft} from "../../models/Library/UniteContentDraft";
 
 export class LibraryViewModel implements LibraryViewModelIF {
     public isTopView: boolean = true;
-    public thinkTable: ThinkTable = ThinkTable.initThinkTable();
-    public thinkDraft: ThinkDraft = ThinkDraft.initThinkDraft();
+    public uniteContentTable: UniteContentTable = UniteContentTable.initUniteContentTable();
+    public uniteContentDraft: UniteContentDraft = UniteContentDraft.initUniteContentDraft();
     // public tabItems: TabItem[] = [
     //     {label: 'All'},
     //     {label: 'Curios'},
@@ -31,21 +32,20 @@ export class LibraryViewModel implements LibraryViewModelIF {
     /**
      * タイムラインを読み込む
      */
-    async loadTimeLine(): Promise<ThinkTable> {
+    async loadUniteContent(): Promise<UniteContentTable> {
         console.log('loadTimeLine');
         // 検索条件
         const search = {
             limit: 20,
             offset:0,
             excludeReplies: "true",
-            parentThinkId:"",
+            parentUniteContentId:"",
             ownerUserUid: ""
         }
 
-        return await this.thinkTable.fetchThinkList({
+        return await this.uniteContentTable.fetchUniteContentList({
             accessToken: this.authState.accessToken,
             uid: this.authState.getUid()
         }, search);
     }
-
 }

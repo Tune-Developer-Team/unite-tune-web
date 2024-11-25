@@ -8,11 +8,9 @@ import {ProfileViewModel} from "../ProfileViewModel";
 import {SelectedTabIF, selectedTabState} from "../../../atoms/SelectedTabState";
 import {Button} from "@mui/material";
 import {useNavigate, useOutletContext, useParams} from "react-router-dom";
-import ImagePath from "../../../models/data/ImagePath";
 import generateCuriosTagChips from "../../../ui/curiosTag/CuriosTagChips";
 import {authenticationState} from "../../../atoms/AuthenticationState";
 import Profile from "../../../models/Profile/Profile";
-import {Think} from "../../../models/ThinkTank/Think";
 
 const BioTab = () => {
     // グローバルオブジェクト
@@ -32,9 +30,6 @@ const BioTab = () => {
 
     // UI
     const navigate = useNavigate();
-
-    // Model
-    const initProfile = viewModel.profile;
 
     // フォーム
     const [isPublishedAis, setIsPublishedAis] = useState<boolean>(false)
