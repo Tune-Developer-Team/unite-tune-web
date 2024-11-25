@@ -59,8 +59,11 @@ const Layout = () => {
         {
             label: 'AIS',
             icon: <img src={aiIcon} alt={""} />,
-            linkPath: `/ais`,
-            children: [{ label: '勤怠', linkPath: '/ais' }],
+            linkPath: `/ais/${authentication.uid}`,
+            children: [
+                { label: '勤怠', linkPath: `/ais/${authentication.uid}/kintai`},
+                { label: '雑談', linkPath: `/ais/${authentication.uid}/zatsudan`}
+            ],
             isActive: pathname.startsWith("/ais")
         },
         {

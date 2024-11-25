@@ -107,7 +107,12 @@ function App() {
                                 <Route path='/user/:uid/portfolio' element={<Portfolio />} />
                             </Route>
                             {/*AIS*/}
-                            <Route path='/ais/:uid' element={<AISecretary />} />
+                            <Route path='/ais/:uid' element={<AISecretary/>}>
+                                {/*<Route index element={<MainTab/>}/>*/}
+                                <Route index element={<AISecretary />}/>
+                                <Route path='kintai' element={<AISecretary />}/>
+                                <Route path='zatsudan' element={<AISecretary />}/>
+                            </Route>
                             {/*quest*/}
                             <Route path='/quests' element={<QuestListView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
