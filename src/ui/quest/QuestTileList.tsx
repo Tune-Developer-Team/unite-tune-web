@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
-import {QuestListItem} from "../../scene/home/HomeViewModelIF";
+import {QuestListItem} from "../../Pages/home/HomeViewModelIF";
 import {useNavigate} from "react-router-dom";
 import QuestTile from "./QuestTile";
 

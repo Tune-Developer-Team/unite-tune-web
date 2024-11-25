@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 import Typography from "@mui/material/Typography";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {QuestListItem} from "../../scene/home/HomeViewModelIF";
+import {QuestListItem} from "../../Pages/home/HomeViewModelIF";
 import {AvatarIcon} from "../avatarIcon/AvatarIcon";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({

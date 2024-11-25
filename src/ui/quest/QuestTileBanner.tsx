@@ -1,6 +1,6 @@
 // QuestTileBanner.tsx
 import React from 'react';
-import { QuestListItem } from '../../scene/home/HomeViewModelIF';
+import { QuestListItem } from '../../Pages/home/HomeViewModelIF';
 import QuestTile from './QuestTile';
 import ScrollContainer from "../container/ScrollContainer";
 
