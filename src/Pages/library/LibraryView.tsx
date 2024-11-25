@@ -248,7 +248,7 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
             {/*スマホ用UI*/}
             {!isDesktop && (
                 <>
-                    {/* タイムライン,詳細 */}
+                    {/* コンテンツ */}
                     <Outlet context={{targetUniteContent, setTargetUniteContent, setParentUniteContent, refreshTimeline}}/>
                     {/*<AddContent onClick={openAddUniteContentModalHandler}/>*/}
                 </>
@@ -256,12 +256,7 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
             {/*PC用UI*/}
             {isDesktop && (
                 <Box display={"flex"} width={"100%"}>
-                    <AddContentFormForPC
-                        onSubmit={addUniteContentButtonHandler}
-                        uniteContentDraft={uniteContentDraft}
-                        onDraftChange={onChangeDraftHandler}
-                    />
-                    {/* タイムライン,詳細 */}
+                    {/* コンテンツ */}
                     <Outlet context={{targetUniteContent, setTargetUniteContent, setParentUniteContent}}/>
                 </Box>
             )}

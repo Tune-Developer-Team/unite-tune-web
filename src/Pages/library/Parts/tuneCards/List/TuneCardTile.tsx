@@ -5,12 +5,12 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import postCardBackground from "./TuneCardTileBackground.svg";
-import {FeedItem} from "./TuneCardTileBanner";
 import blogIcon from "../../../../../assets/dBlog111Icon.png";
 import {useNavigate} from "react-router-dom";
+import {TuneCardItem} from "./TuneCardTileList";
 
-const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
-    width: 180, // Fixed width for square tiles
+const TuneCardFrame = styled(Box)<{ image: string }>(({ theme, image }) => ({
+    width: 110, // Fixed width for square tiles
     height: 180, // Fixed height for square tiles
     flexShrink: 0,
     color: "#232323",
@@ -25,19 +25,24 @@ const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
     zIndex: 0,
 }));
 
-const Title = styled(Typography)({
+const Name = styled(Typography)({
     fontWeight: "bold",
+    position: "absolute",
+    top: 84,
+    left:-10,
+    textAlign: "center",
+    margin: 0, // タイルの右下から少し内側に配置
     overflow: "hidden",
     textOverflow: "ellipsis",
-    whiteSpace: "break-word",
-    color: "#181818"
+    whiteSpace: "pre-wrap",
+    color: "#ffffff"
 });
 
 const AvatarIcon = styled(Avatar)({
     position: "absolute",
-    bottom: 0,
-    right: 0,
-    margin: 8, // タイルの右下から少し内側に配置
+    top: 39,
+    right: 35,
+    margin: 0, // タイルの右下から少し内側に配置
     zIndex: 1, // 背景画像の前に表示されるように調整
     transition: "transform 0.2s ease-in-out",
     pointerEvents: "auto", // クリックイベントを受け取る
@@ -67,41 +72,38 @@ const BackGroundImage = styled("img")({
     pointerEvents: "none" // クリックなどのイベントを無視
 });
 
-interface SeedTileProps {
-    item:  FeedItem; // 親コンポーネントから渡されるフィード
+interface TuneCardTileProps {
+    item:  TuneCardItem; // 親コンポーネントから渡されるフィード
 }
 
-const TuneCardTile: React.FC<SeedTileProps> = ({ item }) => {
+const TuneCardTile: React.FC<TuneCardTileProps> = ({ item }) => {
+    console.log(item.iconImage.path)
     const navigate = useNavigate();
     return (
         <Box>
-            <Tile
+            <TuneCardFrame
                 image={blogIcon}
                 onClick={()=>{
                     navigate(item.link);
                 }}
             >
                 {/* 重ねる画像を表示 */}
-                <BackGroundImage src={blogIcon} alt="BackGround"/>
+                <BackGroundImage src={item.iconImage?.path??''} alt="BackGround"/>
                 <OverlayImage src={postCardBackground} alt="Overlay"/>
 
-                <Title variant="h6" gutterBottom>
+                <Name variant={"body2"} gutterBottom>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     {parse(item.title.substring(0, 38).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
-                </Title>
+                </Name>
                 <Box height={"100%"}>
-                    <AvatarIcon alt="userIcon" sizes={"ss"} src={blogIcon} onClick={()=>{
-                        navigate(item.link);
+                    <AvatarIcon alt="userIcon" sizes={"ss"} src={item.iconImage.path} onClick={()=>{
+                        navigate(item.uid);
                     }}/>
                 </Box>
-            </Tile>
+            </TuneCardFrame>
 
             <Box display={"flex"} paddingTop={1}>
-                <span style={{fontSize:12}}>{parse(item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
-                    <span style={{color:"#fff"}} onClick={() => {
-                        window.open(item.link, "_blank");
-                    }}>...続きをみる</span>
-                </span>
+                <span style={{fontSize:12}}>{parse(item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}</span>
             </Box>
         </Box>
     );

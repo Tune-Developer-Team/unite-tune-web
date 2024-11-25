@@ -4,12 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
 import defaultServiceIcon from "../../../../../assets/dBlog111Icon.png";
 import ClipPostTile from "./ClipPostTile";
-
-export interface FeedItem {
-    title: string;
-    link: string;
-    description: string;
-}
+import {ClipFeedItem} from "./ClipPostTileList";
 
 const service = {
     name: "DBlog111",
@@ -32,7 +27,7 @@ const ScrollContainer = styled(Box)({
 });
 
 const ClipPostTileBanner: React.FC = () => {
-    const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
+    const [feedItems, setFeedItems] = useState<ClipFeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -44,11 +39,12 @@ const ClipPostTileBanner: React.FC = () => {
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "application/xml");
 
-                const items = Array.from(xml.querySelectorAll("item")).slice(0, MAX_FEED_COUNT).map((item) => ({
-                    title: item.querySelector("title")?.textContent || "No Title",
-                    link: item.querySelector("link")?.textContent || "#",
-                    description: item.querySelector("description")?.textContent || "",
-                }));
+                const items = [
+                    {title: "バリュープロポジション戦略",uniteContentId: "id123456789id123456789qdw", uid: "id123456789id123456789",link: "/library/id123456789", description: "自分にできる価値提供を徹底しつつ、全体としては自分の理想的な局面に運んでいく。"},
+                    {title: "顧客理解の基本スタンス",uniteContentId: "id123456789id123456789qdw", uid: "id123456789id123456789", link: "/library/id234567891", description: "顧客理解はビジネスに限らず人と人との関わりの本質である。"},
+                    {title: "経営資源",link: "/library/id345678912", uniteContentId: "id123456789id123456789qdw", uid: "id123456789id123456789" ,description: "経営におけるヒト・オカネ・モノ・ジョウホウの観点から自分の戦略を立ててみる。"},
+                    {title: "理念の共有の重要性",link: "/library/id456789123", uniteContentId: "id123456789id123456789qdw", uid: "id123456789id123456789", description: "組織活動において理念の共有が一番大事である理由を歴史の観点から深掘りしていく。"},
+                ];
 
                 setFeedItems(items);
             } catch (error) {

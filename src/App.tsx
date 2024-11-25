@@ -38,6 +38,7 @@ import ContentDetail from "./Pages/library/Parts/common/ContentDetail";
 import TuneCardTileList from "./Pages/library/Parts/tuneCards/List/TuneCardTileList";
 import ClipPostDetail from "./Pages/library/Parts/clips/Detail/ClipPostDetail";
 import SelfBrandingView from "./Pages/library/Parts/tuneCards/Detail/SelfBrandingView";
+import UnderConstruction from "./Pages/notFound/UnderConstruction";
 
 function App() {
     const [darkMode] = useState(true);
@@ -91,8 +92,11 @@ function App() {
                                 <Route path="d-blog-list" element={<BlogPostTileList />} />
                                 <Route path="clip-list" element={<ClipPostTileList />} />
                                 <Route path='quest-list' element={<QuestListView />} />
+                                <Route path='quest-list' element={<QuestListView />} />
+                                <Route path='document-list' element={<UnderConstruction />} />
+                                <Route path='book-list' element={<UnderConstruction />} />
                                 <Route path='card-list' element={<TuneCardTileList />} />
-                                <Route path='cards/:uid' element={<SelfBrandingView/>}/>
+                                <Route path='card-list/:uid' element={<SelfBrandingView/>}/>
                                 <Route path=':uniteContentId' element={<ClipPostDetail/>}/>
                             </Route>
                             {/*Preference*/}

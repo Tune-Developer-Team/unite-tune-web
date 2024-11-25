@@ -5,14 +5,20 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
 import TuneCardTile from "./TuneCardTile";
 import {authenticationState} from "../../../../../atoms/AuthenticationState";
+import {Api} from "../../../../../models/Api/Api";
+import Authentication from "../../../../../models/Authentication/Authentication";
+import {endPoint} from "../../../../../consts/api";
+import {useRecoilState} from "recoil";
+import {loaderState} from "../../../../../atoms/LoaderState";
+import ImagePath from "../../../../../models/data/ImagePath";
 
-interface FeedItem {
+export interface TuneCardItem {
+    uid: string;
+    iconImage: ImagePath;
     title: string;
     link: string;
     description: string;
 }
-
-const YOUTUBE_API_URL = "https://dblog111.hatenablog.jp/rss";
 
 const GridContainer = styled(Box)({
     display: "grid",
@@ -22,23 +28,65 @@ const GridContainer = styled(Box)({
     overflow: "auto",
 });
 
+export interface ProfilesResponseData {
+    NickName: string
+    IconImage: string
+    Uid: string
+    Description: string
+}
+
 const TuneCardTileList: React.FC = () => {
-    const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [authState] = useRecoilState(authenticationState);
+    const [feedItems, setFeedItems] = useState<TuneCardItem[]>([]);
+    const [loading, setLoading] = useRecoilState(loaderState);
 
     useEffect(() => {
-        const fetchRSSFeed = async () => {
+        const fetchCards = async () => {
             try {
-                const response = await fetch(YOUTUBE_API_URL);
-                const text = await response.text();
-                const parser = new DOMParser();
-                const items = [
-                    {title: `Yamashita`,link: "/library/cards/6923e6b6-bd0f-42cb-97b7-bc539669b080", description: "こんにちは！"},
-                    {title: "顧客理解の基本スタンス",link: "/library/id234567891", description: "顧客理解はビジネスに限らず人と人との関わりの本質である。"},
-                    {title: "経営資源",link: "/library/id345678912", description: "経営におけるヒト・オカネ・モノ・ジョウホウの観点から自分の戦略を立ててみる。"},
-                    {title: "理念の共有の重要性",link: "/library/id456789123", description: "組織活動において理念の共有が一番大事である理由を歴史の観点から深掘りしていく。"},
-                ];
 
+                // 検索条件
+                const search = {
+                    limit: 20,
+                    offset:0,
+                    excludeReplies: "true",
+                    parentThinkId:"",
+                    ownerUserUid: ""
+                }
+
+                setLoading({isLoading:true});
+                let items: TuneCardItem[] = [{
+                    uid: '',
+                    iconImage: ImagePath.create({alt: '', path: ''}),
+                    title: ``,
+                    link: "",
+                    description: ""
+                }];
+                const api = new Api(Authentication.fromState(authState));
+                await api.get(endPoint.PROFILE)
+                    .then((res) => {
+                        console.log(res.data.data);
+                        // TODO: 時間ないので仮、本当はインターフェースとかクラスまで作りたい
+                        if(res.data){
+                            items = res.data.data.map((data:ProfilesResponseData) => {
+                                const image = JSON.parse(data.IconImage);
+                                const iconImage = ImagePath.create({path: image.path, alt: image.alt});
+                                console.log(image.path);
+                                return {
+                                    uid: `${data.Uid}`,
+                                    iconImage: iconImage ?? ImagePath.create({alt: '', path: ''}),
+                                    title: `${data.NickName}`,
+                                    link: `/library/card-list/${data.Uid}`,
+                                    description: `${data.Description}`
+                                }
+                            });
+                        }
+                        console.log("created item data");
+                        console.log(items);
+                    setLoading({isLoading:false});
+                }).catch((err) => {
+                    console.log("failure", err);
+                    setLoading({isLoading:false});
+                });
                 setFeedItems(items);
             } catch (error) {
                 console.error("Error fetching Youtube:", error);
@@ -47,7 +95,7 @@ const TuneCardTileList: React.FC = () => {
             }
         };
 
-        fetchRSSFeed();
+        fetchCards();
     }, []);
 
     if (loading) {

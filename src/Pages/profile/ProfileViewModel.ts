@@ -6,12 +6,6 @@ import {endPoint} from "../../consts/api";
 
 export class ProfileViewModel implements ProfileViewModelIF {
     public profile: Profile = Profile.initProfile();
-    // public tabItems: TabItem[] = [
-    //     {label: 'Main'},
-    //     {label: 'ThinkTank'},
-    //     {label: 'AIS'},
-    //     {label: 'Goods'}
-    // ];
     private readonly authState: Authentication;
 
     constructor(state: AuthenticationArgumentIF) {
@@ -59,10 +53,6 @@ export class ProfileViewModel implements ProfileViewModelIF {
             isShowPortfolio:newProfile.isShowPortfolio,
             mbti:newProfile.mbti
         }
-
-        // if (newProfile.iconImage.path !== "") {
-            // body.iconImage = JSON.stringify(newProfile.iconImage);
-        // }
 
         const response = await api.put(`${endPoint.PROFILE}/${uId}`, body);
         console.log(response.data.data);

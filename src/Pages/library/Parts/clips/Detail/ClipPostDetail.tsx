@@ -102,7 +102,7 @@ const ClipPostDetail = () => {
                             <Box sx={{display: "flex"}}>
                                 <Box sx={{textAlign: "start"}}>
                                     <Typography fontSize={"1.3rem"}>
-                                        <div dangerouslySetInnerHTML={{__html: uniteContent.title}}/>
+                                        【モック】<div dangerouslySetInnerHTML={{__html: uniteContent.title}}/>
                                     </Typography>
                                 </Box>
                             </Box>
