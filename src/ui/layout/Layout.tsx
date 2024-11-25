@@ -1,4 +1,3 @@
-// src/components/Layout.tsx
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import {useEffect} from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import HomeIcon from '@mui/icons-material/Home';
 
 const Layout = () => {
     const [authentication] = useRecoilState(authenticationState);
@@ -34,7 +34,7 @@ const Layout = () => {
     const parentItems:ParentItem[] = [
         {
             label: 'Library',
-            icon: <AssignmentIndIcon />,
+            icon: <HomeIcon />,
             linkPath: "/",
             children: [
                 { label: 'All', linkPath: "/library" },
@@ -121,9 +121,12 @@ const Layout = () => {
         // 状態を更新
         setParentItemState(newParentItemState);
 
+        // ブラウザのタブのtitleを更新
+        const currentPage =  newParentItemState.filter(item=>item.isActive)[0].label;
+        document.title = `Unite-${currentPage}`;
+
         console.log("Updated pathname:", pathname);
     }); // location が変更されたときに実行
-
 
     return (
         <>

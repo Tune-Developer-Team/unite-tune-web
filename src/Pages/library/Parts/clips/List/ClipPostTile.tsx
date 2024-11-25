@@ -78,16 +78,16 @@ const OverlayImage = styled("img")({
     pointerEvents: "none" // クリックなどのイベントを無視
 });
 
-const BackGroundImage = styled("img")({
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover", // タイル全体にフィットさせる
-    zIndex: -2, // タイル背景より前面に表示
-    pointerEvents: "none" // クリックなどのイベントを無視
-});
+// const BackGroundImage = styled("img")({
+//     position: "absolute",
+//     top: 0,
+//     left: 0,
+//     width: "100%",
+//     height: "100%",
+//     objectFit: "cover", // タイル全体にフィットさせる
+//     zIndex: -2, // タイル背景より前面に表示
+//     pointerEvents: "none" // クリックなどのイベントを無視
+// });
 
 interface SeedTileProps {
     item:  ClipFeedItem; // 親コンポーネントから渡されるフィード
@@ -104,7 +104,7 @@ const ClipPostTile: React.FC<SeedTileProps> = ({ item }) => {
                 }}
             >
                 {/* 重ねる画像を表示 */}
-                <BackGroundImage src={blogIcon} alt="BackGround"/>
+                {/*<BackGroundImage src={""} alt="BackGround"/>*/}
                 <OverlayImage src={postCardBackground} alt="Overlay"/>
 
                 <Title variant="h6" gutterBottom>
