@@ -10,7 +10,7 @@ import {
     Modal,
     Container,
     Grid,
-    TextField, Drawer
+    TextField, Drawer, useMediaQuery, useTheme
 } from '@mui/material';
 import {DrawerViewModel} from "./DarawerViewModel";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
@@ -43,6 +43,9 @@ const HeaderUserIconMenu = () => {
     const [customUrlText, setCustomUrlText] = useState<string>('');
     // const [urlIcon, setUrlIcon] = useState<File | null>(null);
     const [customUrlList, setCustomUrlList] = useState<CustomUrl[]>([]);
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     // const handleDrawerToggle = () => {
     //     setOpen(!open);
@@ -94,15 +97,25 @@ const HeaderUserIconMenu = () => {
                         display: "flex",
                         position: 'fixed', // Changed to fixed
                         top: 10,
-                        right: 10,
-                        zIndex: 10, // Ensure it stays above other elements
+                        right: 20,
+                        zIndex: 100, // Ensure it stays above other elements
                     }}
                     alt="userIcon"
                     sizes={"ss"}
                     src={profile.iconImage.path??""}
                     onMouseEnter={handleAvatarMouseEnter}
                     onMouseLeave={handleAvatarMouseLeave}
-                    onClick={open ? handleDrawerClose : handleDrawerOpen}
+                    onClick={() => {
+                        if (!isMobile) {
+                            return
+                        }
+                        if (open) {
+                            handleDrawerClose()
+                        } else {
+                            handleDrawerOpen()
+                        }
+                    }
+                    }
                 />
             <Box display={open ? "block" : "none"}>
                 <Drawer variant="permanent" open={open} anchor={"left"}>

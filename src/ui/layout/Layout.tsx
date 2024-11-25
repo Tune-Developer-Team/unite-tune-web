@@ -2,11 +2,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import {useRecoilState, useSetRecoilState} from "recoil";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import DrawerView from "./DrawerView";
 import CustomTabs from "./CustomTabs";
 import {Button, useMediaQuery} from "@mui/material";
-import { authenticationState } from "../../atoms/AuthenticationState";
+import {authenticationState} from "../../atoms/AuthenticationState";
 import {ParentItem, parentItemsState} from "../../atoms/ParentItemState";
 import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import aiIcon from "../../assets/ais.svg";
@@ -31,60 +31,60 @@ const Layout = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
 
     const defaultPage = "Library";
-    const parentItems:ParentItem[] = [
+    const parentItems: ParentItem[] = [
         {
             label: 'Library',
-            icon: <HomeIcon />,
+            icon: <HomeIcon/>,
             linkPath: "/",
             children: [
-                { label: 'All', linkPath: "/library" },
-                { label: 'DBog', linkPath: "/library/d-blog-list" },
-                { label: 'Clips', linkPath: "/library/clip-list" },
-                { label: 'Cards', linkPath: "/library/card-list" },
-                { label: 'Quests', linkPath: "/library/quest-list" },
-                { label: 'Books', linkPath: "/library/book-list" },
-                { label: 'Documents', linkPath: "/library/document-list" },
+                {label: 'All', linkPath: "/library"},
+                {label: 'DBog', linkPath: "/library/d-blog-list"},
+                {label: 'Clips', linkPath: "/library/clip-list"},
+                {label: 'Cards', linkPath: "/library/card-list"},
+                {label: 'Quests', linkPath: "/library/quest-list"},
+                {label: 'Books', linkPath: "/library/book-list"},
+                {label: 'Documents', linkPath: "/library/document-list"},
             ],
             isActive: false
         },
         {
             label: 'Think Tank',
-            icon: <img src={tsubuyakiIcon} alt={""} />,
+            icon: <img src={tsubuyakiIcon} alt={""}/>,
             linkPath: "/think-tank",
             children: [
-                { label: 'All', linkPath: "/think-tank" },
-                { label: 'General', linkPath: "/think-tank?filter=info,notify" },
-                { label: 'Tech', linkPath: "/think-tank?filter=tec,技術" },
+                {label: 'All', linkPath: "/think-tank"},
+                {label: 'General', linkPath: "/think-tank?filter=info,notify"},
+                {label: 'Tech', linkPath: "/think-tank?filter=tec,技術"},
             ],
             isActive: pathname.startsWith("/think-tank")
         },
         {
             label: 'AIS',
-            icon: <img src={aiIcon} alt={""} />,
+            icon: <img src={aiIcon} alt={""}/>,
             linkPath: `/ais/${authentication.uid}`,
             children: [
-                { label: '勤怠', linkPath: `/ais/${authentication.uid}/kintai`},
-                { label: '雑談', linkPath: `/ais/${authentication.uid}/zatsudan`}
+                {label: '勤怠', linkPath: `/ais/${authentication.uid}/kintai`},
+                {label: '雑談', linkPath: `/ais/${authentication.uid}/zatsudan`}
             ],
             isActive: pathname.startsWith("/ais")
         },
         {
             label: 'Profile',
-            icon: <AssignmentIndIcon />,
+            icon: <AssignmentIndIcon/>,
             linkPath: `/user/${authentication.uid}`,
             children: [
-                { label: 'Bio', linkPath: `/user/${authentication.uid}` },
-                { label: 'ThinkTank', linkPath: `/user/${authentication.uid}/think-tank` },
-                { label: 'Library', linkPath: `/user/${authentication.uid}/library` },
-                { label: 'Ais', linkPath: `/user/${authentication.uid}/ais` }
+                {label: 'Bio', linkPath: `/user/${authentication.uid}`},
+                {label: 'ThinkTank', linkPath: `/user/${authentication.uid}/think-tank`},
+                {label: 'Library', linkPath: `/user/${authentication.uid}/library`},
+                {label: 'Ais', linkPath: `/user/${authentication.uid}/ais`}
             ],
             isActive: pathname.startsWith(`/user/${authentication.uid}`)
         },
         {
             label: 'Preference',
-            icon: <SettingsIcon />,
+            icon: <SettingsIcon/>,
             linkPath: "/preference",
-            children: [{ label: 'Settings', linkPath: '/preference/' }],
+            children: [{label: 'Settings', linkPath: '/preference/'}],
             isActive: pathname.startsWith(`/preference`)
         },
     ];
@@ -122,7 +122,7 @@ const Layout = () => {
         setParentItemState(newParentItemState);
 
         // ブラウザのタブのtitleを更新
-        const currentPage =  newParentItemState.filter(item=>item.isActive)[0].label;
+        const currentPage = newParentItemState.filter(item => item.isActive)[0].label;
         document.title = `Unite-${currentPage}`;
 
         console.log("Updated pathname:", pathname);
@@ -130,10 +130,22 @@ const Layout = () => {
 
     return (
         <>
-            <CssBaseline />
-            <DrawerView />
-            <Box sx={{ padding: isMobile ? 2 : 12 }}>
-                <Box width={"100%"}>
+            <CssBaseline/>
+            <Box sx={{paddingTop: isMobile ? 0 : 12, paddingLeft: isMobile ? 2 : 8}}>
+                <Box width={"100%"}
+                     sx={{
+                         backgroundColor: "#121212",
+                         position: 'fixed',
+                         top: 0,
+                         zIndex: 50,
+                         paddingTop: 4,
+                         display: 'flex',
+                         overflowX: 'auto',
+                         scrollbarWidth: 'none', // Firefox用
+                         '&::-webkit-scrollbar': {
+                             display: 'none', // Chrome, Safari用
+                         },
+                     }}>
                     <CustomTabs/>
                     <Box paddingTop={2}>
                         <Button
@@ -162,10 +174,11 @@ const Layout = () => {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ paddingTop: isMobile ? 0 : 0 }}>
-                    <Outlet />
+                <Box sx={{paddingTop: isMobile ? 14 : 0, paddingLeft: 2, paddingRight: 2}}>
+                    <Outlet/>
                 </Box>
             </Box>
+            <DrawerView/>
         </>
     );
 }

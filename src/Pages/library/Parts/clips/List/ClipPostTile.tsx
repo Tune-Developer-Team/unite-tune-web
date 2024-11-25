@@ -98,7 +98,7 @@ const ClipPostTile: React.FC<SeedTileProps> = ({ item }) => {
     return (
         <Box>
             <Tile
-                image={blogIcon}
+                image={""}
                 onClick={()=>{
                     navigate(item.link);
                 }}

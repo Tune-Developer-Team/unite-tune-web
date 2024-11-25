@@ -74,7 +74,7 @@ export default function DrawerView() {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' , zIndex:100 }}>
             {isMobile ? (
                 <Box sx={{ flexGrow: 1, padding: 1, width: "100%" }}>
                     <HeaderUserIconMenu />
@@ -107,12 +107,6 @@ export default function DrawerView() {
                         {customUrlList.map((item) => (
                             <ListItem key={item.customUrlId} disablePadding sx={{ display: 'block' }}>
                                 <a href={item.urlString} style={{ textDecoration: "none", color: "white" }}>
-                                    {/*<ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>*/}
-                                    {/*    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>*/}
-                                    {/*        <LinkIcon />*/}
-                                    {/*    </ListItemIcon>*/}
-                                    {/*    <ListItemText primary={item.displayName} sx={{ opacity: open ? 1 : 0 }} />*/}
-                                    {/*</ListItemButton>*/}
                                 </a>
                             </ListItem>
                         ))}
