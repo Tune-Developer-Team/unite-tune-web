@@ -88,7 +88,7 @@ const AllTabView = (props: AllTabViewProps) => {
             setPickUp({
                 title: item?.title??"",
                 description: item?.description??"",
-                link: item?.link??"/home",
+                link: item?.link??"/",
                 image: blogIcon,
                 ownerUid: "",
                 ownerName: "dblog",

@@ -9,7 +9,6 @@ import CustomTabs from "./CustomTabs";
 import { useMediaQuery } from "@mui/material";
 import { authenticationState } from "../../atoms/AuthenticationState";
 import {ParentItem, parentItemsState} from "../../atoms/ParentItemState";
-import HomeIcon from "@mui/icons-material/Home";
 import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import aiIcon from "../../assets/ais.svg";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -29,16 +28,20 @@ const Layout = () => {
 
     const isMobile = useMediaQuery('(max-width:600px)');
 
+    const defaultPage = "Library";
     const parentItems:ParentItem[] = [
         {
-            label: 'Home',
-            icon: <HomeIcon />,
+            label: 'Library',
+            icon: <AssignmentIndIcon />,
             linkPath: "/",
             children: [
-                { label: 'All', linkPath: "/home" },
+                { label: 'All', linkPath: "/library" },
+                { label: 'DBog', linkPath: "/library/d-blog-list" },
+                { label: 'Clips', linkPath: "/library/clip-list" },
+                { label: 'Book', linkPath: "/library/book-list" },
+                { label: 'Document', linkPath: "/library/document-list" },
                 { label: 'quest', linkPath: "/quests" },
-                { label: 'dBlog', linkPath: "/library/d-blog-list" },
-                { label: 'Library', linkPath: "/library" },
+                { label: 'Cards', linkPath: "/cards" },
             ],
             isActive: false
         },
@@ -59,30 +62,6 @@ const Layout = () => {
             linkPath: `/ais`,
             children: [{ label: '勤怠', linkPath: '/ais' }],
             isActive: pathname.startsWith("/ais")
-        },
-        {
-            label: 'Library',
-            icon: <AssignmentIndIcon />,
-            linkPath: "/library",
-            children: [
-                { label: 'All', linkPath: "/library" },
-                { label: 'DBog', linkPath: "/library/d-blog-list" },
-                { label: 'Clips', linkPath: "/library/clip-list" },
-                { label: 'Book', linkPath: "/library/book-list" },
-                { label: 'Document', linkPath: "/library/document-list" },
-            ],
-            isActive: pathname.startsWith("/library")
-        },
-        {
-            label: 'Quests',
-            icon: <AssignmentIndIcon />,
-            linkPath: "/quests",
-            children: [
-                { label: 'All', linkPath: "/quests" },
-                { label: 'open', linkPath: "/quests?filter=open" },
-                { label: 'close', linkPath: "/quests?filter=close" },
-            ],
-            isActive: pathname.startsWith("/quests")
         },
         {
             label: 'Profile',
@@ -121,16 +100,16 @@ const Layout = () => {
         // 現在の URL に基づいて isActive を更新
         let newParentItemState = parentItems.map((item) => ({
             ...item,
-            isActive: item.label === "Home"
-                ? pathname === item.linkPath // "Home" の場合は完全一致
+            isActive: item.label === defaultPage
+                ? pathname === item.linkPath // デフォルトページの場合は完全一致
                 : pathname.startsWith(item.linkPath), // それ以外は部分一致
         }));
 
-        // 全ての isActive が false の場合、label が "Home" の要素を isActive: true にする
+        // 全ての isActive が false の場合、label が "Library" の要素を isActive: true にする
         if (newParentItemState.every(item => !item.isActive)) {
             newParentItemState = newParentItemState.map(item => ({
                 ...item,
-                isActive: item.label === "Home", // "Home" の場合に true、それ以外は false
+                isActive: item.label === defaultPage, // デフォルトページの場合に true、それ以外は false
             }));
         }
 

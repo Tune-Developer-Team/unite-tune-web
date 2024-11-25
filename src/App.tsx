@@ -82,7 +82,13 @@ function App() {
                         {/*After Login Content*/}
                         <Route path='/' element={<Layout />} >
                             <Route index element={<HomeView />} ></Route>
-                            <Route path='/home' element={<HomeView />} />
+                            {/*home*/}
+                            <Route path="library" element={<LibraryView viewModel={LibraryViewModel.appInit()}/>}>
+                                <Route index element={<HomeView />} />
+                                <Route path="d-blog-list" element={<BlogPostTileList />} />
+                                <Route path="clip-list" element={<ClipPostTileList />} />
+                                <Route path=":uniteContentId" element={<ContentDetail />} />
+                            </Route>
                             {/*Preference*/}
                             <Route path='/preference' element={<PreferenceView />} />
                             {/*ThinkTank*/}
@@ -102,13 +108,6 @@ function App() {
                             </Route>
                             {/*AIS*/}
                             <Route path='/ais/:uid' element={<AISecretary />} />
-                            {/*Library*/}
-                            <Route path="library" element={<LibraryView viewModel={LibraryViewModel.appInit()}/>}>
-                                <Route index element={<CommentTimeline />} />
-                                <Route path="d-blog-list" element={<BlogPostTileList />} />
-                                <Route path="clip-list" element={<ClipPostTileList />} />
-                                <Route path=":thinkId" element={<ContentDetail />} />
-                            </Route>
                             {/*quest*/}
                             <Route path='/quests' element={<QuestListView />} />
                             <Route path='/quests/:questId' element={<QuestView />} />
