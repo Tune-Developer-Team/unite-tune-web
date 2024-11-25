@@ -87,6 +87,8 @@ function App() {
                                 <Route index element={<HomeView />} />
                                 <Route path="d-blog-list" element={<BlogPostTileList />} />
                                 <Route path="clip-list" element={<ClipPostTileList />} />
+                                <Route path='quest-list' element={<QuestListView />} />
+                                <Route path='card-list' element={<QuestListView />} />
                                 <Route path=":uniteContentId" element={<ContentDetail />} />
                             </Route>
                             {/*Preference*/}
@@ -113,10 +115,6 @@ function App() {
                                 <Route path='kintai' element={<AISecretary />}/>
                                 <Route path='zatsudan' element={<AISecretary />}/>
                             </Route>
-                            {/*quest*/}
-                            <Route path='/quests' element={<QuestListView />} />
-                            <Route path='/quests/:questId' element={<QuestView />} />
-                            <Route path='/quests/:questId/edit' element={<QuestView />} />
                         </Route>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>

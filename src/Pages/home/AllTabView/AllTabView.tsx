@@ -101,7 +101,7 @@ const AllTabView = (props: AllTabViewProps) => {
                 setPickUp({
                     title: response.seed.title,
                     description: response.seed.description,
-                    link: `quests/${response.seed.questId}`,
+                    link: `library/${response.seed.questId}`,
                     image: response.seed.imagePath.path,
                     ownerUid: response.seed.ownerUserUid,
                     ownerName: response.seed.ownerUserName,
@@ -166,7 +166,7 @@ const AllTabView = (props: AllTabViewProps) => {
                     </Typography>
                     <Box textAlign={"end"} paddingRight={1}>
                         <Button variant="text" style={{color: "#fff"}} onClick={() => {
-                            navigate(`/quests`)
+                            navigate(`/library/quest-list`)
                         }}>全て表示する</Button>
                     </Box>
                     <Grid xs={12} sm={12} md={12} lg={12}>

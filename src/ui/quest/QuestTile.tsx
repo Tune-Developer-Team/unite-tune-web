@@ -79,7 +79,7 @@ const QuestTile: React.FC<SeedTileProps> = ({ item }) => {
                 image={item.imagePath.path}
                 onClick={()=>{
                     if(!isAvatarHovered){
-                        navigate(`/quests/${item.questId}`);
+                        navigate(`/library/${item.questId}`);
                     }
                 }}
             >
@@ -116,7 +116,7 @@ const QuestTile: React.FC<SeedTileProps> = ({ item }) => {
             <Box display={"flex"} paddingTop={1}>
                 <span style={{fontSize:12}}>{item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, '')}
                     <span style={{color:"#fff"}} onClick={() => {
-                        navigate(`/quests/${item.questId}`)
+                        navigate(`/library/${item.questId}`)
                     }}>...続きをみる</span>
                 </span>
             </Box>
