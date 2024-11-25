@@ -6,15 +6,16 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import DrawerView from "./DrawerView";
 import CustomTabs from "./CustomTabs";
-import { useMediaQuery } from "@mui/material";
+import {Button, useMediaQuery} from "@mui/material";
 import { authenticationState } from "../../atoms/AuthenticationState";
 import {ParentItem, parentItemsState} from "../../atoms/ParentItemState";
-import HomeIcon from "@mui/icons-material/Home";
 import tsubuyakiIcon from "../../assets/ThinkTankIcon.svg";
 import aiIcon from "../../assets/ais.svg";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {useEffect} from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const Layout = () => {
     const [authentication] = useRecoilState(authenticationState);
@@ -29,16 +30,20 @@ const Layout = () => {
 
     const isMobile = useMediaQuery('(max-width:600px)');
 
+    const defaultPage = "Library";
     const parentItems:ParentItem[] = [
         {
-            label: 'Home',
-            icon: <HomeIcon />,
+            label: 'Library',
+            icon: <AssignmentIndIcon />,
             linkPath: "/",
             children: [
-                { label: 'All', linkPath: "/home" },
-                { label: 'Quest', linkPath: "/quests" },
-                { label: 'Blog', linkPath: "/blog" },
-                { label: 'Library', linkPath: "/library" },
+                { label: 'All', linkPath: "/library" },
+                { label: 'DBog', linkPath: "/library/d-blog-list" },
+                { label: 'Clips', linkPath: "/library/clip-list" },
+                { label: 'Cards', linkPath: "/library/card-list" },
+                { label: 'Quests', linkPath: "/library/quest-list" },
+                { label: 'Books', linkPath: "/library/book-list" },
+                { label: 'Documents', linkPath: "/library/document-list" },
             ],
             isActive: false
         },
@@ -56,20 +61,12 @@ const Layout = () => {
         {
             label: 'AIS',
             icon: <img src={aiIcon} alt={""} />,
-            linkPath: `/ais`,
-            children: [{ label: '勤怠', linkPath: '/ais' }],
-            isActive: pathname.startsWith("/ais")
-        },
-        {
-            label: 'Quests',
-            icon: <AssignmentIndIcon />,
-            linkPath: "/quests",
+            linkPath: `/ais/${authentication.uid}`,
             children: [
-                { label: 'All', linkPath: "/quests" },
-                { label: 'open', linkPath: "/quests?filter=open" },
-                { label: 'close', linkPath: "/quests?filter=close" },
+                { label: '勤怠', linkPath: `/ais/${authentication.uid}/kintai`},
+                { label: '雑談', linkPath: `/ais/${authentication.uid}/zatsudan`}
             ],
-            isActive: pathname.startsWith("/quests")
+            isActive: pathname.startsWith("/ais")
         },
         {
             label: 'Profile',
@@ -79,7 +76,6 @@ const Layout = () => {
                 { label: 'Bio', linkPath: `/user/${authentication.uid}` },
                 { label: 'ThinkTank', linkPath: `/user/${authentication.uid}/think-tank` },
                 { label: 'Library', linkPath: `/user/${authentication.uid}/library` },
-                { label: 'Blog', linkPath: `/user/${authentication.uid}/blog` },
                 { label: 'Ais', linkPath: `/user/${authentication.uid}/ais` }
             ],
             isActive: pathname.startsWith(`/user/${authentication.uid}`)
@@ -109,16 +105,16 @@ const Layout = () => {
         // 現在の URL に基づいて isActive を更新
         let newParentItemState = parentItems.map((item) => ({
             ...item,
-            isActive: item.label === "Home"
-                ? pathname === item.linkPath // "Home" の場合は完全一致
+            isActive: item.label === defaultPage
+                ? pathname === item.linkPath // デフォルトページの場合は完全一致
                 : pathname.startsWith(item.linkPath), // それ以外は部分一致
         }));
 
-        // 全ての isActive が false の場合、label が "Home" の要素を isActive: true にする
+        // 全ての isActive が false の場合、label が "Library" の要素を isActive: true にする
         if (newParentItemState.every(item => !item.isActive)) {
             newParentItemState = newParentItemState.map(item => ({
                 ...item,
-                isActive: item.label === "Home", // "Home" の場合に true、それ以外は false
+                isActive: item.label === defaultPage, // デフォルトページの場合に true、それ以外は false
             }));
         }
 
@@ -134,10 +130,36 @@ const Layout = () => {
             <CssBaseline />
             <DrawerView />
             <Box sx={{ padding: isMobile ? 2 : 12 }}>
-                <Box width={"100%"} sx={{ backgroundColor: "#ff0000" }}>
+                <Box width={"100%"}>
                     <CustomTabs/>
+                    <Box paddingTop={2}>
+                        <Button
+                            startIcon={<ArrowBackIcon/>}
+                            onClick={() => navigate(-1)} // Go back to the previous screen
+                            sx={{
+                                marginBottom: 2,
+                                color: 'white', // ボタンのテキストカラーを白に設定
+                                '&:hover': {
+                                    color: 'rgba(220,220,220,0.68)', // ボタンのテキストカラーを白に設定
+                                },
+                            }}
+                        >
+                        </Button>
+                        <Button
+                            startIcon={<ArrowForwardIcon/>}
+                            onClick={() => navigate(+1)} // Go back to the previous screen
+                            sx={{
+                                marginBottom: 2,
+                                color: 'white', // ボタンのテキストカラーを白に設定
+                                '&:hover': {
+                                    color: 'rgba(220,220,220,0.68)', // ボタンのテキストカラーを白に設定
+                                },
+                            }}
+                        >
+                        </Button>
+                    </Box>
                 </Box>
-                <Box sx={{ paddingTop: isMobile ? 3 : 0 }}>
+                <Box sx={{ paddingTop: isMobile ? 0 : 0 }}>
                     <Outlet />
                 </Box>
             </Box>

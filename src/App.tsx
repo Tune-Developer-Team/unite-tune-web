@@ -2,34 +2,42 @@ import React, {useState} from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
 
-import SignIn from "./scene/signIn/SignInView";
-import {createTheme, ThemeProvider} from "@mui/material";
+import SignIn from "./Pages/signIn/SignInView";
+import {Container, createTheme, ThemeProvider} from "@mui/material";
 import {RecoilRoot, useRecoilState} from "recoil";
-import Profile from "./scene/profile/ProfileView";
-import Portfolio from "./scene/portfolio";
-import HomeView from "./scene/home/HomeView";
-import TuneCardView from "./scene/tuneCard/tuneCardView";
-import PreferenceView from "./scene/preference/PreferenceView";
-import RegisterView from "./scene/register/registerView";
-import BlogPostTileList from "./ui/blogPost/BlogPostTileList";
-import AISecretary from "./scene/crappy/AISecretary";
-import NotFound from "./scene/notFound/NotFound";
+import Profile from "./Pages/profile/ProfileView";
+import Portfolio from "./Pages/portfolio";
+import HomeView from "./Pages/home/HomeView";
+import RegisterTuneCardView from "./Pages/registration/RegisterTuneCardView";
+import PreferenceView from "./Pages/preference/PreferenceView";
+import RegisterView from "./Pages/register/registerView";
+import BlogPostTileList from "./Pages/library/Parts/dBlog/BlogPostTileList";
+import AISecretary from "./Pages/crappy/AISecretary";
+import NotFound from "./Pages/notFound/NotFound";
 import Layout from "./ui/layout/Layout";
-import ThinkTankView from "./scene/thinkTank/ThinkTankView";
-import QuestView from "./scene/Quest/QuestView";
-import QuestListView from "./scene/questList/QuestListView";
-import {ThinkTankViewModel} from "./scene/thinkTank/ThinkTankViewModel";
-import ThinkTimeline from "./scene/thinkTank/Parts/ThinkTimeline";
-import ThinkDetail from "./scene/thinkTank/Parts/ThinkDetail";
-import MyThinkTank from "./scene/profile/ThinkTankTab/MyThinkTank";
-import MainTab from "./scene/profile/MainTab/MainTab";
-import AISTab from "./scene/profile/AISTab/AISTab";
-import LibraryTab from "./scene/profile/LibraryTab/LibraryTab";
-import UniteLandingPage from "./scene/signIn/UniteLandingPage/UniteLandingPage";
-import LPCurios from "./scene/signIn/UniteLandingPage/LPCurios";
-import LPThinkTank from "./scene/signIn/UniteLandingPage/LPThinkTank";
-import LPAis from "./scene/signIn/UniteLandingPage/LPAis";
-import UniteLandingPageHeader from "./scene/signIn/UniteLandingPage/UniteLandingPageHeader";
+import ThinkTankView from "./Pages/thinkTank/ThinkTankView";
+import QuestView from "./Pages/quest/QuestView";
+import QuestListView from "./Pages/questList/QuestListView";
+import {ThinkTankViewModel} from "./Pages/thinkTank/ThinkTankViewModel";
+import ThinkTimeline from "./Pages/thinkTank/Parts/ThinkTimeline";
+import ThinkDetail from "./Pages/thinkTank/Parts/ThinkDetail";
+import MyThinkTank from "./Pages/profile/ThinkTankTab/MyThinkTank";
+import BioTab from "./Pages/profile/BioTab/BioTab";
+import AISTab from "./Pages/profile/AISTab/AISTab";
+import LibraryTab from "./Pages/profile/LibraryTab/LibraryTab";
+import UniteLandingPage from "./Pages/signIn/UniteLandingPage/UniteLandingPage";
+import LPCurios from "./Pages/signIn/UniteLandingPage/LPCurios";
+import LPThinkTank from "./Pages/signIn/UniteLandingPage/LPThinkTank";
+import LPAis from "./Pages/signIn/UniteLandingPage/LPAis";
+import UniteLandingPageHeader from "./Pages/signIn/UniteLandingPage/UniteLandingPageHeader";
+import LibraryView from "./Pages/library/LibraryView";
+import {LibraryViewModel} from "./Pages/library/LibraryViewModel";
+import CommentTimeline from "./Pages/library/Parts/common/CommentTimeline";
+import ClipPostTileList from "./Pages/library/Parts/clips/List/ClipPostTileList";
+import ContentDetail from "./Pages/library/Parts/common/ContentDetail";
+import TuneCardTileList from "./Pages/library/Parts/tuneCards/List/TuneCardTileList";
+import ClipPostDetail from "./Pages/library/Parts/clips/Detail/ClipPostDetail";
+import SelfBrandingView from "./Pages/library/Parts/tuneCards/Detail/SelfBrandingView";
 
 function App() {
     const [darkMode] = useState(true);
@@ -72,12 +80,21 @@ function App() {
                         </Route>
 
                         <Route path='/signin' element={<SignIn />} />
-                        {/*Card*/}
-                        <Route path='/card/:cardSerial' element={<TuneCardView />} />
+                        {/*SignUp*/}
+                        <Route path='/register-card/:cardSerial' element={<RegisterTuneCardView />} />
                         {/*After Login Content*/}
                         <Route path='/' element={<Layout />} >
                             <Route index element={<HomeView />} ></Route>
-                            <Route path='/home' element={<HomeView />} />
+                            {/*home*/}
+                            <Route path="library" element={<LibraryView viewModel={LibraryViewModel.appInit()}/>}>
+                                <Route index element={<HomeView />} />
+                                <Route path="d-blog-list" element={<BlogPostTileList />} />
+                                <Route path="clip-list" element={<ClipPostTileList />} />
+                                <Route path='quest-list' element={<QuestListView />} />
+                                <Route path='card-list' element={<TuneCardTileList />} />
+                                <Route path='cards/:uid' element={<SelfBrandingView/>}/>
+                                <Route path=':uniteContentId' element={<ClipPostDetail/>}/>
+                            </Route>
                             {/*Preference*/}
                             <Route path='/preference' element={<PreferenceView />} />
                             {/*ThinkTank*/}
@@ -87,7 +104,7 @@ function App() {
                             </Route>
                             {/*Profile*/}
                             <Route path='/user/:uid' element={<Profile/>}>
-                                <Route index element={<MainTab/>}/>
+                                <Route index element={<BioTab/>}/>
                                 <Route path='/user/:uid/ais' element={<AISTab/>}/>
                                 <Route path='/user/:uid/think-tank' element={<MyThinkTank/>}>
                                     <Route index element={<ThinkTimeline/>}/>
@@ -96,13 +113,12 @@ function App() {
                                 <Route path='/user/:uid/portfolio' element={<Portfolio />} />
                             </Route>
                             {/*AIS*/}
-                            <Route path='/ais/:uid' element={<AISecretary />} />
-                            {/*Quest*/}
-                            <Route path='/quests' element={<QuestListView />} />
-                            <Route path='/quests/:questId' element={<QuestView />} />
-                            <Route path='/quests/:questId/edit' element={<QuestView />} />
-                            {/*Blog*/}
-                            <Route path='/blogposts' element={<BlogPostTileList />} />
+                            <Route path='/ais/:uid' element={<AISecretary/>}>
+                                {/*<Route index element={<BioTab/>}/>*/}
+                                <Route index element={<AISecretary />}/>
+                                <Route path='kintai' element={<AISecretary />}/>
+                                <Route path='zatsudan' element={<AISecretary />}/>
+                            </Route>
                         </Route>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>

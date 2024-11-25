@@ -1,38 +1,40 @@
 import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
-import defaultServiceIcon from "../../assets/dBlog111Icon.png";
-import {Grid} from "@mui/material";
-import BlogPostSixColumnTile from "./BlogPostSixColumnTile";
+import { styled } from "@mui/system";
+import BlogPostTile from "./BlogPostTile";
 
-export interface FeedItem {
+interface FeedItem {
     title: string;
     link: string;
     description: string;
 }
 
-export const BlogService = {
-    name: "DBlog111",
-    icon: defaultServiceIcon,
-    feed: process.env.REACT_APP_TARGET_BLOG_RSS as string
-}
+const RSS_URL = "https://dblog111.hatenablog.jp/rss";
 
-// 取得件数
-const MAX_FEED_COUNT = 6;
+const GridContainer = styled(Box)({
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gap: "16px", // Add spacing between tiles
+    padding: "16px",
+    overflow: "auto",
+});
 
-const BlogPostTileSixColumn: React.FC = () => {
+const BlogPostTileList: React.FC = () => {
     const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        document.body.style.overflowY = '';
         const fetchRSSFeed = async () => {
             try {
-                const response = await fetch(BlogService.feed);
+                const response = await fetch(RSS_URL);
                 const text = await response.text();
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "application/xml");
 
-                const items = Array.from(xml.querySelectorAll("item")).slice(0, MAX_FEED_COUNT).map((item) => ({
+                const items = Array.from(xml.querySelectorAll("item")).map((item) => ({
                     title: item.querySelector("title")?.textContent || "No Title",
                     link: item.querySelector("link")?.textContent || "#",
                     description: item.querySelector("description")?.textContent || "",
@@ -54,14 +56,17 @@ const BlogPostTileSixColumn: React.FC = () => {
     }
 
     return (
-        <Grid container spacing={2} className={"new-arrival-banner"} paddingBottom={5}>
-            {feedItems.map((item, index) => (
-                <Grid xs={6} sm={6} md={6} lg={6} paddingLeft={1}>
-                    <BlogPostSixColumnTile item={item}/>
-                </Grid>
-            ))}
-        </Grid>
+        <div className="PostList" >
+            <Typography variant="h5" component="div">
+                DBlog
+            </Typography>
+            <GridContainer>
+                {feedItems.map((item, index) => (
+                   <BlogPostTile item={item}/>
+                ))}
+            </GridContainer>
+        </div>
     );
 };
 
-export default BlogPostTileSixColumn;
+export default BlogPostTileList;

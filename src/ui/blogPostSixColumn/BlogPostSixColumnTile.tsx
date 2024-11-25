@@ -4,8 +4,8 @@ import parse from "html-react-parser";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import postCardBackground from "../blogPost/BlogPostTileBackground.svg";
-import {FeedItem} from "../blogPost/BlogPostTileBanner";
+import postCardBackground from "../../Pages/library/Parts/dBlog/BlogPostTileBackground.svg";
+import {FeedItem} from "../../Pages/library/Parts/dBlog/BlogPostTileBanner";
 import blogIcon from "../../assets/dBlog111Icon.png";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({

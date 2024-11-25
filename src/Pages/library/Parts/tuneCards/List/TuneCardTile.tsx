@@ -1,12 +1,13 @@
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
-import seedCardBackground from "./QuestTileBackground.svg";
 import parse from "html-react-parser";
+import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import React, {useState} from "react";
+import React from "react";
+import postCardBackground from "./TuneCardTileBackground.svg";
+import {FeedItem} from "./TuneCardTileBanner";
+import blogIcon from "../../../../../assets/dBlog111Icon.png";
 import {useNavigate} from "react-router-dom";
-import {QuestListItem} from "../../Pages/home/HomeViewModelIF";
-import {AvatarIcon} from "../avatarIcon/AvatarIcon";
 
 const Tile = styled(Box)<{ image: string }>(({ theme, image }) => ({
     width: 180, // Fixed width for square tiles
@@ -32,6 +33,19 @@ const Title = styled(Typography)({
     color: "#181818"
 });
 
+const AvatarIcon = styled(Avatar)({
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    margin: 8, // タイルの右下から少し内側に配置
+    zIndex: 1, // 背景画像の前に表示されるように調整
+    transition: "transform 0.2s ease-in-out",
+    pointerEvents: "auto", // クリックイベントを受け取る
+    "&:hover": {
+        transform: "scale(1.5)",
+    },
+});
+
 const OverlayImage = styled("img")({
     position: "absolute",
     top: 0,
@@ -54,73 +68,42 @@ const BackGroundImage = styled("img")({
 });
 
 interface SeedTileProps {
-    item:  QuestListItem; // 親コンポーネントから渡されるシード
+    item:  FeedItem; // 親コンポーネントから渡されるフィード
 }
 
-const QuestTile: React.FC<SeedTileProps> = ({ item }) => {
-    const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
-
-    console.log(item.title);
-    console.log(item.imagePath.path);
-
-    const handleAvatarMouseEnter = () => {
-        console.log("hovering");
-        setIsAvatarHovered(true); // Set hover state to true
-    };
-
-    const handleAvatarMouseLeave = () => {
-        setIsAvatarHovered(false); // Reset hover state
-    };
-
+const TuneCardTile: React.FC<SeedTileProps> = ({ item }) => {
     const navigate = useNavigate();
     return (
         <Box>
             <Tile
-                image={item.imagePath.path}
+                image={blogIcon}
                 onClick={()=>{
-                    if(!isAvatarHovered){
-                        navigate(`/library/${item.questId}`);
-                    }
+                    navigate(item.link);
                 }}
             >
                 {/* 重ねる画像を表示 */}
-                <BackGroundImage src={item.imagePath.path} alt="BackGround"/>
-                <OverlayImage src={seedCardBackground} alt="Overlay"/>
+                <BackGroundImage src={blogIcon} alt="BackGround"/>
+                <OverlayImage src={postCardBackground} alt="Overlay"/>
 
                 <Title variant="h6" gutterBottom>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     {parse(item.title.substring(0, 38).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
                 </Title>
                 <Box height={"100%"}>
-                    <AvatarIcon
-                        sx={{
-                            position: "absolute",
-                            bottom: 0,
-                            right: 0
-                        }}
-                        alt="userIcon"
-                        sizes={"ss"}
-                        src={item.userIconImagePath.path}
-                        isAvatarHovered={isAvatarHovered}
-                        onMouseEnter={handleAvatarMouseEnter}
-                        onMouseLeave={handleAvatarMouseLeave}
-                        onClick={() => {
-                            console.log("ユーザー");
-                            setIsAvatarHovered(true);
-                            navigate(`/user/${item.ownerUserUid}`);
-                        }}
-                    />
+                    <AvatarIcon alt="userIcon" sizes={"ss"} src={blogIcon} onClick={()=>{
+                        navigate(item.link);
+                    }}/>
                 </Box>
             </Tile>
 
             <Box display={"flex"} paddingTop={1}>
-                <span style={{fontSize:12}}>{item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, '')}
+                <span style={{fontSize:12}}>{parse(item.description.substring(0, 50).replace(/<a[^>]*>(.*?)<\/a>/gi, ''))}
                     <span style={{color:"#fff"}} onClick={() => {
-                        navigate(`/library/${item.questId}`)
+                        window.open(item.link, "_blank");
                     }}>...続きをみる</span>
                 </span>
             </Box>
         </Box>
     );
 }
-export default QuestTile;
+export default TuneCardTile;

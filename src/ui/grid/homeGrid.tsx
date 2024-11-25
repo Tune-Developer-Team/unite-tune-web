@@ -16,7 +16,7 @@ export default function HomeGrid() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-                <Grid xs={12} className={"new-arrival-blogPost"}>
+                <Grid xs={12} className={"new-arrival-dBlog"}>
                     <Item>new arrival</Item>
                 </Grid>
                 <Grid xs={4}  className={"new-arrival-tile-1"}>
