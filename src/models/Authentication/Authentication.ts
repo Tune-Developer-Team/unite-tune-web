@@ -1,18 +1,19 @@
 export interface AuthenticationArgumentIF {
-    accessToken: string;
-    uid: string;
-    email: string;
+    accessToken: string
+    uid: string
+    email: string
 }
 
 export default class Authentication {
     private constructor(
         public accessToken: string,
         protected uid: string,
-        protected email: string
-    ) {}
+        protected email: string,
+    ) {
+    }
 
-    public static fromState(state: AuthenticationArgumentIF): Authentication {
-        return new Authentication(state.accessToken, state.uid, state.email);
+    public static initAuthentication(): Authentication {
+        return new Authentication('', '', '');
     }
 
     public setAuthentication(argument: AuthenticationArgumentIF): void {
@@ -22,17 +23,14 @@ export default class Authentication {
     }
 
     public getUid(): string {
-        if (!this.uid) throw new Error('UID is empty');
-        return this.uid;
+        return this.uid
     }
 
     public getEmail(): string {
-        if (!this.email) throw new Error('Email is empty');
-        return this.email;
+        return this.email
     }
 
     public getAccessToken(): string {
-        if (!this.accessToken) throw new Error('Access token is empty');
-        return this.accessToken;
+        return this.accessToken
     }
 }
