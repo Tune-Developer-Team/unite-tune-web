@@ -14,7 +14,7 @@ import {authenticationState} from "../../../atoms/AuthenticationState";
 import Profile from "../../../models/Profile/Profile";
 import {Think} from "../../../models/ThinkTank/Think";
 
-const MainTab = () => {
+const BioTab = () => {
     // グローバルオブジェクト
     const [authState] = useRecoilState(authenticationState);
     const [globalProfile, setGlobalProfile] = useRecoilState<Profile>(profileState)
@@ -31,35 +31,16 @@ const MainTab = () => {
     const uid = params.uid as string;
 
     // UI
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const navigate = useNavigate();
 
     // Model
     const initProfile = viewModel.profile;
-    // プロフィール編集
-    const [newProfile, setNewProfile] = useState<Profile>(initProfile)
 
     // フォーム
-    const [newIconImage, setNewIconImage] = useState<ImagePath | null>(null)
     const [isPublishedAis, setIsPublishedAis] = useState<boolean>(false)
     const [isShowPortfolio, setIsShowPortfolio] = useState<boolean>(false)
     const [isShowMbti, setIsShowMbti] = useState<boolean>(false)
     const [newTags, setNewTags] = useState<string[]>([]);
-
-    // ファイル変更時に受け取るコールバック関数
-    const handleFileChange = async (iconImage: ImagePath) => {
-        // プレビュー用画像
-        setNewIconImage(iconImage);
-    };
-
-    const toggleDrawer = (open: boolean) => {
-        // グローバルオブジェクトを深いコピーで更新
-        const updatedProfile = Profile.initProfile();  // Profileの新しいインスタンスを作成 RecoilStateはイミュータブルなため。
-        Object.assign(updatedProfile, viewModel.profile);
-        setGlobalProfile(updatedProfile);
-
-        setIsDrawerOpen(open);
-    };
 
     const setUp = async (): Promise<void> => {
         const newViewModel = viewModel.setUp({
@@ -128,4 +109,4 @@ const MainTab = () => {
     );
 }
 
-export default MainTab
+export default BioTab

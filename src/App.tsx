@@ -22,7 +22,7 @@ import {ThinkTankViewModel} from "./Pages/thinkTank/ThinkTankViewModel";
 import ThinkTimeline from "./Pages/thinkTank/Parts/ThinkTimeline";
 import ThinkDetail from "./Pages/thinkTank/Parts/ThinkDetail";
 import MyThinkTank from "./Pages/profile/ThinkTankTab/MyThinkTank";
-import MainTab from "./Pages/profile/MainTab/MainTab";
+import BioTab from "./Pages/profile/BioTab/BioTab";
 import AISTab from "./Pages/profile/AISTab/AISTab";
 import LibraryTab from "./Pages/profile/LibraryTab/LibraryTab";
 import UniteLandingPage from "./Pages/signIn/UniteLandingPage/UniteLandingPage";
@@ -35,6 +35,7 @@ import {LibraryViewModel} from "./Pages/library/LibraryViewModel";
 import CommentTimeline from "./Pages/library/Parts/common/CommentTimeline";
 import ClipPostTileList from "./Pages/library/Parts/clips/ClipPostTileList";
 import ContentDetail from "./Pages/library/Parts/common/ContentDetail";
+import TuneCardTileList from "./Pages/library/Parts/tuneCards/TuneCardTileList";
 
 function App() {
     const [darkMode] = useState(true);
@@ -88,7 +89,7 @@ function App() {
                                 <Route path="d-blog-list" element={<BlogPostTileList />} />
                                 <Route path="clip-list" element={<ClipPostTileList />} />
                                 <Route path='quest-list' element={<QuestListView />} />
-                                <Route path='card-list' element={<QuestListView />} />
+                                <Route path='card-list' element={<TuneCardTileList />} />
                                 <Route path=":uniteContentId" element={<ContentDetail />} />
                             </Route>
                             {/*Preference*/}
@@ -100,7 +101,7 @@ function App() {
                             </Route>
                             {/*Profile*/}
                             <Route path='/user/:uid' element={<Profile/>}>
-                                <Route index element={<MainTab/>}/>
+                                <Route index element={<BioTab/>}/>
                                 <Route path='/user/:uid/ais' element={<AISTab/>}/>
                                 <Route path='/user/:uid/think-tank' element={<MyThinkTank/>}>
                                     <Route index element={<ThinkTimeline/>}/>
@@ -110,7 +111,7 @@ function App() {
                             </Route>
                             {/*AIS*/}
                             <Route path='/ais/:uid' element={<AISecretary/>}>
-                                {/*<Route index element={<MainTab/>}/>*/}
+                                {/*<Route index element={<BioTab/>}/>*/}
                                 <Route index element={<AISecretary />}/>
                                 <Route path='kintai' element={<AISecretary />}/>
                                 <Route path='zatsudan' element={<AISecretary />}/>
