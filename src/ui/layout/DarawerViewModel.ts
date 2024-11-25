@@ -1,22 +1,24 @@
 import Authentication, {AuthenticationArgumentIF} from "../../models/Authentication/Authentication";
-import Profile, {ProfileIF} from "../../models/Profile/Profile";
+import dayjs from "dayjs";
+import Profile from "../../models/Profile/Profile";
 import {Api} from "../../models/Api/Api";
 import {AxiosResponse} from "axios";
 import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
 
 export class DrawerViewModel {
+    public authState: Authentication = Authentication.initAuthentication();
     public profile: Profile = Profile.initProfile();
     public customUrlList: CustomUrl[] = [];
-    public authState: Authentication;
-    constructor(state: AuthenticationArgumentIF) {
-        this.authState = Authentication.fromState(state);
+    constructor(
+    ) {
+        console.log('====================DrawerViewModel_called====================');
     }
 
     /**
      * セットアップ処理
      * @param argument
      */
-    setUp(argument: { profile: ProfileIF; authentication: { uid: any; accessToken: any; email: any } }): void {
+    setUp(argument: { profile: { iconImage: any; nickName: any }; authentication: { uid: any; accessToken: any; email: any } }): void {
         console.log('====================DrawerViewModel_setup====================');
         this.authState.setAuthentication(argument.authentication);
         this.profile.setProfile(argument.profile);
@@ -28,6 +30,17 @@ export class DrawerViewModel {
      */
     cleanUp():void {
         console.log('cleanUp');
+    }
+
+    /**
+     *
+     */
+    generateSeedId(): string {
+        // 新規作成の際のseedIdを生成 TODO: やっつけなのでちゃんと設計する
+        const date = Date();
+        const dateString = dayjs(date).format("YYYYMMDDhhmmss");
+        console.log(this.authState);
+        return this.authState.getUid() + dateString;
     }
 
     /**

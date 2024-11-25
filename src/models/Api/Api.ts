@@ -90,19 +90,9 @@ export class Api {
      * コンフィグを設定する
      * @param options
      */
-    public setConfig(options: { contentsType: string}) {
+    public setConfig(options: { contentsType: string }) {
         this.axiosInstance.interceptors.request.use(config => {
             config.headers['content-type'] = options.contentsType;
-            return config;
-        });
-    }
-
-    /**
-     * @param authorization
-     */
-    public setAuthorization(authorization: string|null) {
-        this.axiosInstance.interceptors.request.use(config => {
-            config.headers['content-Authorization'] = authorization;
             return config;
         });
     }

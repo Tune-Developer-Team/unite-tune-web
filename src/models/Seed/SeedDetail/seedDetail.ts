@@ -80,7 +80,7 @@ export class SeedDetail {
         });
 
         apiResponse.HashTagList = ['#tag1','#tag2','#tag3']; // TODO: JSONを配列に変換
-        apiResponse.OwnerUserName = '山田 太郎'; // TODO: バックエンドが未実装
+        apiResponse.OwnerUserName = ''; // TODO: バックエンドが未実装
 
 
 
