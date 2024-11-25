@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useRecoilState} from "recoil";
 import Grid from "@mui/material/Unstable_Grid2";
 import {useParams} from "react-router-dom";
-import {TuneCardViewModel} from "./tuneCardViewModel";
+import {RegisterTuneCardViewModel} from "./RegisterTuneCardViewModel";
 import {navigationState} from "../../atoms/NavigationState";
 import {tuneCardState} from "../../atoms/TuneCardState";
 import Loader from "../../ui/loading/Loader";
@@ -11,13 +11,13 @@ import {loaderState} from "../../atoms/LoaderState";
 import {TuneCard} from "../../models/TuneCard/TuneCard";
 import Box from "@mui/material/Box";
 
-const tuneCardViewModel = new TuneCardViewModel();
+const tuneCardViewModel = new RegisterTuneCardViewModel();
 
-const TuneCardView: React.FunctionComponent = () => {
+const RegisterTuneCardView: React.FunctionComponent = () => {
     const [loading, setLoading] = useRecoilState(loaderState);
     const [navigation, setNavigation] = useRecoilState(navigationState);
     const [tuneCard, setTuneCard] = useRecoilState<TuneCard>(tuneCardState);
-    const [viewModel] = useState<TuneCardViewModel>(tuneCardViewModel);
+    const [viewModel] = useState<RegisterTuneCardViewModel>(tuneCardViewModel);
 
     const urlParams = useParams<{ cardSerial: string }>()
     const cardSerial: string = urlParams.cardSerial ?? '';
@@ -93,4 +93,4 @@ const TuneCardView: React.FunctionComponent = () => {
         </Grid>
     );
 };
-export default TuneCardView;
+export default RegisterTuneCardView;

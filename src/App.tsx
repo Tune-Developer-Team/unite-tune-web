@@ -8,7 +8,7 @@ import {RecoilRoot, useRecoilState} from "recoil";
 import Profile from "./Pages/profile/ProfileView";
 import Portfolio from "./Pages/portfolio";
 import HomeView from "./Pages/home/HomeView";
-import TuneCardView from "./Pages/tuneCard/tuneCardView";
+import RegisterTuneCardView from "./Pages/registration/RegisterTuneCardView";
 import PreferenceView from "./Pages/preference/PreferenceView";
 import RegisterView from "./Pages/register/registerView";
 import BlogPostTileList from "./Pages/library/Parts/dBlog/BlogPostTileList";
@@ -77,8 +77,8 @@ function App() {
                         </Route>
 
                         <Route path='/signin' element={<SignIn />} />
-                        {/*Card*/}
-                        <Route path='/card/:cardSerial' element={<TuneCardView />} />
+                        {/*SignUp*/}
+                        <Route path='/register-card/:cardSerial' element={<RegisterTuneCardView />} />
                         {/*After Login Content*/}
                         <Route path='/' element={<Layout />} >
                             <Route index element={<HomeView />} ></Route>

@@ -2,7 +2,7 @@ import axios from "axios";
 import {endPoint} from "../../consts/api";
 import {TuneCard} from "../../models/TuneCard/TuneCard";
 
-export class TuneCardViewModel {
+export class RegisterTuneCardViewModel {
     /**
      * 取得
      * @param cardSerial
