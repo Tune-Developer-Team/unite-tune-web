@@ -167,8 +167,8 @@ const AllTabView = (props: AllTabViewProps) => {
             <Grid container spacing={3} className={"officeManager-list"}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
-                        {/* みんなのステータス */}
-                        🔥 STATUS
+                        {/* 出社組の便利ツール */}
+                        🔥 OfficeManager
                     </Typography>
                     <Grid xs={12} sm={12} md={12} lg={12}>
                         <StatusTileList />
