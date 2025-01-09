@@ -88,7 +88,7 @@ function App() {
                                 <Route index element={<HomeView />} />
                                 <Route path="d-blog-list" element={<BlogPostTileList />} />
                                 <Route path="clip-list" element={<ClipPostTileList />} />
-                                <Route path='quest-list' element={<QuestListView />} />
+                                {/*<Route path='quest-list' element={<QuestListView />} />*/}
                                 <Route path='document-list' element={<UnderConstruction />} />
                                 <Route path='book-list' element={<UnderConstruction />} />
                                 <Route path='card-list' element={<TuneCardTileList />} />

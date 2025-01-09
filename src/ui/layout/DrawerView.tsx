@@ -73,6 +73,8 @@ export default function DrawerView() {
         navigate(item.linkPath);
     };
 
+    const sideAppList = parentItems.slice(0,3);
+
     return (
         <Box sx={{ display: 'flex' , zIndex:100 }}>
             {isMobile ? (
@@ -81,7 +83,7 @@ export default function DrawerView() {
                     <BottomMenu />
                 </Box>
             ) : (
-                <Drawer variant="permanent" open={open}>
+                <Drawer id={"pc-drawer-menu"} variant="permanent" open={open}>
                     <HeaderUserIconMenu />
                     <DrawerHeader>
                         <Button onClick={open ? handleDrawerClose : handleDrawerOpen}>
@@ -90,7 +92,7 @@ export default function DrawerView() {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {parentItems.map((item, index) => (
+                        {sideAppList.map((item, index) => (
                             <ListItem key={index} disablePadding onClick={() => handleItemClick(item)}>
                                 <ListItemButton
                                     sx={{minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5}}>

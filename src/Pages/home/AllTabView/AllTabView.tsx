@@ -14,6 +14,7 @@ import Avatar from "@mui/material/Avatar";
 import PickUp from "./PickUp";
 import {randomInt} from "crypto";
 import blogIcon from "../../../assets/dBlog111Icon.png";
+import StatusTileList from "../../library/Parts/officeManager/OfficeManager";
 
 interface AllTabViewProps {
     viewModel: HomeViewModel
@@ -131,6 +132,11 @@ const AllTabView = (props: AllTabViewProps) => {
                     <Typography variant="h5" component="div">
                         ✨ NEW ARRIVAL
                     </Typography>
+                    <Box textAlign={"end"} paddingRight={1}>
+                        <Button variant="text" style={{color: "#fff"}} onClick={() => {
+                            navigate(`/library/d-blog-list`)
+                        }}>全て表示する</Button>
+                    </Box>
                 </Grid>
                 <BlogPostTileSixColumn/>
             </Grid>
@@ -158,19 +164,14 @@ const AllTabView = (props: AllTabViewProps) => {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={3} className={"quest-banner"}>
+            <Grid container spacing={3} className={"officeManager-list"}>
                 <Grid sx={{textAlign: "start"}} xs={12} sm={12} md={12} lg={12}>
                     <Typography variant="h5" component="div">
-                        {/*このシードがアツい！*/}
-                        🔥 HOT QUESTS !
+                        {/* みんなのステータス */}
+                        🔥 STATUS
                     </Typography>
-                    <Box textAlign={"end"} paddingRight={1}>
-                        <Button variant="text" style={{color: "#fff"}} onClick={() => {
-                            navigate(`/library/quest-list`)
-                        }}>全て表示する</Button>
-                    </Box>
                     <Grid xs={12} sm={12} md={12} lg={12}>
-                        <QuestTileBanner questList={questList}/>
+                        <StatusTileList />
                     </Grid>
                 </Grid>
             </Grid>

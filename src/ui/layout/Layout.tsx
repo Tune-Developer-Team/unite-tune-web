@@ -86,7 +86,7 @@ const Layout = () => {
             linkPath: "/preference",
             children: [{label: 'Settings', linkPath: '/preference/'}],
             isActive: pathname.startsWith(`/preference`)
-        },
+        }
     ];
 
     console.log("=========================================");
