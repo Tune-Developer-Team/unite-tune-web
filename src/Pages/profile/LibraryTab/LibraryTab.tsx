@@ -12,10 +12,10 @@ const LibraryTab = () => {
     return (
         <Grid container spacing={2} className={"Goods"}>
             <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"tab"}>
-                forRent / forSell 🚧開発中🚧
+                🚧開発中🚧<br/>Blog,Clip,Book,Document
             </Grid>
             <Grid paddingBottom={2} textAlign={"start"} xs={12} sm={12} md={12} lg={12} className={"table"}>
-                自分の読んだ本とかのテーブル🚧開発中🚧
+                自分が出したコンテンツが表示される
             </Grid>
         </Grid>
     );

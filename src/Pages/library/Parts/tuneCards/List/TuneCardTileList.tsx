@@ -1,69 +1,83 @@
-import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
-import { styled } from "@mui/system";
+import Grid from "@mui/material/Grid";
+import {loaderState} from "../../../../../atoms/LoaderState";
 import TuneCardTile from "./TuneCardTile";
+import {useRecoilState} from "recoil";
+import {endPoint} from "../../../../../consts/api";
+import {useEffect, useState} from "react";
+import {Api} from "../../../../../models/Api/Api";
+import Authentication from "../../../../../models/Authentication/Authentication";
+import ImagePath from "../../../../../models/data/ImagePath";
 import {authenticationState} from "../../../../../atoms/AuthenticationState";
+import {Box, CircularProgress, Typography} from "@mui/material"; // MUIのGridコンポーネントをインポート
 
-interface FeedItem {
+export interface TuneCardItem {
+    uid: string;
+    iconImage: ImagePath;
     title: string;
     link: string;
     description: string;
 }
 
-const YOUTUBE_API_URL = "https://dblog111.hatenablog.jp/rss";
-
-const GridContainer = styled(Box)({
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-    gap: "16px", // Add spacing between tiles
-    padding: "16px",
-    overflow: "auto",
-});
+export interface ProfilesResponseData {
+    NickName: string
+    IconImage: string
+    Uid: string
+    Description: string
+}
 
 const TuneCardTileList: React.FC = () => {
-    const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [authState] = useRecoilState(authenticationState);
+    const [feedItems, setFeedItems] = useState<TuneCardItem[]>([]);
+    const [loading, setLoading] = useRecoilState(loaderState);
 
     useEffect(() => {
-        const fetchRSSFeed = async () => {
+        const fetchCards = async () => {
             try {
-                const response = await fetch(YOUTUBE_API_URL);
-                const text = await response.text();
-                const parser = new DOMParser();
-                const items = [
-                    {title: `Yamashita`,link: "/library/cards/6923e6b6-bd0f-42cb-97b7-bc539669b080", description: "こんにちは！"},
-                    {title: "顧客理解の基本スタンス",link: "/library/id234567891", description: "顧客理解はビジネスに限らず人と人との関わりの本質である。"},
-                    {title: "経営資源",link: "/library/id345678912", description: "経営におけるヒト・オカネ・モノ・ジョウホウの観点から自分の戦略を立ててみる。"},
-                    {title: "理念の共有の重要性",link: "/library/id456789123", description: "組織活動において理念の共有が一番大事である理由を歴史の観点から深掘りしていく。"},
-                ];
+                setLoading({ isLoading: true });
+                let items: TuneCardItem[] = [];
+                const api = new Api(Authentication.fromState(authState));
+                const response = await api.get(endPoint.PROFILE);
 
+                if (response.data) {
+                    items = response.data.data.map((data: ProfilesResponseData) => {
+                        const image = JSON.parse(data.IconImage);
+                        return {
+                            uid: data.Uid,
+                            iconImage: ImagePath.create({ path: image.path, alt: image.alt }),
+                            title: data.NickName,
+                            link: `/library/card-list/${data.Uid}`,
+                            description: data.Description,
+                        };
+                    });
+                }
                 setFeedItems(items);
             } catch (error) {
-                console.error("Error fetching Youtube:", error);
+                console.error("Error fetching cards:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchRSSFeed();
-    }, []);
+        fetchCards();
+    }, [authState]);
 
     if (loading) {
         return <CircularProgress />;
     }
 
     return (
-        <div className="PostList" >
+        <div className="PostList">
             <Typography variant="h5" component="div">
                 TuneCards
             </Typography>
-            <GridContainer>
-                {feedItems.map((item, index) => (
-                   <TuneCardTile item={item}/>
+            <Grid container spacing={4} style={{ padding: "2rem", display: "flex"}}>
+                {feedItems.map((item) => (
+                    <Box key={item.uid} style={{paddingLeft:34}}>
+                        <TuneCardTile item={item} />
+                        {/*{"a"}*/}
+                    </Box>
                 ))}
-            </GridContainer>
+            </Grid>
         </div>
     );
 };

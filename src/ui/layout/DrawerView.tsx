@@ -73,15 +73,17 @@ export default function DrawerView() {
         navigate(item.linkPath);
     };
 
+    const sideAppList = parentItems.slice(0,3);
+
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' , zIndex:100 }}>
             {isMobile ? (
                 <Box sx={{ flexGrow: 1, padding: 1, width: "100%" }}>
                     <HeaderUserIconMenu />
                     <BottomMenu />
                 </Box>
             ) : (
-                <Drawer variant="permanent" open={open}>
+                <Drawer id={"pc-drawer-menu"} variant="permanent" open={open}>
                     <HeaderUserIconMenu />
                     <DrawerHeader>
                         <Button onClick={open ? handleDrawerClose : handleDrawerOpen}>
@@ -90,7 +92,7 @@ export default function DrawerView() {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {parentItems.map((item, index) => (
+                        {sideAppList.map((item, index) => (
                             <ListItem key={index} disablePadding onClick={() => handleItemClick(item)}>
                                 <ListItemButton
                                     sx={{minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5}}>
@@ -107,12 +109,6 @@ export default function DrawerView() {
                         {customUrlList.map((item) => (
                             <ListItem key={item.customUrlId} disablePadding sx={{ display: 'block' }}>
                                 <a href={item.urlString} style={{ textDecoration: "none", color: "white" }}>
-                                    {/*<ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>*/}
-                                    {/*    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>*/}
-                                    {/*        <LinkIcon />*/}
-                                    {/*    </ListItemIcon>*/}
-                                    {/*    <ListItemText primary={item.displayName} sx={{ opacity: open ? 1 : 0 }} />*/}
-                                    {/*</ListItemButton>*/}
                                 </a>
                             </ListItem>
                         ))}

@@ -1,4 +1,20 @@
-import {useState} from 'react';
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { authenticationState } from '../../atoms/AuthenticationState';
+import { profileState } from '../../atoms/ProfileState';
+import { parentItemsState } from "../../atoms/ParentItemState";
+import { useState } from 'react';
+import { DrawerViewModel } from "./DarawerViewModel";
+import { CustomUrl } from "../../models/CustomUrl/CustomUrl";
+import AddIcon from "@mui/icons-material/Add";
+import { AxiosResponse } from "axios";
+import Profile from "../../models/Profile/Profile";
 import {
     Box,
     Button,
@@ -10,22 +26,8 @@ import {
     Modal,
     Container,
     Grid,
-    TextField, Drawer
+    TextField, Drawer, useMediaQuery, useTheme
 } from '@mui/material';
-import {DrawerViewModel} from "./DarawerViewModel";
-import {CustomUrl} from "../../models/CustomUrl/CustomUrl";
-import {AxiosResponse} from "axios";
-import {useNavigate} from "react-router-dom";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {profileState} from "../../atoms/ProfileState";
-import {authenticationState} from "../../atoms/AuthenticationState";
-import AddIcon from "@mui/icons-material/Add";
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Profile from "../../models/Profile/Profile";
-import {parentItemsState} from "../../atoms/ParentItemState";
-
-const TSUBUYAKI_ORIGIN = process.env.REACT_APP_TSUBUYAKI_ORIGIN as string;
 
 // Inside your component
 const HeaderUserIconMenu = () => {
@@ -36,26 +38,26 @@ const HeaderUserIconMenu = () => {
 
     // ビューモデル
     const [viewModel] = useState<DrawerViewModel>(new DrawerViewModel(authentication));
-    const [open, setOpen] = useState(false);
+    const [openPCMenu, setOpenPCMenu] = useState(false);
+    const [openMobileMenu, setOpenMobileMenu] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
     // カスタムURL
     const [urlString, setUrlString] = useState<string>('');
     const [customUrlText, setCustomUrlText] = useState<string>('');
-    // const [urlIcon, setUrlIcon] = useState<File | null>(null);
     const [customUrlList, setCustomUrlList] = useState<CustomUrl[]>([]);
 
-    // const handleDrawerToggle = () => {
-    //     setOpen(!open);
-    // };
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
     const navigate = useNavigate();
     const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpenMobileMenu(true);
         document.body.style.overflowY = 'hidden';
     }
     const handleDrawerClose = () => {
-        setOpen(false);
+        setOpenMobileMenu(false);
         document.body.style.overflowY = '';
     };
 
@@ -68,17 +70,11 @@ const HeaderUserIconMenu = () => {
         setIsAvatarHovered(false); // Reset hover state
     };
 
-    // const menuItems= [
-    //     {
-    //         label: 'Profile',
-    //         icon: <AssignmentIndIcon/>,
-    //         linkPath: `/user/${authentication.uid}`
-    //     },
-    //     {
-    //         label: 'Preference',
-    //         icon: <SettingsIcon/>,
-    //         linkPath: "/preference"
-    //     }];
+    const handleClose = () => {
+        setOpenPCMenu(false)
+    };
+
+    const userMenu = parentItems.slice(3, 6);
 
     return (
         <Box
@@ -89,23 +85,90 @@ const HeaderUserIconMenu = () => {
                 padding: '0 16px',
                 overflowX: 'auto',
             }}>
+
+
+
+            <Tooltip title="Account settings">
+                <IconButton
+                    size="small"
+                    sx={{ ml: 2 }}
+                    aria-controls={openPCMenu ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openPCMenu ? 'true' : undefined}
+                >
                 <Avatar
                     sx={{
                         display: "flex",
                         position: 'fixed', // Changed to fixed
                         top: 10,
-                        right: 10,
-                        zIndex: 10, // Ensure it stays above other elements
+                        right: 20,
+                        zIndex: 100, // Ensure it stays above other elements
                     }}
                     alt="userIcon"
                     sizes={"ss"}
                     src={profile.iconImage.path??""}
                     onMouseEnter={handleAvatarMouseEnter}
                     onMouseLeave={handleAvatarMouseLeave}
-                    onClick={open ? handleDrawerClose : handleDrawerOpen}
+                    onClick={() => {
+                        if (!isMobile) {
+                            openPCMenu ? setOpenPCMenu(false) : setOpenPCMenu(true)
+                            return
+                        }
+
+                        if (openMobileMenu) {
+                            handleDrawerClose()
+                        } else {
+                            handleDrawerOpen()
+                        }
+                    }
+                    }
                 />
-            <Box display={open ? "block" : "none"}>
-                <Drawer variant="permanent" open={open} anchor={"left"}>
+                </IconButton>
+            </Tooltip>
+            <Menu
+                id="account-menu"
+                open={openPCMenu}
+                onClick={handleClose}
+                slotProps={{
+                    paper: {
+                        elevation: 0,
+                        sx: {
+                            overflow: 'visible',
+                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                            mt: 1.5,
+                            '& .MuiAvatar-root': {
+                                width: 32,
+                                height: 32,
+                                ml: -0.5,
+                                mr: 1,
+                            },
+                            '&::before': {
+                                content: '""',
+                                display: 'block',
+                                position: 'relative',
+                                top: 0,
+                                right: 14,
+                                width: 10,
+                                height: 10,
+                                bgcolor: 'background.paper',
+                                transform: 'translateY(-50%) rotate(45deg)',
+                                zIndex: 0,
+                            },
+                        },
+                    },
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+            >
+                {userMenu.map((item, index) => (
+                    <MenuItem onClick={() => navigate(item.linkPath)}>
+                        {item.icon}&nbsp;&nbsp;{item.label}
+                    </MenuItem>
+                ))}
+            </Menu>
+
+            <Box id={"mobile-drawer-menu"} display={openMobileMenu ? "block" : "none"}>
+                <Drawer variant="permanent" open={openMobileMenu} anchor={"left"}>
                     <List sx={{
                         gap: 2,
                         overflowX: 'auto',
@@ -114,11 +177,7 @@ const HeaderUserIconMenu = () => {
                         {parentItems.slice(3, 6).map((item, index) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'flex'}} onClick={() => {
                                 handleDrawerClose()
-                                if (item.linkPath === TSUBUYAKI_ORIGIN) {
-                                    window.open(item.linkPath, '_blank'); // 仮
-                                } else {
-                                    navigate(item.linkPath);
-                                }
+                                navigate(item.linkPath);
                             }}>
                                 <ListItemButton sx={{justifyContent: 'center', px: 2, display: 'block'}}>
                                     <ListItemIcon sx={{minWidth: 0, justifyContent: 'center'}}>

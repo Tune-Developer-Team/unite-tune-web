@@ -4,18 +4,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
 import defaultServiceIcon from "../../../../../assets/dBlog111Icon.png";
 import TuneCardTile from "./TuneCardTile";
-
-export interface FeedItem {
-    title: string;
-    link: string;
-    description: string;
-}
-
-const service = {
-    name: "DBlog111",
-    icon: defaultServiceIcon,
-    feed: process.env.REACT_APP_TARGET_BLOG_RSS as string
-}
+import {endPoint} from "../../../../../consts/api";
+import {loaderState} from "../../../../../atoms/LoaderState";
+import {ProfilesResponseData, TuneCardItem} from "./TuneCardTileList";
+import Authentication from "../../../../../models/Authentication/Authentication";
+import {authenticationState} from "../../../../../atoms/AuthenticationState";
+import {useRecoilState} from "recoil";
+import {Api} from "../../../../../models/Api/Api";
+import ImagePath from "../../../../../models/data/ImagePath";
 
 // 取得件数
 const MAX_FEED_COUNT = 5;
@@ -32,33 +28,64 @@ const ScrollContainer = styled(Box)({
 });
 
 const TuneCardTileBanner: React.FC = () => {
-    const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [authState] = useRecoilState(authenticationState);
+    const [tuneCardItems, setTuneCardItems] = useState<TuneCardItem[]>([]);
+    const [loading, setLoading] = useRecoilState(loaderState);
 
     useEffect(() => {
-        document.body.style.overflowY = '';
-        const fetchRSSFeed = async () => {
+        const fetchCards = async () => {
             try {
-                const response = await fetch(service.feed);
-                const text = await response.text();
-                const parser = new DOMParser();
-                const xml = parser.parseFromString(text, "application/xml");
 
-                const items = Array.from(xml.querySelectorAll("item")).slice(0, MAX_FEED_COUNT).map((item) => ({
-                    title: item.querySelector("title")?.textContent || "No Title",
-                    link: item.querySelector("link")?.textContent || "#",
-                    description: item.querySelector("description")?.textContent || "",
-                }));
+                // 検索条件
+                const search = {
+                    limit: 20,
+                    offset:0,
+                    excludeReplies: "true",
+                    parentThinkId:"",
+                    ownerUserUid: ""
+                }
 
-                setFeedItems(items);
+                setLoading({isLoading:true});
+                let items: TuneCardItem[] = [{
+                    uid: '',
+                    iconImage: ImagePath.create({alt: '', path: ''}),
+                    title: ``,
+                    link: "",
+                    description: ""
+                }];
+                const api = new Api(Authentication.fromState(authState));
+                const response = await api.get(endPoint.PROFILE)
+                    .then((res) => {
+                        console.log(res.data.data);
+                        // TODO: 時間ないので仮、本当はインターフェースとかクラスまで作りたい
+                        if(res.data){
+                            items = res.data.data.map((data:ProfilesResponseData) => {
+                                return {
+                                    uid: `${data.Uid}`,
+                                    iconImage: ImagePath.create({
+                                        path: JSON.parse(data.IconImage).path ?? '',
+                                        alt: JSON.parse(data.IconImage).alt ?? ''
+                                    }),
+                                    title: `${data.NickName}`,
+                                    link: `/library/card-list/${data.Uid}`,
+                                    description: `${data.Description}`
+                                }
+                            });
+                        }
+                        setLoading({isLoading:false});
+                    }).catch((err) => {
+                        console.log("failure", err);
+                        setLoading({isLoading:false});
+                    });
+                setTuneCardItems(items);
             } catch (error) {
-                console.error("Error fetching RSS dBlog:", error);
+                console.error("Error fetching Youtube:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchRSSFeed();
+        fetchCards();
     }, []);
 
     const handleMouseEnter = () => {
@@ -85,7 +112,7 @@ const TuneCardTileBanner: React.FC = () => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
-            {feedItems.map((item, index) => (
+            {tuneCardItems.map((item, index) => (
                 <TuneCardTile item={item}/>
             ))}
         </ScrollContainer>

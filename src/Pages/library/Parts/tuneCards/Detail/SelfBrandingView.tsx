@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Grid, Paper, Button, useMediaQuery, useTheme, Slide, Fade } from '@mui/material';
+import Profile from "../../../../../models/Profile/Profile";
+import {useParams} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {authenticationState, AuthenticationStateIF} from "../../../../../atoms/AuthenticationState";
 
 const SelfBrandingView = () => {
+    const params = useParams();
+    const uid = params.uid as string;
+
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const [profile, setProfile] = useState(Profile.initProfile);
+    const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
 
     // Viewport detection for triggering Fade animation
     const [seedInView, setSeedInView] = useState(false);
@@ -27,7 +37,15 @@ const SelfBrandingView = () => {
         }
     };
 
+    const setUpProfile = async () => {
+        const profileEntity = Profile.initProfile();
+        const profileApiResponse = await profileEntity.fetchModel(uid, authState.accessToken);
+        profileEntity.setFromAPIResponse(profileApiResponse);
+        setProfile(profileEntity);
+    }
+
     useEffect(() => {
+        setUpProfile()
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -60,7 +78,7 @@ const SelfBrandingView = () => {
                         textAlign="center"
                         sx={{ fontWeight: 'bold' }}
                     >
-                        UNITE
+                        【モック】{profile.nickName}
                     </Typography>
                 </Fade>
             </Box>
@@ -80,7 +98,7 @@ const SelfBrandingView = () => {
                         私の理念
                     </Typography>
                     <Typography variant="body1" textAlign="center" maxWidth="600px">
-                        "みんなが自分らしくいられる場所"を作る。<br/>
+                        {profile.description}<br/>
                     </Typography>
                 </Box>
             </Slide>
@@ -93,17 +111,15 @@ const SelfBrandingView = () => {
                         <Slide direction="left" in timeout={800}>
                             <Paper elevation={3} sx={{ padding: 4, height: '100%', backgroundColor: accentColor, color: textColor }}>
                                 <Typography variant="h5" component="h3" gutterBottom sx={{ color: primaryColor }}>
-                                    Curios
+                                    特徴1
                                 </Typography>
                                 <Typography variant="body1">
-                                    我々は全ての好奇心には投資的価値があると信じています。<br/>
-                                    UNITEは組織のメンバーひとりひとりの"好奇心"の価値を最大化することで、
-                                    みんなが自分らしく周囲に価値を創出できる環境を提供します。
+                                    説明
                                 </Typography>
                                 <Typography variant="body2" color={primaryColor} mt={2}>
-                                    <li><a href={"/lp/curios"}>CASE1：タグを活用したコンテンツの最適化</a></li>
-                                    <li><a href={"/lp/curios"}>CASE2：好奇心が作る小集団</a></li>
-                                    <li><a href={"/lp/curios"}>CASE3：組織と個人のベクトルを揃える</a></li>
+                                    <li><a >説明1：説明</a></li>
+                                    <li><a >説明2：説明</a></li>
+                                    <li><a >説明3：説明</a></li>
                                 </Typography>
                             </Paper>
                         </Slide>
@@ -114,16 +130,15 @@ const SelfBrandingView = () => {
                         <Slide direction="up" in timeout={800}>
                             <Paper elevation={3} sx={{ padding: 4, height: '100%', backgroundColor: accentColor, color: textColor }}>
                                 <Typography variant="h5" component="h3" gutterBottom sx={{ color: primaryColor }}>
-                                    ThinkTank
+                                    特徴2
                                 </Typography>
                                 <Typography variant="body1">
-                                    技術的な問題から日常の些細なことまで、あらゆる知識を組織全体で共有できます。<br/>
-                                    暗黙知を共有し、組織の財産とすることが可能です。物理的な距離を超えたコミュニケーションの活性化が目的です。
+                                    説明
                                 </Typography>
                                 <Typography variant="body2" color={primaryColor} mt={2}>
-                                    <li><a href={"/lp/think-tank"}>CASE1：組織のナレッジベースとして活用する</a></li>
-                                    <li><a href={"/lp/think-tank"}>CASE2：メンバーに対しての深いインサイト</a></li>
-                                    <li><a href={"/lp/think-tank"}>CASE3：コンテンツマーケティングに活用する</a></li>
+                                    <li><a >説明1：説明</a></li>
+                                    <li><a >説明2：説明</a></li>
+                                    <li><a >説明3：説明</a></li>
                                 </Typography>
                             </Paper>
                         </Slide>
@@ -134,16 +149,15 @@ const SelfBrandingView = () => {
                         <Slide direction="right" in timeout={800}>
                             <Paper elevation={3} sx={{ padding: 4, height: '100%', backgroundColor: accentColor, color: textColor }}>
                                 <Typography variant="h5" component="h3" gutterBottom sx={{ color: primaryColor }}>
-                                    AIS
+                                    特徴3
                                 </Typography>
                                 <Typography variant="body1">
-                                    AISはあなただけの秘書として、日々の雑務から組織内のデータ分析、戦略立案をはじめとするコンサルタントを担います。<br/>
-                                    あなたは自分のビジョンの実現に専念できます。AISは強力な右腕となってあなたをサポートします。
+                                    説明
                                 </Typography>
                                 <Typography variant="body2" color={primaryColor} mt={2}>
-                                    <li><a href={"/lp/ais"}>CASE1：ワークフローの自動化</a></li>
-                                    <li><a href={"/lp/ais"}>CASE2：勤怠管理・報告を任せる</a></li>
-                                    <li><a href={"/lp/ais"}>CASE3：雑談によるメンタルケア</a></li>
+                                    <li><a >説明1：説明</a></li>
+                                    <li><a >説明2：説明</a></li>
+                                    <li><a >説明3：説明</a></li>
                                 </Typography>
                             </Paper>
                         </Slide>
@@ -168,7 +182,7 @@ const SelfBrandingView = () => {
                     }}
                 >
                     <Typography variant={isMobile ? 'h4' : 'h2'} component="h2" color="white" gutterBottom>
-                        CURIOS
+                        特徴1
                     </Typography>
                     <Typography
                         variant="body1"
@@ -177,7 +191,7 @@ const SelfBrandingView = () => {
                         paddingBottom={10}
                         maxWidth={isMobile ? '90%' : '60%'}
                     >
-                        - 好奇心による価値創出 -
+                        - コピー1 -
                     </Typography>
                     <Typography
                         variant="body1"
@@ -185,9 +199,7 @@ const SelfBrandingView = () => {
                         textAlign="center"
                         maxWidth={isMobile ? '90%' : '60%'}
                     >
-                        我々は全ての好奇心には投資的価値があると信じています。<br/>
-                        UNITEは組織のメンバーひとりひとりの"好奇心"の価値を最大化することで、
-                        みんなが自分らしく周囲に価値を創出できる環境を提供します。
+                        説明１
                     </Typography>
                 </Box>
             </Fade>
@@ -209,7 +221,7 @@ const SelfBrandingView = () => {
                     }}
                 >
                     <Typography variant={isMobile ? 'h4' : 'h2'} component="h2" color="white" gutterBottom>
-                        THINK TANK
+                        特徴2
                     </Typography>
                     <Typography
                         variant="body1"
@@ -218,7 +230,7 @@ const SelfBrandingView = () => {
                         paddingBottom={10}
                         maxWidth={isMobile ? '90%' : '60%'}
                     >
-                        - 組織が有する知識の最高権威 -
+                        - コピー2 -
                     </Typography>
                     <Typography
                         variant="body1"
@@ -226,8 +238,7 @@ const SelfBrandingView = () => {
                         textAlign="center"
                         maxWidth={isMobile ? '90%' : '60%'}
                     >
-                        組織全体で知識を共有し、次世代への引き継ぎがしやすくなります。<br/>
-                        何気ないつぶやきから暗黙知を共有し、組織の価値を高めます。
+                        説明2
                     </Typography>
                 </Box>
             </Fade>
@@ -249,7 +260,7 @@ const SelfBrandingView = () => {
                     }}
                 >
                     <Typography variant={isMobile ? 'h4' : 'h2'} component="h2" color="white" gutterBottom>
-                        AIS
+                        特徴3
                     </Typography>
                     <Typography
                         variant="body1"
@@ -258,7 +269,7 @@ const SelfBrandingView = () => {
                         paddingBottom={10}
                         maxWidth={isMobile ? '90%' : '60%'}
                     >
-                        - あなただけの個人秘書 -
+                        - コピー3 -
                     </Typography>
                     <Typography
                         variant="body1"
@@ -266,8 +277,7 @@ const SelfBrandingView = () => {
                         textAlign="center"
                         maxWidth={isMobile ? '90%' : '60%'}
                     >
-                        雑務を手放し、ビジョン実現に全力を注げる環境を整えます。<br/>
-                        AISはあなたのビジネスを強力に支援します。
+                        説明3
                     </Typography>
                 </Box>
             </Fade>

@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Card, CardContent, CardMedia, Typography, Avatar, Button, Grid} from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {Box, Typography, Avatar, Grid} from '@mui/material';
 import {useNavigate, useParams} from "react-router-dom";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {profileState} from "../../../../../atoms/ProfileState";
-import RoundedButton from "../../../../../ui/button/RoundedButton";
 import ImagePath from "../../../../../models/data/ImagePath";
 import Loader from "../../../../../ui/loading/Loader";
 import generateCuriosTagChips from "../../../../../ui/curiosTag/CuriosTagChips";
 import {authenticationState, AuthenticationStateIF} from "../../../../../atoms/AuthenticationState";
 import Profile from "../../../../../models/Profile/Profile";
+import {styled} from "@mui/system";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import postCardBackground from "../List/ClipPostTileBackground.svg";
 
 interface UniteContent {
     uniteContentId: string
@@ -22,6 +23,48 @@ interface UniteContent {
     curiosTags: string[]
 }
 
+const SamNail = styled(Box)<{ image: string }>(({ theme, image }) => ({
+    width: "100%",
+    height: 180, // Fixed height for square tiles
+    flexShrink: 0,
+    color: "#232323",
+    position: "relative",  // 子要素の絶対位置を指定可能に
+    borderRadius: theme.shape.borderRadius,
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+        transform: "scale(1.05)",
+    },
+    padding: 5,
+    overflow: "hidden", // Hide overflowing content
+    zIndex: 0,
+}));
+
+const PlayIcon = styled(PlayCircleIcon)({
+    position: "absolute",
+    fontSize: "xxx-large",
+    color: "white",
+    top: 70,
+    left: 130,
+    margin: 8, // タイルの右下から少し内側に配置
+    zIndex: 1, // 背景画像の前に表示されるように調整
+    transition: "transform 0.2s ease-in-out",
+    pointerEvents: "auto", // クリックイベントを受け取る
+    "&:hover": {
+        transform: "scale(1.5)",
+    },
+});
+
+const OverlayImage = styled("img")({
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover", // タイル全体にフィットさせる
+    zIndex: -1, // タイル背景より前面に表示
+    pointerEvents: "none" // クリックなどのイベントを無視
+});
+
 const ClipPostDetail = () => {
     const [authState] = useRecoilState<AuthenticationStateIF>(authenticationState);
     const profile = useRecoilValue<Profile>(profileState);
@@ -31,15 +74,15 @@ const ClipPostDetail = () => {
     const urlParams = useParams<{ uniteContentId: string }>()
     const uniteContentId: string = urlParams.uniteContentId ?? '';
     const initialContent: UniteContent = {
-        uniteContentId: "",
-        title: "",
-        category: "",
-        ownerUserUid: authState.uid,
-        description: profile.description,
-        userIconImagePath: profile.iconImage,
-        contentImage: profile.iconImage,
-        curiosTags: ["マーケティング", "経営", "組織論"]
-    }
+            uniteContentId: "id12345678",
+            title: "バリュープロポジション戦略",
+            category: "clip",
+            ownerUserUid: "12345qqwer",
+            description: "",
+            userIconImagePath: ImagePath.create({alt:"",path:""}),
+            contentImage: ImagePath.create({alt:"",path:""}),
+            curiosTags: ["マーケティング", "経営", "組織論"]
+        }
 
     initialContent.uniteContentId = uniteContentId;
     const [uniteContent, setUniteContent] = useState<UniteContent>(initialContent);
@@ -55,11 +98,11 @@ const ClipPostDetail = () => {
                 uniteContentId: "id12345678",
                 title: "バリュープロポジション戦略",
                 category: "clip",
-                ownerUserUid: authState.uid,
-                description: profile.description,
-                userIconImagePath: profile.iconImage,
-                contentImage: profile.iconImage,
-                curiosTags: profile.curios
+                ownerUserUid: "12345qqwer",
+                description: "",
+                userIconImagePath: ImagePath.create({alt:"",path:""}),
+                contentImage: ImagePath.create({alt:"",path:""}),
+                curiosTags: ["マーケティング", "経営", "組織論"]
             }
 
             console.log(newUniteContent.uniteContentId);
@@ -84,17 +127,22 @@ const ClipPostDetail = () => {
             <Box className="ContentDetail" paddingLeft={0}>
                 <Loader/>
                 {/*サムネイル*/}
-                <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
-                    <Box paddingBottom={2}
-                         sx={{display: {xs: "block", s: "block", md: "none", lg: "none", xl: "none"}}}>
-                        <img src={uniteContent.contentImage.path ?? ""}
-                             alt={"サムネイル"}
-                             style={{objectFit: "cover"}}
-                             width={350}
-                             height={350}
-                        />
+                <SamNail
+                    image={""}
+                    onClick={() => {
+                        const isConfirm = window.confirm("Youtubeで動画を視聴します.");
+                        if (!isConfirm) {
+                            return;
+                        }
+                        window.open("https://youtube.com", "_blank");
+                    }}
+                >
+                    <OverlayImage src={postCardBackground} alt="Overlay"/>
+                    <Box height={"100%"}>
+                        <PlayIcon/>
                     </Box>
-                </Grid>
+                </SamNail>
+
                 <Box className="ContentDetail" padding={2}>
                     {/*Title*/}
                     <Grid container spacing={2}>
@@ -102,7 +150,7 @@ const ClipPostDetail = () => {
                             <Box sx={{display: "flex"}}>
                                 <Box sx={{textAlign: "start"}}>
                                     <Typography fontSize={"1.3rem"}>
-                                        <div dangerouslySetInnerHTML={{__html: uniteContent.title}}/>
+                                        【モック】<div dangerouslySetInnerHTML={{__html: uniteContent.title}}/>
                                     </Typography>
                                 </Box>
                             </Box>
