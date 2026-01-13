@@ -219,7 +219,7 @@ const QuestView = () => {
                     </Box>
                 </Grid>
 
-                {/*CuriosTags*/}
+                {/*facets*/}
                 <Grid textAlign={"start"} xs={12} sm={12} md={12} lg={12}>
                     <Box sx={{textAlign: "start"}}>
                         <Typography>

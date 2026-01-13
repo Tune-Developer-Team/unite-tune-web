@@ -30,6 +30,19 @@ const GoogleAuthenticationButton: (label: string, redirectUri: string) => JSX.El
         const authorizationUrl = process.env.REACT_APP_GOOGLE_AUTHORIZATION as string
         console.log(authorizationUrl)
 
+        // ================================
+        // 暫定対応：ローカル環境は code を付与して遷移
+        // ================================
+        if (String(process.env.REACT_APP_ENV).includes('local')) {
+            console.log('localhostのためGoogle認証をスキップ');
+
+            const url = new URL(window.location.href);
+            url.searchParams.set('code', 'dummy_because_develop');
+
+            window.location.href = url.toString();
+            return;
+        }
+
         // 同意画面へリダイレクト
         window.location.href = `${authorizationUrl}?${query}`;
     }

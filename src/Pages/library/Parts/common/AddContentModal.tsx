@@ -14,7 +14,7 @@ interface AddUniteContentModalProps {
 
 const AddContentModal: React.FC<AddUniteContentModalProps> = ({ isOpen, onClose, onSubmit, uniteContentDraft, onDraftChange }) => {
     const [sentence, setSentence] = useState<string>("");
-    const [curiosTags, setCuriosTags] = useState<string[]>([]);
+    const [facets, setFacets] = useState<string[]>([]);
 
     /**
      * セットアップ処理
@@ -29,7 +29,7 @@ const AddContentModal: React.FC<AddUniteContentModalProps> = ({ isOpen, onClose,
      */
     const initForm = () => {
         setSentence("");
-        setCuriosTags([]);
+        setFacets([]);
     }
 
     /**
@@ -57,8 +57,8 @@ const AddContentModal: React.FC<AddUniteContentModalProps> = ({ isOpen, onClose,
      * 他コンポーネン経由のデータの更新
      */
     useEffect(() => {
-        uniteContentDraft.setCuriosTags(curiosTags);
-    }, [curiosTags]);
+        uniteContentDraft.setFacets(facets);
+    }, [facets]);
 
 
     return (
@@ -99,7 +99,7 @@ const AddContentModal: React.FC<AddUniteContentModalProps> = ({ isOpen, onClose,
                     maxRows={40}
                     sx={{ flexGrow: 1, resize: 'vertical', overflow: 'auto', paddingTop: 4 }}
                 />
-                <CuriosTagInput tags={curiosTags} setTags={setCuriosTags} />
+                <CuriosTagInput tags={facets} setTags={setFacets} />
             </Box>
         </Drawer>
     );

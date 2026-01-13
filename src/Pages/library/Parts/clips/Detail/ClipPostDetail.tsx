@@ -20,7 +20,7 @@ interface UniteContent {
     description: string
     userIconImagePath: ImagePath
     contentImage: ImagePath
-    curiosTags: string[]
+    facets: string[]
 }
 
 const SamNail = styled(Box)<{ image: string }>(({ theme, image }) => ({
@@ -81,7 +81,7 @@ const ClipPostDetail = () => {
             description: "",
             userIconImagePath: ImagePath.create({alt:"",path:""}),
             contentImage: ImagePath.create({alt:"",path:""}),
-            curiosTags: ["マーケティング", "経営", "組織論"]
+            facets: ["マーケティング", "経営", "組織論"]
         }
 
     initialContent.uniteContentId = uniteContentId;
@@ -102,7 +102,7 @@ const ClipPostDetail = () => {
                 description: "",
                 userIconImagePath: ImagePath.create({alt:"",path:""}),
                 contentImage: ImagePath.create({alt:"",path:""}),
-                curiosTags: ["マーケティング", "経営", "組織論"]
+                facets: ["マーケティング", "経営", "組織論"]
             }
 
             console.log(newUniteContent.uniteContentId);
@@ -200,7 +200,7 @@ const ClipPostDetail = () => {
                                     タグ
                                 </Typography>
                                 <Typography fontSize={10}>
-                                    {generateCuriosTagChips(uniteContent.curiosTags)}
+                                    {generateCuriosTagChips(uniteContent.facets)}
                                 </Typography>
                             </Box>
                         </Grid>

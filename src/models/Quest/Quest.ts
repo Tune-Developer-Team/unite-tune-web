@@ -37,7 +37,7 @@ export interface QuestDetailApiResponseIF {
     Title: string;
     MentionList: Mention[];
     Benefit: string;
-    CuriosTags: string;
+    facets: string;
     QuestId: string
     OwnerUserUid: string
     OwnerUserName: string
@@ -100,11 +100,12 @@ export class QuestDetail {
             return ImagePath.create({alt: imagePath.alt, path: imagePath.path});
         });
 
-        let curiosTags:string[] = [];
-        if (apiResponse.CuriosTags !== "") {
-            curiosTags = Array.from(
+        let facets:string[] = [];
+        if (apiResponse.facets !== "") {
+            console.log("⭐️")
+            facets = Array.from(
                 new Set(
-                    apiResponse.CuriosTags
+                    apiResponse.facets
                         .split(',')
                         .map(tag => tag.trim()) // 空白を取り除く
                         .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
@@ -124,7 +125,7 @@ export class QuestDetail {
             termsFrom: apiResponse.TermsFrom,
             termsTo: apiResponse.TermsTo,
             relationQuestIdList: apiResponse.RelationQuestIdList,
-            hashTagStringList: curiosTags,
+            hashTagStringList: facets,
             imagePathList: imagePathList,
             mentionList: apiResponse.MentionList
         }

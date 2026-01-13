@@ -50,7 +50,7 @@ const HeaderUserIconMenu = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const navigate = useNavigate();
-    const [isAvatarHovered, setIsAvatarHovered] = useState(false); // State to track hover
+    const [_, setIsAvatarHovered] = useState(false); // State to track hover
 
     const handleDrawerOpen = () => {
         setOpenMobileMenu(true);
@@ -174,7 +174,7 @@ const HeaderUserIconMenu = () => {
                         overflowX: 'auto',
                         flexWrap: 'flex-wrap',
                     }}>
-                        {parentItems.slice(3, 6).map((item, index) => (
+                        {parentItems.slice(3, 6).map((item, index:number) => (
                             <ListItem key={item.label} disablePadding sx={{display: 'flex'}} onClick={() => {
                                 handleDrawerClose()
                                 navigate(item.linkPath);

@@ -20,7 +20,7 @@ export interface ProfileApiResponseIF {
     NickName: string
     IconImage: string
     Description: string
-    CuriosTags: string
+    Facets: string
     CuriosValue: number
     CuriosDirection: number
     IsPublishedAis: boolean
@@ -107,23 +107,23 @@ export default class Profile {
             iconImage = JSON.parse(apiResponse.IconImage);
         }
 
-        let curiosTags:string[] = [];
-        if (apiResponse.CuriosTags !== "") {
-            curiosTags = Array.from(
+        let facets:string[] = [];
+        if (apiResponse.Facets !== "") {
+            facets = Array.from(
                 new Set(
-                    apiResponse.CuriosTags
+                    apiResponse.Facets
                         .split(',')
                         .map(tag => tag.trim()) // 空白を取り除く
                         .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
                 )
             );
         }
-        console.log(apiResponse.CuriosTags)
-        console.log(curiosTags)
+        console.log(apiResponse.Facets)
+        console.log(facets)
 
         this.nickName = apiResponse.NickName ?? "undefined user";
         this.description = apiResponse.Description ?? "";
-        this.curios = curiosTags;
+        this.curios = facets;
         this.curiosValue = apiResponse.CuriosValue ?? 0;
         this.curiosDirection = CURIOS_DIRECTION.find(item => item.kind === curiosDirectionKind)!;
         this.iconImage = ImagePath.create({

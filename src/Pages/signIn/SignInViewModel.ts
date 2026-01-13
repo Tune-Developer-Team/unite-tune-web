@@ -30,7 +30,12 @@ export class SignInViewModel implements SignInViewModelIF {
      * サインインを実行する
      */
     async signIn(code:string): Promise<AxiosResponse> {
-        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
+
+        // ================================
+        // 暫定対応：ローカル環境の clientID
+        // ================================
+        const isLocal = String(process.env.REACT_APP_ENV).includes('local')
+        const clientId = isLocal ? "dummy_because_develop": process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
 
         const params = {
             code,

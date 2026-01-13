@@ -70,12 +70,12 @@ export class ThinkTable {
             }
 
             // キュリオスタグ
-            console.log(thinkListItem.curiosTags)
-            let curiosTags:string[] = [];
-            if (thinkListItem.curiosTags !== "") {
-                curiosTags = Array.from(
+            console.log(thinkListItem.facets)
+            let facets:string[] = [];
+            if (thinkListItem.facets !== "") {
+                facets = Array.from(
                     new Set(
-                        thinkListItem.curiosTags
+                        thinkListItem.facets
                             .split(',')
                             .map(tag => tag.trim()) // 空白を取り除く
                             .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
@@ -91,7 +91,7 @@ export class ThinkTable {
                 // imagePathList: thinkListItem.ImagePathList,
                 imagePathList: [ImagePath.create({alt: "", path: ""})],
                 thinkId: thinkListItem.thinkId,
-                curiosTags: curiosTags,
+                facets: facets,
                 // mentionList: thinkListItem.MentionList,
                 mentionList: [Mention.create({idValue: "", idCategory: ""})],
                 createdAt: thinkListItem.createdAt,
@@ -126,7 +126,7 @@ export interface ThinkApiResponseIF {
     createdAt: string
     sentence: string
     imagePathList: string
-    curiosTags: string
+    facets: string
     favoriteCount: number
     rethinkCount: number
     parentThinkId: string

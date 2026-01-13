@@ -12,7 +12,7 @@ export interface ThinkIF {
     thinkUserName: string
     ownerUserUid: string
     thinkId: string
-    curiosTags: string[]
+    facets: string[]
     imagePathList: ImagePath[]
     mentionList: Mention[]
     createdAt: string
@@ -36,7 +36,7 @@ export class Think {
     public createdAt: Date
     public parentThinkId: string
     public sentence: string
-    public curiosTags: string[]
+    public facets: string[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
     public hasReply: boolean
@@ -62,7 +62,7 @@ export class Think {
         this.createdAt = createdAt;
         this.parentThinkId = argument.parentThinkId
         this.sentence = argument.sentence;
-        this.curiosTags = argument.curiosTags;
+        this.facets = argument.facets;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList
         this.hasReply = argument.hasReply
@@ -74,7 +74,7 @@ export class Think {
             thinkUserName: "",
             ownerUserUid: "",
             thinkId: "",
-            curiosTags: [],
+            facets: [],
             imagePathList: [ImagePath.create({alt: "", path: ""})],
             mentionList: [Mention.create({idValue: "", idCategory: ""})],
             createdAt: "",
@@ -112,8 +112,8 @@ export class Think {
     public static createThinkInstance(argument: ThinkIF
     ): Think {
 
-        if (argument.curiosTags === null) {
-            argument.curiosTags = [];
+        if (argument.facets === null) {
+            argument.facets = [];
         }
 
         if (argument.imagePathList === null) {
@@ -186,12 +186,12 @@ export class Think {
         }
 
         // キュリオスタグ
-        console.log(apiResponse.curiosTags)
-        let curiosTags: string[] = [];
-        if (apiResponse.curiosTags !== "") {
-            curiosTags = Array.from(
+        console.log(apiResponse.facets)
+        let facets: string[] = [];
+        if (apiResponse.facets !== "") {
+            facets = Array.from(
                 new Set(
-                    apiResponse.curiosTags
+                    apiResponse.facets
                         .split(',')
                         .map(tag => tag.trim()) // 空白を取り除く
                         .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
@@ -207,7 +207,7 @@ export class Think {
             // imagePathList: apiResponse.ImagePathList,
             imagePathList: [ImagePath.create({alt: "", path: ""})],
             thinkId: apiResponse.thinkId,
-            curiosTags: curiosTags,
+            facets: facets,
             // mentionList: apiResponse.MentionList,
             mentionList: [Mention.create({idValue: "", idCategory: ""})],
             createdAt: apiResponse.createdAt,

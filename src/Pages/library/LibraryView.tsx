@@ -171,7 +171,7 @@ const LibraryView = (props:{viewModel: LibraryViewModelIF}) => {
         // TODO:APIの構造化
         try {
             console.log('[try]');
-            console.log(uniteContentDraft.curiosTags)
+            console.log(uniteContentDraft.facets)
             const response = await uniteContentDraft.saveUniteContent(Authentication.fromState(authState))
             if (response === undefined) {
                 throw Error

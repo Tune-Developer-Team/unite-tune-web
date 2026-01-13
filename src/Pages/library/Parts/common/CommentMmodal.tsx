@@ -21,10 +21,10 @@ interface ReplyThinkModalProps {
 const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSubmit, thinkDraft, parentThink, onDraftChange }) => {
     const [myProfile] = useRecoilState(profileState)
     const [sentence, setSentence] = useState<string>("");
-    const [curiosTags, setCuriosTags] = useState<string[]>([]);
+    const [facets, setFacets] = useState<string[]>([]);
 
     // UI
-    const [isNeedImportCuriosTags, setIsNeedImportCuriosTags] = useState<boolean>(true);
+    const [isNeedImportFacets, setIsNeedImportFacets] = useState<boolean>(true);
     const [onClickCuriosTagImportButtonColor, setOnClickCuriosTagImportButtonColor] = useState<string>('#2BA129FF');
 
     /**
@@ -40,7 +40,7 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
      */
     const initForm = () => {
         setSentence("");
-        setCuriosTags([]);
+        setFacets([]);
     }
 
     /**
@@ -68,8 +68,8 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
      * 他コンポーネン経由のデータの更新
      */
     useEffect(() => {
-        thinkDraft.setCuriosTags(curiosTags);
-    }, [curiosTags]);
+        thinkDraft.setFacets(facets);
+    }, [facets]);
 
     /**
      * サービス処理
@@ -77,14 +77,14 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
      * - キュリオスタグのインポート
      */
     const onClickCuriosTagImportButtonHandler = () => {
-        if (!isNeedImportCuriosTags) {
+        if (!isNeedImportFacets) {
             window.alert('キュリオスタグは引き継ぎ済みです。');
         }
 
-        thinkDraft.setCuriosTags(parentThink.curiosTags);
-        setCuriosTags(parentThink.curiosTags);
+        thinkDraft.setFacets(parentThink.facets);
+        setFacets(parentThink.facets);
 
-        setIsNeedImportCuriosTags(false);
+        setIsNeedImportFacets(false);
         setOnClickCuriosTagImportButtonColor('#586383FF')
     };
 
@@ -149,7 +149,7 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flex: '0 0 auto',
-                                animation: isNeedImportCuriosTags ? 'blink 1s infinite' : 'none',  // 点滅アニメーションの適用
+                                animation: isNeedImportFacets ? 'blink 1s infinite' : 'none',  // 点滅アニメーションの適用
                                 '@keyframes blink': {
                                     '0%': { opacity: 1 },
                                     '50%': { opacity: 0.6 }, // 中間で薄くなる
@@ -167,7 +167,7 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
                             sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
                             dangerouslySetInnerHTML={{ __html: parentThink.getSentenceWithHtml() }}
                         />
-                        <span>{parentThink.curiosTags.map((tag, index) => {
+                        <span>{parentThink.facets.map((tag, index) => {
                             return (
                                 <Typography key={index} color="text.secondary" display={"inline-flex"} sx={{ flexWrap: 'wrap', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                                     &nbsp;{tag}
@@ -196,7 +196,7 @@ const ReplyThinkModal: React.FC<ReplyThinkModalProps> = ({ isOpen, onClose, onSu
                     maxRows={40}
                     sx={{ flexGrow: 1, resize: 'vertical', overflow: 'auto', paddingTop: 4 }}
                 />
-                <CuriosTagInput tags={curiosTags} setTags={setCuriosTags} />
+                <CuriosTagInput tags={facets} setTags={setFacets} />
             </Box>
         </Drawer>
     );

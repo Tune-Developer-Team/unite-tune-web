@@ -70,12 +70,13 @@ export class UniteContentTable {
             }
 
             // キュリオスタグ
-            console.log(uniteContentListItem.curiosTags)
-            let curiosTags:string[] = [];
-            if (uniteContentListItem.curiosTags !== "") {
-                curiosTags = Array.from(
+            console.log(uniteContentListItem.facets)
+            let facets:string[] = [];
+            if (uniteContentListItem.facets !== "") {
+                console.log("⭐️")
+                facets = Array.from(
                     new Set(
-                        uniteContentListItem.curiosTags
+                        uniteContentListItem.facets
                             .split(',')
                             .map(tag => tag.trim()) // 空白を取り除く
                             .filter(tag => tag && tag !== '#') // 空文字や # のみを除外
@@ -91,7 +92,7 @@ export class UniteContentTable {
                 // imagePathList: uniteContentListItem.ImagePathList,
                 imagePathList: [ImagePath.create({alt: "", path: ""})],
                 uniteContentId: uniteContentListItem.uniteContentId,
-                curiosTags: curiosTags,
+                facets: facets,
                 // mentionList: uniteContentListItem.MentionList,
                 mentionList: [Mention.create({idValue: "", idCategory: ""})],
                 createdAt: uniteContentListItem.createdAt,
@@ -126,7 +127,7 @@ export interface UniteContentApiResponseIF {
     createdAt: string
     sentence: string
     imagePathList: string
-    curiosTags: string
+    facets: string
     favoriteCount: number
     reuniteContentCount: number
     parentUniteContentId: string

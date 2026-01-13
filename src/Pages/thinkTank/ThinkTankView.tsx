@@ -173,7 +173,7 @@ const ThinkTankView = (props:{viewModel: ThinkTankViewModelIF}) => {
         // TODO:APIの構造化
         try {
             console.log('[try]');
-            console.log(thinkDraft.curiosTags)
+            console.log(thinkDraft.facets)
             const response = await thinkDraft.saveThink(Authentication.fromState(authState))
             if (response === undefined) {
                 throw Error

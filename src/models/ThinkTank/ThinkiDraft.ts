@@ -10,7 +10,7 @@ export interface ThinkDraftIF {
     sentence: string
     thinkUserName: string
     thinkId: string
-    curiosTags: string[]
+    facets: string[]
     imagePathList: ImagePath[]
     mentionList: Mention[]
     createdAt: string
@@ -34,7 +34,7 @@ export class ThinkDraft {
     public createdAt: string
     public parentThinkId: string
     public sentence: string
-    public curiosTags: string[]
+    public facets: string[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
     public isPublished: boolean
@@ -53,7 +53,7 @@ export class ThinkDraft {
         this.createdAt = argument.createdAt;
         this.parentThinkId = argument.parentThinkId;
         this.sentence = argument.sentence;
-        this.curiosTags = argument.curiosTags;
+        this.facets = argument.facets;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList;
         this.isPublished = argument.isPublished;
@@ -67,8 +67,8 @@ export class ThinkDraft {
     public static createThinkDraftInstance(argument: ThinkDraftIF
     ): ThinkDraft {
 
-        if (argument.curiosTags === null) {
-            argument.curiosTags = [];
+        if (argument.facets === null) {
+            argument.facets = [];
         }
 
         if (argument.imagePathList === null) {
@@ -94,7 +94,7 @@ export class ThinkDraft {
             sentence: "",
             thinkUserName: "",
             thinkId: "",
-            curiosTags: [],
+            facets: [],
             imagePathList: [ImagePath.create({alt: "", path: ""})],
             mentionList: [Mention.create({idValue: "", idCategory: ""})],
             parentThinkId: "",
@@ -127,7 +127,7 @@ export class ThinkDraft {
             userIconImagePath: this.userIconImagePath,
             parentThinkId: this.parentThinkId,
             sentence: this.sentence,
-            curiosTagSentenceList: JSON.stringify(this.curiosTags),
+            curiosTagSentenceList: JSON.stringify(this.facets),
             mentionList: JSON.stringify(this.mentionList),
             imagePathList: JSON.stringify(this.imagePathList),
             isPublished: this.isPublished,
@@ -139,11 +139,11 @@ export class ThinkDraft {
 
     /**
      *
-     * @param curiosTags
+     * @param facets
      */
-    setCuriosTags(curiosTags: string[]): void {
-        this.curiosTags = curiosTags;
-        console.log(curiosTags)
+    setFacets(facets: string[]): void {
+        this.facets = facets;
+        console.log(facets)
     }
 
     /**

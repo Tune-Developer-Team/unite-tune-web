@@ -12,7 +12,7 @@ interface AddThinkFormForPCProps {
 
 const AddThinkFormForPC: React.FC<AddThinkFormForPCProps> = ({ onSubmit, thinkDraft, onDraftChange }) => {
     const [sentence, setSentence] = useState<string>("");
-    const [curiosTags, setCuriosTags] = useState<string[]>([]);
+    const [facets, setFacets] = useState<string[]>([]);
 
     /**
      * セットアップ処理
@@ -27,7 +27,7 @@ const AddThinkFormForPC: React.FC<AddThinkFormForPCProps> = ({ onSubmit, thinkDr
      */
     const initForm = () => {
         setSentence("");
-        setCuriosTags([]);
+        setFacets([]);
     }
 
     /**
@@ -55,8 +55,8 @@ const AddThinkFormForPC: React.FC<AddThinkFormForPCProps> = ({ onSubmit, thinkDr
      * 他コンポーネン経由のデータの更新
      */
     useEffect(() => {
-        thinkDraft.setCuriosTags(curiosTags);
-    }, [curiosTags]);
+        thinkDraft.setFacets(facets);
+    }, [facets]);
 
 
     return (
@@ -72,7 +72,7 @@ const AddThinkFormForPC: React.FC<AddThinkFormForPCProps> = ({ onSubmit, thinkDr
                     maxRows={40}
                     sx={{ flexGrow: 1, resize: 'vertical', overflow: 'auto', paddingTop: 4 }}
                 />
-                <CuriosTagInput tags={curiosTags} setTags={setCuriosTags} />
+                <CuriosTagInput tags={facets} setTags={setFacets} />
                 <Box display="flex" position="sticky" top={10} zIndex={10}>
                     <Button onClick={onSubmit} sx={{
                         font: 'bold', marginLeft: 'auto',

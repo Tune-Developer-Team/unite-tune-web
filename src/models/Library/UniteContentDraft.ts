@@ -10,7 +10,7 @@ export interface UniteContentDraftIF {
     sentence: string
     uniteContentUserName: string
     uniteContentId: string
-    curiosTags: string[]
+    facets: string[]
     imagePathList: ImagePath[]
     mentionList: Mention[]
     createdAt: string
@@ -34,7 +34,7 @@ export class UniteContentDraft {
     public createdAt: string
     public parentUniteContentId: string
     public sentence: string
-    public curiosTags: string[]
+    public facets: string[]
     public mentionList: Mention[]
     public imagePathList: ImagePath[]
     public isPublished: boolean
@@ -53,7 +53,7 @@ export class UniteContentDraft {
         this.createdAt = argument.createdAt;
         this.parentUniteContentId = argument.parentUniteContentId;
         this.sentence = argument.sentence;
-        this.curiosTags = argument.curiosTags;
+        this.facets = argument.facets;
         this.mentionList = argument.mentionList;
         this.imagePathList = argument.imagePathList;
         this.isPublished = argument.isPublished;
@@ -67,8 +67,8 @@ export class UniteContentDraft {
     public static createUniteContentDraftInstance(argument: UniteContentDraftIF
     ): UniteContentDraft {
 
-        if (argument.curiosTags === null) {
-            argument.curiosTags = [];
+        if (argument.facets === null) {
+            argument.facets = [];
         }
 
         if (argument.imagePathList === null) {
@@ -94,7 +94,7 @@ export class UniteContentDraft {
             sentence: "",
             uniteContentUserName: "",
             uniteContentId: "",
-            curiosTags: [],
+            facets: [],
             imagePathList: [ImagePath.create({alt: "", path: ""})],
             mentionList: [Mention.create({idValue: "", idCategory: ""})],
             parentUniteContentId: "",
@@ -127,7 +127,7 @@ export class UniteContentDraft {
             userIconImagePath: this.userIconImagePath,
             parentUniteContentId: this.parentUniteContentId,
             sentence: this.sentence,
-            curiosTagSentenceList: JSON.stringify(this.curiosTags),
+            curiosTagSentenceList: JSON.stringify(this.facets),
             mentionList: JSON.stringify(this.mentionList),
             imagePathList: JSON.stringify(this.imagePathList),
             isPublished: this.isPublished,
@@ -139,11 +139,11 @@ export class UniteContentDraft {
 
     /**
      *
-     * @param curiosTags
+     * @param facets
      */
-    setCuriosTags(curiosTags: string[]): void {
-        this.curiosTags = curiosTags;
-        console.log(curiosTags)
+    setFacets(facets: string[]): void {
+        this.facets = facets;
+        console.log(facets)
     }
 
     /**

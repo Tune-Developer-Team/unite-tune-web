@@ -153,7 +153,7 @@ const ThinkTimeline: React.FC = () => {
                                 <Typography variant="body1" color="text.primary" textAlign="start">
                                     <MarkdownRenderer content={sanitizeMarkdown(think.sentence)} />
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary" textAlign="start">{think.curiosTags.join(', ')}</Typography>
+                                <Typography variant="body2" color="text.secondary" textAlign="start">{think.facets.join(', ')}</Typography>
                             </Box>
                             <Box sx={{ display: "flex" }} paddingTop={1}>
                                 <ReplyIcon sx={{ color: "white", width: 18, marginRight: 3 }} onClick={() => onClickReplyHandler(think)} />
