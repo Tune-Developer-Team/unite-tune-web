@@ -13,7 +13,7 @@ export interface ClipFeedItem {
     description: string;
 }
 
-const YOUTUBE_API_URL = "https://dblog111.hatenablog.jp/rss";
+const YOUTUBE_API_URL = process.env.REACT_APP_YOUTUBE_API_URL ?? "";
 
 const GridContainer = styled(Box)({
     width: "100%",

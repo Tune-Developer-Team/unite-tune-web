@@ -12,7 +12,7 @@ interface FeedItem {
     description: string;
 }
 
-const RSS_URL = "https://dblog111.hatenablog.jp/rss";
+const RSS_URL = process.env.REACT_APP_RSS_URL??"";
 
 const GridContainer = styled(Box)({
     display: "grid",
